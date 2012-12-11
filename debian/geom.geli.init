@@ -141,8 +141,10 @@ geli_start()
 				fi
 				count=$((count+1))
 			done
-			log_end_msg $RET
-			exit $RET
+			if ! [ "$RET" = 0 ]; then
+				log_end_msg $RET
+				exit $RET
+			fi
 		fi
 	done
 

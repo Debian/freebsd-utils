@@ -1,3 +1,14 @@
+freebsd-utils (9.0+ds1-9) UNRELEASED; urgency=low
+
+  * Fix geli initscript to support more than one geli_device as intended.
+    (Closes: #694374)
+  * If devfs is unavailable (for example in a jail environment) the
+    freebsd-utils start action would exit with non-zero status, causing postinst
+    to fail.  Instead, return zero exit status but print a warning.
+    (Closes: #695679)
+
+ -- Steven Chamberlain <steven@pyro.eu.org>  Tue, 11 Dec 2012 20:28:30 +0000
+
 freebsd-utils (9.0+ds1-8) unstable; urgency=low
 
    * Team upload.

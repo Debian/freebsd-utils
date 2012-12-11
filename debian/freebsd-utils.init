@@ -24,13 +24,17 @@ case "$1" in
     fi
 
     log_action_begin_msg "Loading devfs rules"
-    devfs ruleset 1
-    devfs rule delset
-    for rule in /etc/devfs.d/*.rules ; do
-      egrep -v '^[[:space:]]*(#|$)' $rule | devfs rule add -
-    done
-    devfs rule applyset
-    log_action_end_msg $?
+    if devfs ruleset 1 ; then
+      devfs rule delset
+      for rule in /etc/devfs.d/*.rules ; do
+        egrep -v '^[[:space:]]*(#|$)' $rule | devfs rule add -
+      done
+      devfs rule applyset
+      log_action_end_msg $?
+    else
+      # devfs unavailable, probably in a jail environment;  no point proceeding
+      log_end_msg 255 || exit 0 # (warning)
+    fi
 
     log_action_begin_msg "Setting up /dev links"
     # setup /dev/cdrom symlink
