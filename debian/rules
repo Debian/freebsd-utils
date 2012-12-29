@@ -101,7 +101,7 @@ get-orig-source:
 		 usr.bin/showmount \
 		 usr.sbin/powerd \
 	; do \
-	    svn export $(SVN)/$$i $(ORIGDIR)/$$i ; \
+	    svn export $(SVN)/$$i $(ORIGDIR)/$$i || exit ; \
 	done
 	tar --numeric-owner --owner 0 --group 0 -czf ../$(TARNAME) $(ORIGDIR)
 	rm -rf $(ORIGDIR)
