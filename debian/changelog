@@ -1,11 +1,18 @@
-freebsd-utils (9.0+ds1-9) UNRELEASED; urgency=low
+freebsd-utils (9.0+ds1-9) unstable; urgency=low
 
+  [ Steven Chamberlain ]
   * Fix geli initscript to support more than one geli_device as intended.
     (Closes: #694374)
   * If devfs is unavailable (for example in a jail environment) the
     freebsd-utils start action would exit with non-zero status, causing postinst
     to fail.  Instead, return zero exit status but print a warning.
     (Closes: #695679)
+
+  [ Christoph Egger ]
+  * Import patch from Steven Chamberlain to fix segfault getting bridge
+    status (Closes: #696514)
+  * Import patch from Steven Chamberlain fixing implicit declarations
+  * Upload to unstable
 
  -- Steven Chamberlain <steven@pyro.eu.org>  Tue, 11 Dec 2012 20:28:30 +0000
 

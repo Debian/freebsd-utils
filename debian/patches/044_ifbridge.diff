@@ -1,0 +1,13 @@
+Index: freebsd-utils-9.0+ds1/sbin/ifconfig/ifbridge.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/ifconfig/ifbridge.c	2007-11-04 08:32:27.000000000 +0000
++++ freebsd-utils-9.0+ds1/sbin/ifconfig/ifbridge.c	2012-12-29 20:27:46.888636491 +0000
+@@ -46,6 +46,8 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ 
++#include <netinet/ether.h> /* for ether_aton, etherntoa */
++
+ #include <net/ethernet.h>
+ #include <net/if.h>
+ #include <net/if_bridgevar.h>

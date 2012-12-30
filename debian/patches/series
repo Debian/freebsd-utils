@@ -45,5 +45,7 @@ mount_cli_compat.diff
 039_geom.diff
 041_delete_key.diff
 043_ppp.diff
+044_ifbridge.diff
+045_implicit-declaration.diff
 devd_link_c++_statically.diff
 stablerestart-fhs-compliance.diff

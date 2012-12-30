@@ -1,0 +1,324 @@
+Index: freebsd-utils-9.0+ds1/usr.sbin/mountd/mountd.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/usr.sbin/mountd/mountd.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/usr.sbin/mountd/mountd.c	2012-12-29 20:05:01.478673213 +0000
+@@ -80,6 +80,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <bsd/stdio.h>
++
+ #include "pathnames.h"
+ #include "mntopts.h"
+ 
+Index: freebsd-utils-9.0+ds1/usr.sbin/vidcontrol/vidcontrol.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/usr.sbin/vidcontrol/vidcontrol.c	2010-03-29 21:12:44.000000000 +0100
++++ freebsd-utils-9.0+ds1/usr.sbin/vidcontrol/vidcontrol.c	2012-12-29 20:05:04.610607859 +0000
+@@ -48,6 +48,8 @@
+ #include <sys/errno.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <bsd/err.h>
++
+ #include "path.h"
+ #include "decode.h"
+ 
+Index: freebsd-utils-9.0+ds1/usr.sbin/ppp/defs.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/usr.sbin/ppp/defs.c	2004-09-05 02:46:52.000000000 +0100
++++ freebsd-utils-9.0+ds1/usr.sbin/ppp/defs.c	2012-12-29 20:00:01.091748618 +0000
+@@ -47,6 +47,7 @@
+ #include <time.h>
+ #endif
+ #include <unistd.h>
++#include <bsd/unistd.h>
+ 
+ #if defined(__FreeBSD__) && !defined(NOKLDLOAD)
+ #include "id.h"
+Index: freebsd-utils-9.0+ds1/usr.sbin/nfsd/nfsd.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/usr.sbin/nfsd/nfsd.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/usr.sbin/nfsd/nfsd.c	2012-12-29 20:00:04.194641584 +0000
+@@ -71,6 +71,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <bsd/unistd.h>
+ 
+ /* Global defs */
+ #ifdef DEBUG
+Index: freebsd-utils-9.0+ds1/usr.sbin/arp/arp.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/usr.sbin/arp/arp.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/usr.sbin/arp/arp.c	2012-12-29 20:00:07.442606898 +0000
+@@ -80,6 +80,7 @@
+ #include <string.h>
+ #include <strings.h>
+ #include <unistd.h>
++#include <bsd/stdlib.h>
+ 
+ typedef void (action_fn)(struct sockaddr_dl *sdl,
+ 	struct sockaddr_inarp *s_in, struct rt_msghdr *rtm);
+Index: freebsd-utils-9.0+ds1/usr.sbin/rpc.lockd/kern.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/usr.sbin/rpc.lockd/kern.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/usr.sbin/rpc.lockd/kern.c	2012-12-29 20:00:14.848822213 +0000
+@@ -52,6 +52,7 @@
+ #include <unistd.h>
+ #include <netdb.h>
+ #include <signal.h>
++#include <bsd/unistd.h>
+ 
+ #include <nlm_prot.h>
+ #include <nfs/nfsproto.h>
+Index: freebsd-utils-9.0+ds1/usr.sbin/pppctl/pppctl.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/usr.sbin/pppctl/pppctl.c	2004-12-13 14:50:13.000000000 +0000
++++ freebsd-utils-9.0+ds1/usr.sbin/pppctl/pppctl.c	2012-12-29 20:00:17.754640690 +0000
+@@ -48,6 +48,7 @@
+ #include <string.h>
+ #include <time.h>
+ #include <unistd.h>
++#include <bsd/unistd.h>
+ 
+ #define LINELEN 2048
+ 
+Index: freebsd-utils-9.0+ds1/usr.bin/kdump/kdump.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/usr.bin/kdump/kdump.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/usr.bin/kdump/kdump.c	2012-12-29 20:05:19.540626059 +0000
+@@ -83,6 +83,8 @@
+ #include <time.h>
+ #include <unistd.h>
+ #include <vis.h>
++#include <bsd/string.h>
++
+ #include "ktrace.h"
+ #include "kdump_subr.h"
+ 
+Index: freebsd-utils-9.0+ds1/sbin/geom/core/geom.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/geom/core/geom.c	2011-03-24 19:11:05.000000000 +0000
++++ freebsd-utils-9.0+ds1/sbin/geom/core/geom.c	2012-12-29 20:06:16.428605677 +0000
+@@ -46,6 +46,8 @@
+ #include <inttypes.h>
+ #include <dlfcn.h>
+ #include <assert.h>
++#include <bsd/err.h>
++
+ #include <libgeom.h>
+ #include <geom.h>
+ 
+Index: freebsd-utils-9.0+ds1/sbin/geom/class/eli/geom_eli.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/geom/class/eli/geom_eli.c	2010-11-22 20:10:48.000000000 +0000
++++ freebsd-utils-9.0+ds1/sbin/geom/class/eli/geom_eli.c	2012-12-29 20:00:30.210625738 +0000
+@@ -43,6 +43,7 @@
+ #include <paths.h>
+ #include <errno.h>
+ #include <assert.h>
++#include <bsd/stdlib.h>
+ 
+ #include <sys/param.h>
+ #include <sys/mman.h>
+Index: freebsd-utils-9.0+ds1/sbin/geom/class/stripe/geom_stripe.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/geom/class/stripe/geom_stripe.c	2010-10-09 21:20:27.000000000 +0100
++++ freebsd-utils-9.0+ds1/sbin/geom/class/stripe/geom_stripe.c	2012-12-29 20:02:33.016673155 +0000
+@@ -36,6 +36,8 @@
+ #include <string.h>
+ #include <strings.h>
+ #include <assert.h>
++#include <bsd/stdlib.h>
++
+ #include <libgeom.h>
+ #include <geom/stripe/g_stripe.h>
+ 
+Index: freebsd-utils-9.0+ds1/sbin/geom/class/concat/geom_concat.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/geom/class/concat/geom_concat.c	2010-10-09 21:20:27.000000000 +0100
++++ freebsd-utils-9.0+ds1/sbin/geom/class/concat/geom_concat.c	2012-12-29 20:02:36.477613023 +0000
+@@ -35,6 +35,8 @@
+ #include <string.h>
+ #include <strings.h>
+ #include <assert.h>
++#include <bsd/stdlib.h>
++
+ #include <libgeom.h>
+ #include <geom/concat/g_concat.h>
+ 
+Index: freebsd-utils-9.0+ds1/sbin/geom/class/raid3/geom_raid3.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/geom/class/raid3/geom_raid3.c	2011-01-12 13:55:01.000000000 +0000
++++ freebsd-utils-9.0+ds1/sbin/geom/class/raid3/geom_raid3.c	2012-12-29 20:02:42.593673584 +0000
+@@ -36,6 +36,8 @@
+ #include <string.h>
+ #include <strings.h>
+ #include <assert.h>
++#include <bsd/stdlib.h>
++
+ #include <libgeom.h>
+ #include <geom/raid3/g_raid3.h>
+ #include <core/geom.h>
+Index: freebsd-utils-9.0+ds1/sbin/geom/class/mirror/geom_mirror.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/geom/class/mirror/geom_mirror.c	2010-10-09 21:20:27.000000000 +0100
++++ freebsd-utils-9.0+ds1/sbin/geom/class/mirror/geom_mirror.c	2012-12-29 20:02:47.384726078 +0000
+@@ -36,6 +36,8 @@
+ #include <string.h>
+ #include <strings.h>
+ #include <assert.h>
++#include <bsd/stdlib.h>
++
+ #include <libgeom.h>
+ #include <geom/mirror/g_mirror.h>
+ #include <core/geom.h>
+Index: freebsd-utils-9.0+ds1/sbin/geom/class/shsec/geom_shsec.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/geom/class/shsec/geom_shsec.c	2010-10-09 21:20:27.000000000 +0100
++++ freebsd-utils-9.0+ds1/sbin/geom/class/shsec/geom_shsec.c	2012-12-29 20:02:51.019638336 +0000
+@@ -36,6 +36,8 @@
+ #include <string.h>
+ #include <strings.h>
+ #include <assert.h>
++#include <bsd/stdlib.h>
++
+ #include <libgeom.h>
+ #include <geom/shsec/g_shsec.h>
+ 
+Index: freebsd-utils-9.0+ds1/sbin/swapon/swapon.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/swapon/swapon.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/sbin/swapon/swapon.c	2012-12-29 20:03:04.126649982 +0000
+@@ -55,6 +55,8 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <fcntl.h>
++#include <bsd/stdlib.h>
++
+ #include <libutil.h>
+ 
+ static void usage(void);
+Index: freebsd-utils-9.0+ds1/sbin/camcontrol/modeedit.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/camcontrol/modeedit.c	2010-06-11 18:02:57.000000000 +0100
++++ freebsd-utils-9.0+ds1/sbin/camcontrol/modeedit.c	2012-12-29 20:01:06.245613425 +0000
+@@ -41,6 +41,7 @@
+ #include <stdio.h>
+ #include <sysexits.h>
+ #include <unistd.h>
++#include <bsd/stdio.h>
+ 
+ #include <cam/scsi/scsi_all.h>
+ #include <cam/cam.h>
+Index: freebsd-utils-9.0+ds1/sbin/devfs/rule.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/devfs/rule.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/sbin/devfs/rule.c	2012-12-29 20:01:12.238673437 +0000
+@@ -44,6 +44,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <bsd/stdlib.h>
++#include <bsd/unistd.h>
+ 
+ #include "extern.h"
+ 
+Index: freebsd-utils-9.0+ds1/sbin/devfs/devfs.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/devfs/devfs.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/sbin/devfs/devfs.c	2012-12-29 20:01:15.870628336 +0000
+@@ -43,6 +43,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <bsd/stdio.h>
+ 
+ #include "extern.h"
+ 
+Index: freebsd-utils-9.0+ds1/sbin/ifconfig/af_inet.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/sbin/ifconfig/af_inet.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/sbin/ifconfig/af_inet.c	2012-12-29 20:01:18.523614679 +0000
+@@ -43,6 +43,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <bsd/stdlib.h>
+ 
+ #include <netinet/in.h>
+ #include <net/if_var.h>		/* for struct ifaddr */
+Index: freebsd-utils-9.0+ds1/contrib/pf/authpf/authpf.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/contrib/pf/authpf/authpf.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/contrib/pf/authpf/authpf.c	2012-12-29 20:03:24.975681073 +0000
+@@ -17,6 +17,8 @@
+  */
+ 
+ #include <stdio.h>
++#include <bsd/stdio.h>
++
+ #include <sys/cdefs.h>
+ __FBSDID("$FreeBSD$");
+ 
+Index: freebsd-utils-9.0+ds1/contrib/pf/pfctl/parse.y
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/contrib/pf/pfctl/parse.y	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/contrib/pf/pfctl/parse.y	2012-12-29 20:01:42.634649462 +0000
+@@ -61,6 +61,7 @@
+ #include <pwd.h>
+ #include <grp.h>
+ #include <md5.h>
++#include <bsd/stdlib.h>
+ 
+ #include "pfctl_parser.h"
+ #include "pfctl.h"
+Index: freebsd-utils-9.0+ds1/contrib/pf/pfctl/pfctl.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/contrib/pf/pfctl/pfctl.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/contrib/pf/pfctl/pfctl.c	2012-12-29 20:01:46.279635068 +0000
+@@ -60,6 +60,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <bsd/stdlib.h>
+ 
+ #include "pfctl_parser.h"
+ #include "pfctl.h"
+Index: freebsd-utils-9.0+ds1/contrib/pf/pfctl/pfctl_osfp.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/contrib/pf/pfctl/pfctl_osfp.c	2011-06-28 12:57:25.000000000 +0100
++++ freebsd-utils-9.0+ds1/contrib/pf/pfctl/pfctl_osfp.c	2012-12-29 20:01:49.600683134 +0000
+@@ -33,6 +33,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <bsd/stdio.h>
+ 
+ #include "pfctl_parser.h"
+ #include "pfctl.h"
+Index: freebsd-utils-9.0+ds1/contrib/pf/pfctl/pfctl_table.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/contrib/pf/pfctl/pfctl_table.c	2011-06-28 12:57:25.000000000 +0100
++++ freebsd-utils-9.0+ds1/contrib/pf/pfctl/pfctl_table.c	2012-12-29 20:01:52.597709013 +0000
+@@ -50,6 +50,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <time.h>
++#include <bsd/stdlib.h>
+ 
+ #include "pfctl_parser.h"
+ #include "pfctl.h"
+Index: freebsd-utils-9.0+ds1/contrib/pf/pfctl/pfctl_optimize.c
+===================================================================
+--- freebsd-utils-9.0+ds1.orig/contrib/pf/pfctl/pfctl_optimize.c	2012-12-29 19:56:58.000000000 +0000
++++ freebsd-utils-9.0+ds1/contrib/pf/pfctl/pfctl_optimize.c	2012-12-29 20:01:55.921692089 +0000
+@@ -38,6 +38,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <bsd/stdlib.h>
+ 
+ #include "pfctl_parser.h"
+ #include "pfctl.h"
