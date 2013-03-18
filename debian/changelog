@@ -1,3 +1,11 @@
+freebsd-utils (9.0+ds1-10) unstable; urgency=low
+
+  * Import patch by Steven Chamberlain to make rpc.lockd start without
+    `-h' arguments (Closes: #664812)
+  * Add me to uploaders
+
+ -- Christoph Egger <christoph@debian.org>  Mon, 18 Mar 2013 11:54:48 +0100
+
 freebsd-utils (9.0+ds1-9) unstable; urgency=low
 
   [ Steven Chamberlain ]

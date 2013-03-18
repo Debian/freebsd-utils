@@ -49,3 +49,4 @@ mount_cli_compat.diff
 045_implicit-declaration.diff
 devd_link_c++_statically.diff
 stablerestart-fhs-compliance.diff
+rpc.lockd-startup-fix.diff
