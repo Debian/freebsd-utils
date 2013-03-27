@@ -1,3 +1,13 @@
+freebsd-utils (9.0+ds1-11) UNRELEASED; urgency=low
+
+  * Don't use --pidfile when starting/stopping daemons that don't create one:
+    - Prevents trying to start nfsd, rpc.lockd, rpc.statd more than once
+      (Closes: #700245)
+    - Fixes a 30-second delay as each service is stopped (Closes: #700249)
+  * Stop nfsd with the correct signal USR1, since it ignores TERM
+
+ -- Steven Chamberlain <steven@pyro.eu.org>  Wed, 27 Mar 2013 13:16:03 +0000
+
 freebsd-utils (9.0+ds1-10) unstable; urgency=low
 
   * Import patch by Steven Chamberlain to make rpc.lockd start without
