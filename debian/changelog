@@ -1,4 +1,4 @@
-freebsd-utils (9.0+ds1-11) UNRELEASED; urgency=low
+freebsd-utils (9.0+ds1-11) unstable; urgency=low
 
   * Don't use --pidfile when starting/stopping daemons that don't create one:
     - Prevents trying to start nfsd, rpc.lockd, rpc.statd more than once
