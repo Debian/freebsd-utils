@@ -145,8 +145,6 @@ Package: freebsd-net-tools
 Section: net
 Architecture: kfreebsd-any
 Depends: ${shlibs:Depends}, ${misc:Depends},
-# just to handle upgrades, maybe remove this after wheezy?
- pf,
 Replaces: freebsd-utils (<< 5.4), freebsd-hackedutils (<< 7), net-tools
 Provides: net-tools
 Breaks: ifupdown (<< 0.7~alpha5+really0.6.16~), isc-dhcp-client (<< 4.2.2-2~)
