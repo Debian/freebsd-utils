@@ -2,16 +2,6 @@
 we don't link against libmd since it's not on debian
 http://martin.hinner.info/libmd/
 
-To run this, you need the if_tun module to be loaded:
-
-# kldload if_tun
-# ./ppp
-Working in interactive mode
-Warning: Add! route failed: ff02::/32: errno: Network is unreachable
-Using interface: tun0
-Warning: No default entry found in config file.
-ppp ON loony>
-
 --- a/usr.sbin/ppp/Makefile
 +++ b/usr.sbin/ppp/Makefile
 @@ -38,11 +38,11 @@
@@ -70,18 +60,6 @@ ppp ON loony>
  
          log_Printf(LogDEBUG, "Transmitting link (%d bytes)\n", expect);
          if ((got = writev(reply[0], iov + 1, niov - 1)) != expect) {
---- a/usr.sbin/ppp/cbcp.c
-+++ b/usr.sbin/ppp/cbcp.c
-@@ -28,9 +28,7 @@
- 
- #include <sys/param.h>
- 
--#ifdef __FreeBSD__
- #include <netinet/in.h>
--#endif
- #include <sys/un.h>
- 
- #include <string.h>
 --- a/usr.sbin/ppp/chap.c
 +++ b/usr.sbin/ppp/chap.c
 @@ -38,10 +38,7 @@
@@ -115,7 +93,7 @@ ppp ON loony>
  #include "command.h"
 --- a/usr.sbin/ppp/id.h
 +++ b/usr.sbin/ppp/id.h
-@@ -61,9 +61,18 @@
+@@ -63,9 +63,18 @@
  #define ID0fopen fopen
  #define ID0open open
  #define ID0write write

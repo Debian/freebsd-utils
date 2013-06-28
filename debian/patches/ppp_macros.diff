@@ -1,0 +1,238 @@
+--- a/usr.sbin/ppp/bundle.c
++++ b/usr.sbin/ppp/bundle.c
+@@ -699,7 +699,7 @@
+   static struct bundle bundle;		/* there can be only one */
+   int enoentcount, err, minunit, maxunit;
+   const char *ifname;
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+   int kldtried;
+ #endif
+ #if defined(TUNSIFMODE) || defined(TUNSLMODE) || defined(TUNSIFHEAD)
+@@ -720,7 +720,7 @@
+   }
+   err = ENOENT;
+   enoentcount = 0;
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+   kldtried = 0;
+ #endif
+   for (bundle.unit = minunit; bundle.unit != maxunit; bundle.unit++) {
+@@ -730,7 +730,7 @@
+     if (bundle.dev.fd >= 0)
+       break;
+     else if (errno == ENXIO || errno == ENOENT) {
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+       if (bundle.unit == minunit && !kldtried++) {
+         /*
+          * Attempt to load the tunnel interface KLD if it isn't loaded
+--- a/usr.sbin/ppp/cbcp.c
++++ b/usr.sbin/ppp/cbcp.c
+@@ -28,7 +28,7 @@
+ 
+ #include <sys/param.h>
+ 
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ #include <netinet/in.h>
+ #endif
+ #include <sys/un.h>
+--- a/usr.sbin/ppp/chap_ms.c
++++ b/usr.sbin/ppp/chap_ms.c
+@@ -29,8 +29,9 @@
+  * $FreeBSD$
+  */
+ 
++#include <sys/param.h>
+ #include <ctype.h>
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ #include <openssl/des.h>
+ #include <sha.h>
+ #else
+@@ -187,7 +188,7 @@
+   ChallengeResponse(Challenge, PasswordHash, Response);
+ }
+ 
+-#ifndef __FreeBSD__
++#ifndef __FreeBSD_kernel__
+ #define LENGTH 20
+ static char *
+ SHA1_End(SHA_CTX *ctx, char *buf)
+--- a/usr.sbin/ppp/defs.c
++++ b/usr.sbin/ppp/defs.c
+@@ -39,16 +39,16 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+ #include <sys/module.h>
+ #endif
+ #include <termios.h>
+-#if !defined(__FreeBSD__) || __FreeBSD__ < 3
++#ifndef __FreeBSD_kernel__
+ #include <time.h>
+ #endif
+ #include <unistd.h>
+ 
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+ #include "id.h"
+ #include "log.h"
+ #endif
+@@ -56,20 +56,11 @@
+ 
+ #define	issep(c)	((c) == '\t' || (c) == ' ')
+ 
+-#if defined(__NetBSD__) || __FreeBSD__ < 3
++#ifdef __NetBSD__
+ void
+ randinit()
+ {
+-#if defined(__FreeBSD__)
+-  static int initdone;		/* srandomdev() call is only required once */
+-
+-  if (!initdone) {
+-    initdone = 1;
+-    srandomdev();
+-  }
+-#else
+   srandom((time(NULL)^getpid())+random());
+-#endif
+ }
+ #endif
+ 
+@@ -420,7 +411,7 @@
+   }
+ }
+ 
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+ int
+ loadmodules(int how, const char *module, ...)
+ {
+--- a/usr.sbin/ppp/defs.h
++++ b/usr.sbin/ppp/defs.h
+@@ -28,8 +28,10 @@
+  * $FreeBSD$
+  */
+ 
++#include <sys/param.h>
++
+ /* Check the following definitions for your machine environment */
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ # define  MODEM_LIST	"/dev/cuad1\0/dev/cuad0"	/* name of tty device */
+ #else
+ # ifdef __OpenBSD__
+@@ -117,7 +119,7 @@
+ 
+ #define ROUNDUP(x) ((x) ? (1 + (((x) - 1) | (sizeof(long) - 1))) : sizeof(long))
+ 
+-#if defined(__NetBSD__) || __FreeBSD__ < 3
++#ifdef __NetBSD__
+ extern void randinit(void);
+ #else
+ #define random arc4random
+--- a/usr.sbin/ppp/id.c
++++ b/usr.sbin/ppp/id.c
+@@ -40,7 +40,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <sysexits.h>
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+ #include <sys/linker.h>
+ #endif
+ #include <unistd.h>
+@@ -262,7 +262,7 @@
+   return result;
+ }
+ 
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+ int
+ ID0kldload(const char *dev)
+ {
+--- a/usr.sbin/ppp/id.h
++++ b/usr.sbin/ppp/id.h
+@@ -26,6 +26,8 @@
+  * $FreeBSD$
+  */
+ 
++#include <sys/param.h>
++
+ #ifndef NOSUID
+ struct utmpx;
+ struct sockaddr_un;
+@@ -46,7 +48,7 @@
+ extern int ID0bind_un(int, const struct sockaddr_un *);
+ extern int ID0connect_un(int, const struct sockaddr_un *);
+ extern int ID0kill(pid_t, int);
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+ extern int ID0kldload(const char *);
+ #endif
+ #ifndef NONETGRAPH
+@@ -70,7 +72,7 @@
+ #define ID0connect_un(s, n) \
+ 	connect(s, (const struct sockaddr *)(n), sizeof *(n))
+ #define ID0kill kill
+-#if defined(__FreeBSD__) && !defined(NOKLDLOAD)
++#if defined(__FreeBSD_kernel__) && !defined(NOKLDLOAD)
+ #include <sys/param.h>
+ #include <sys/linker.h>
+ #define ID0kldload kldload
+--- a/usr.sbin/ppp/iface.c
++++ b/usr.sbin/ppp/iface.c
+@@ -31,7 +31,7 @@
+ #include <netinet/in.h>
+ #include <net/if.h>
+ #include <net/if_dl.h>
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ #include <net/if_var.h>
+ #endif
+ #include <net/route.h>
+@@ -667,7 +667,7 @@
+     close(s);
+     return 0;
+   }
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+   new_flags = (ifrq.ifr_flags & 0xffff) | (ifrq.ifr_flagshigh << 16);
+ #else
+   new_flags = ifrq.ifr_flags & 0xffff;
+@@ -678,7 +678,7 @@
+   else
+     new_flags &= ~flags;
+   ifrq.ifr_flags = new_flags & 0xffff;
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+   ifrq.ifr_flagshigh = new_flags >> 16;
+ #endif
+ 
+--- a/usr.sbin/ppp/lqr.c
++++ b/usr.sbin/ppp/lqr.c
+@@ -30,7 +30,7 @@
+ 
+ #include <sys/param.h>
+ 
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ #include <netinet/in.h>
+ #endif
+ #include <sys/un.h>
+--- a/usr.sbin/ppp/tun.c
++++ b/usr.sbin/ppp/tun.c
+@@ -29,7 +29,7 @@
+ #include <sys/param.h>
+ 
+ #include <sys/socket.h>		/* For IFF_ defines */
+-#ifndef __FreeBSD__
++#ifndef __FreeBSD_kernel__
+ #include <net/if.h>		/* For IFF_ defines */
+ #endif
+ #include <net/route.h>

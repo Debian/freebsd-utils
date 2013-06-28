@@ -1,6 +1,8 @@
 freebsd-utils (9.0+ds1-12) UNRELEASED; urgency=low
 
   * Remove transitional dependency (freebsd-net-tools -> pf)
+  * Misc improvements in PPP port. Among others, it should no longer be
+    necessary to load modules manually.
 
  -- Robert Millan <rmh@debian.org>  Thu, 20 Jun 2013 01:50:09 +0200
 
