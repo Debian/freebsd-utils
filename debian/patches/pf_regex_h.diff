@@ -8,7 +8,6 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
 		-e 's/#\( \|\t\)*ifdef\( \|\t\)*__FreeBSD__/#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)/g' \
 		-e 's/#\( \|\t\)*ifndef\( \|\t\)*__FreeBSD__/#if !defined(__FreeBSD__) \&\& !defined(__FreeBSD_kernel__)/g' \
 	; done
-
 --- a/contrib/pf/pfctl/pfctl.h
 +++ b/contrib/pf/pfctl/pfctl.h
 @@ -86,7 +86,7 @@
@@ -156,7 +155,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  extern struct mtx pf_task_mtx;
  
  #define	PF_LOCK_ASSERT()	mtx_assert(&pf_task_mtx, MA_OWNED)
-@@ -833,7 +833,7 @@
+@@ -830,7 +830,7 @@
  	u_int64_t		 id;
  	u_int32_t		 creatorid;
  	u_int8_t		 direction;
@@ -165,7 +164,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  	u_int8_t		 pad[2];
  	u_int8_t		 local_flags;
  #define	PFSTATE_EXPIRING 0x01
-@@ -923,7 +923,7 @@
+@@ -920,7 +920,7 @@
  	sa_family_t	 af;
  	u_int8_t	 proto;
  	u_int8_t	 direction;
@@ -174,7 +173,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  	u_int8_t	 local_flags;
  #define	PFSTATE_EXPIRING		0x01
  	u_int8_t	 pad;
-@@ -935,7 +935,7 @@
+@@ -932,7 +932,7 @@
  	u_int8_t	 updates;
  } __packed;
  
@@ -183,7 +182,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  #ifdef _KERNEL
  /* pfsync */
  typedef int		pfsync_state_import_t(struct pfsync_state *, u_int8_t);
-@@ -1215,7 +1215,7 @@
+@@ -1212,7 +1212,7 @@
  RB_HEAD(pfi_ifhead, pfi_kif);
  
  /* state tables */
@@ -192,7 +191,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  #ifdef _KERNEL
  VNET_DECLARE(struct pf_state_tree,	 pf_statetbl);
  #define	V_pf_statetbl			 VNET(pf_statetbl)
-@@ -1277,7 +1277,7 @@
+@@ -1274,7 +1274,7 @@
  	struct pf_addr	*dst;		/* dst address */
  	u_int16_t *sport;
  	u_int16_t *dport;
@@ -201,7 +200,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  	struct pf_mtag	*pf_mtag;
  #endif
  
-@@ -1403,7 +1403,7 @@
+@@ -1400,7 +1400,7 @@
  			*(a) = (x); \
  	} while (0)
  
@@ -210,7 +209,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  #define REASON_SET(a, x) \
  	do { \
  		if ((a) != NULL) \
-@@ -1488,7 +1488,7 @@
+@@ -1485,7 +1485,7 @@
  	u_int32_t		 parent_qid;	/* parent queue id */
  	u_int32_t		 bandwidth;	/* queue bandwidth */
  	u_int8_t		 priority;	/* priority */
@@ -219,7 +218,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  	u_int8_t		 local_flags;	/* dynamic interface */
  #define	PFALTQ_FLAG_IF_REMOVED		0x01
  #endif
-@@ -1768,7 +1768,7 @@
+@@ -1765,7 +1765,7 @@
  #define	DIOCSETIFFLAG	_IOWR('D', 89, struct pfioc_iface)
  #define	DIOCCLRIFFLAG	_IOWR('D', 90, struct pfioc_iface)
  #define	DIOCKILLSRCNODES	_IOWR('D', 91, struct pfioc_src_node_kill)
@@ -228,7 +227,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  struct pf_ifspeed {
  	char			ifname[IFNAMSIZ];
  	u_int32_t		baudrate;
-@@ -1779,7 +1779,7 @@
+@@ -1776,7 +1776,7 @@
  #ifdef _KERNEL
  RB_HEAD(pf_src_tree, pf_src_node);
  RB_PROTOTYPE(pf_src_tree, pf_src_node, entry, pf_src_compare);
@@ -237,7 +236,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  VNET_DECLARE(struct pf_src_tree,	 tree_src_tracking);
  #define	V_tree_src_tracking		 VNET(tree_src_tracking)
  #else
-@@ -1789,7 +1789,7 @@
+@@ -1786,7 +1786,7 @@
  RB_HEAD(pf_state_tree_id, pf_state);
  RB_PROTOTYPE(pf_state_tree_id, pf_state,
      entry_id, pf_state_compare_id);
@@ -246,7 +245,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  VNET_DECLARE(struct pf_state_tree_id,	 tree_id);
  #define	V_tree_id			 VNET(tree_id)
  VNET_DECLARE(struct pf_state_queue,	 state_list);
-@@ -1800,14 +1800,14 @@
+@@ -1797,14 +1797,14 @@
  #endif
  
  TAILQ_HEAD(pf_poolqueue, pf_pool);
@@ -263,7 +262,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  VNET_DECLARE(struct pf_altqqueue,	 pf_altqs[2]);
  #define	V_pf_altqs			 VNET(pf_altqs)
  VNET_DECLARE(struct pf_palist,		 pf_pabuf);
-@@ -1817,7 +1817,7 @@
+@@ -1814,7 +1814,7 @@
  extern struct pf_palist			  pf_pabuf;
  #endif
  
@@ -272,7 +271,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  VNET_DECLARE(u_int32_t,			 ticket_altqs_active);
  #define	V_ticket_altqs_active		 VNET(ticket_altqs_active)
  VNET_DECLARE(u_int32_t,			 ticket_altqs_inactive);
-@@ -1849,7 +1849,7 @@
+@@ -1846,7 +1846,7 @@
  extern void			 pf_tbladdr_remove(struct pf_addr_wrap *);
  extern void			 pf_tbladdr_copyout(struct pf_addr_wrap *);
  extern void			 pf_calc_skip_steps(struct pf_rulequeue *);
@@ -281,7 +280,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  #ifdef ALTQ
  extern	void			 pf_altq_ifnet_event(struct ifnet *, int);
  #endif
-@@ -1886,7 +1886,7 @@
+@@ -1885,7 +1885,7 @@
  extern struct pool		 pf_state_scrub_pl;
  #endif
  extern void			 pf_purge_thread(void *);
@@ -290,7 +289,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  extern int			 pf_purge_expired_src_nodes(int);
  extern int			 pf_purge_expired_states(u_int32_t , int);
  #else
-@@ -1911,7 +1911,7 @@
+@@ -1910,7 +1910,7 @@
  extern u_int16_t		 pf_cksum_fixup(u_int16_t, u_int16_t, u_int16_t,
  				    u_int8_t);
  
@@ -299,7 +298,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  VNET_DECLARE(struct ifnet *,		 sync_ifp);
  #define	V_sync_ifp		 	 VNET(sync_ifp);
  VNET_DECLARE(struct pf_rule,		 pf_default_rule);
-@@ -1924,12 +1924,12 @@
+@@ -1923,12 +1923,12 @@
  				    u_int8_t);
  void				 pf_rm_rule(struct pf_rulequeue *,
  				    struct pf_rule *);
@@ -314,7 +313,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  int	pf_test(int, struct ifnet *, struct mbuf **, struct ether_header *,
      struct inpcb *);
  #else
-@@ -1938,7 +1938,7 @@
+@@ -1937,7 +1937,7 @@
  #endif /* INET */
  
  #ifdef INET6
@@ -323,7 +322,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  int	pf_test6(int, struct ifnet *, struct mbuf **, struct ether_header *,
      struct inpcb *);
  #else
-@@ -1949,7 +1949,7 @@
+@@ -1948,7 +1948,7 @@
  void	pf_addr_inc(struct pf_addr *, sa_family_t);
  #endif /* INET6 */
  
@@ -332,16 +331,16 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  u_int32_t	pf_new_isn(struct pf_state *);
  #endif
  void   *pf_pull_hdr(struct mbuf *, int, void *, int, u_short *, u_short *,
-@@ -1986,7 +1986,7 @@
- void	pf_purge_expired_fragments(void);
- int	pf_routable(struct pf_addr *addr, sa_family_t af, struct pfi_kif *);
- int	pf_rtlabel_match(struct pf_addr *, sa_family_t, struct pf_addr_wrap *);
+@@ -1987,7 +1987,7 @@
+ 	    int);
+ int	pf_rtlabel_match(struct pf_addr *, sa_family_t, struct pf_addr_wrap *,
+ 	    int);
 -#ifdef __FreeBSD__
 +#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
  int	pf_socket_lookup(int, struct pf_pdesc *,  struct inpcb *);
  #else
  int	pf_socket_lookup(int, struct pf_pdesc *);
-@@ -2031,7 +2031,7 @@
+@@ -2032,7 +2032,7 @@
  int	pfr_ina_define(struct pfr_table *, struct pfr_addr *, int, int *,
  	    int *, u_int32_t, int);
  
@@ -350,7 +349,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  VNET_DECLARE(struct pfi_kif *,		 pfi_all);
  #define	V_pfi_all	 		 VNET(pfi_all)
  #else
-@@ -2039,7 +2039,7 @@
+@@ -2040,7 +2040,7 @@
  #endif
  
  void		 pfi_initialize(void);
@@ -359,7 +358,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  void		 pfi_cleanup(void);
  #endif
  struct pfi_kif	*pfi_kif_get(const char *);
-@@ -2061,7 +2061,7 @@
+@@ -2062,7 +2062,7 @@
  int		 pfi_set_flags(const char *, int);
  int		 pfi_clear_flags(const char *, int);
  
@@ -368,7 +367,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  int		 pf_match_tag(struct mbuf *, struct pf_rule *, int *,
  		    struct pf_mtag *);
  #else
-@@ -2071,7 +2071,7 @@
+@@ -2072,7 +2072,7 @@
  void		 pf_tag2tagname(u_int16_t, char *);
  void		 pf_tag_ref(u_int16_t);
  void		 pf_tag_unref(u_int16_t);
@@ -377,7 +376,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  int		 pf_tag_packet(struct mbuf *, int, int, struct pf_mtag *);
  #else
  int		 pf_tag_packet(struct mbuf *, int, int);
-@@ -2080,14 +2080,14 @@
+@@ -2081,14 +2081,14 @@
  void		 pf_qid2qname(u_int32_t, char *);
  void		 pf_qid_unref(u_int32_t);
  
@@ -394,7 +393,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  VNET_DECLARE(uma_zone_t,		 pf_frent_pl);
  #define	V_pf_frent_pl			 VNET(pf_frent_pl)
  VNET_DECLARE(uma_zone_t,		 pf_frag_pl);
-@@ -2103,14 +2103,14 @@
+@@ -2104,14 +2104,14 @@
  	void		*pp;
  	unsigned	 limit;
  };
@@ -411,7 +410,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  struct pf_frent {
  	LIST_ENTRY(pf_frent) fr_next;
  	struct ip *fr_ip;
-@@ -2144,7 +2144,7 @@
+@@ -2145,7 +2145,7 @@
  
  #endif /* _KERNEL */
  
@@ -420,7 +419,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  #ifdef _KERNEL
  VNET_DECLARE(struct pf_anchor_global,		 pf_anchors);
  #define	V_pf_anchors				 VNET(pf_anchors)
-@@ -2172,7 +2172,7 @@
+@@ -2173,7 +2173,7 @@
  struct pf_ruleset	*pf_find_or_create_ruleset(const char *);
  void			 pf_rs_initialize(void);
  
@@ -429,7 +428,7 @@ find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
  #ifdef _KERNEL
  int			 pf_anchor_copyout(const struct pf_ruleset *,
  			    const struct pf_rule *, struct pfioc_rule *);
-@@ -2193,7 +2193,7 @@
+@@ -2194,7 +2194,7 @@
  	    const struct tcphdr *);
  void	pf_osfp_flush(void);
  int	pf_osfp_get(struct pf_osfp_ioctl *);

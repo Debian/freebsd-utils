@@ -196,7 +196,7 @@
  #include <net/if_var.h>
  #endif
  #include <net/route.h>
-@@ -667,7 +667,7 @@
+@@ -666,7 +666,7 @@
      close(s);
      return 0;
    }
@@ -205,7 +205,7 @@
    new_flags = (ifrq.ifr_flags & 0xffff) | (ifrq.ifr_flagshigh << 16);
  #else
    new_flags = ifrq.ifr_flags & 0xffff;
-@@ -678,7 +678,7 @@
+@@ -677,7 +677,7 @@
    else
      new_flags &= ~flags;
    ifrq.ifr_flags = new_flags & 0xffff;

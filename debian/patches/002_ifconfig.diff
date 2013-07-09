@@ -32,18 +32,21 @@
  .include <bsd.prog.mk>
 --- a/sbin/ifconfig/ifconfig.c
 +++ b/sbin/ifconfig/ifconfig.c
-@@ -48,6 +48,10 @@
- #include <sys/module.h>
- #include <sys/linker.h>
+@@ -76,6 +76,13 @@
  
-+#include <sys/types.h>
-+#include <sys/sockio.h>
-+#include <netinet/ether.h>
+ #include "ifconfig.h"
+ 
++#ifndef IFCAP_RXCSUM_IPV6
++#define IFCAP_RXCSUM_IPV6 0x200000
++#endif
++#ifndef IFCAP_TXCSUM_IPV6
++#define IFCAP_TXCSUM_IPV6 0x400000
++#endif
 +
- #include <net/ethernet.h>
- #include <net/if.h>
- #include <net/if_var.h>
-@@ -158,7 +162,7 @@
+ /*
+  * Since "struct ifreq" is composed of various union members, callers
+  * should pay special attention to interprete the value.
+@@ -158,7 +165,7 @@
  	all = downonly = uponly = namesonly = noload = verbose = 0;
  
  	/* Parse leading line options */
@@ -52,7 +55,7 @@
  	for (p = opts; p != NULL; p = p->next)
  		strlcat(options, p->opt, sizeof(options));
  	while ((c = getopt(argc, argv, options)) != -1) {
-@@ -953,7 +957,7 @@
+@@ -954,7 +961,7 @@
  	putchar('\n');
  
  	for (;;) {
@@ -61,75 +64,26 @@
  			ifr.ifr_buffer.buffer = descr;
  			ifr.ifr_buffer.length = descrlen;
  			if (ioctl(s, SIOCGIFDESCR, &ifr) == 0) {
---- a/sbin/ifconfig/af_inet6.c
-+++ b/sbin/ifconfig/af_inet6.c
-@@ -42,7 +42,6 @@
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
--#include <ifaddrs.h>
- 
- #include <arpa/inet.h>
- 
-@@ -53,6 +52,8 @@
- #include <netdb.h>
- 
- #include <netinet6/nd6.h>	/* Define ND6_INFINITE_LIFETIME */
-+#include <time.h>
-+#include <ifaddrs.h>
- 
- #include "ifconfig.h"
- 
 --- a/sbin/ifconfig/af_link.c
 +++ b/sbin/ifconfig/af_link.c
-@@ -46,6 +46,8 @@
- #include <net/if_dl.h>
+@@ -47,6 +47,8 @@
  #include <net/if_types.h>
  #include <net/ethernet.h>
-+#include <netinet/ether.h>
-+#include "../../lib/linkaddr.h"
  
++#include "../../lib/linkaddr.h"
++
  #include "ifconfig.h"
  
+ static struct ifreq link_ridreq;
 --- a/sbin/ifconfig/ifieee80211.c
 +++ b/sbin/ifconfig/ifieee80211.c
 @@ -83,6 +83,9 @@
  #include <fcntl.h>
  #include <inttypes.h>
  #include <stdio.h>
-+#include <stdint.h>
-+#include <netinet/ether.h>
++
++
 +#include "../../lib/linkaddr.h"
  #include <stdlib.h>
  #include <string.h>
  #include <unistd.h>
---- a/sbin/ifconfig/af_inet.c
-+++ b/sbin/ifconfig/af_inet.c
-@@ -43,13 +43,13 @@
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
--#include <ifaddrs.h>
- 
- #include <netinet/in.h>
- #include <net/if_var.h>		/* for struct ifaddr */
- #include <netinet/in_var.h>
- #include <arpa/inet.h>
- #include <netdb.h>
-+#include <ifaddrs.h>
- 
- #include "ifconfig.h"
- 
---- a/sbin/ifconfig/af_ipx.c
-+++ b/sbin/ifconfig/af_ipx.c
-@@ -41,9 +41,9 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
--#include <ifaddrs.h>
- 
- #include <net/if_var.h>
-+#include <ifaddrs.h>
- #define IPTUNNEL
- #include <netipx/ipx.h>
- #include <netipx/ipx_if.h>

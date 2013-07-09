@@ -1,15 +1,6 @@
 --- a/sbin/camcontrol/camcontrol.c
 +++ b/sbin/camcontrol/camcontrol.c
-@@ -30,7 +30,7 @@
- __FBSDID("$FreeBSD$");
- 
- #include <sys/ioctl.h>
--#include <sys/stdint.h>
-+#include <stdint.h>
- #include <sys/types.h>
- #include <sys/endian.h>
- #include <sys/sbuf.h>
-@@ -132,12 +132,12 @@
+@@ -134,12 +134,12 @@
  };
  
  #ifndef MINIMALISTIC
@@ -28,25 +19,6 @@
  #endif
  
  struct camcontrol_opts option_table[] = {
-@@ -6036,7 +6036,6 @@
- 	 * the arguments again.
- 	 */
- 	optind = optstart;
--	optreset = 1;
- 
- 	switch(cmdlist) {
- #ifndef MINIMALISTIC
---- a/sbin/camcontrol/util.c
-+++ b/sbin/camcontrol/util.c
-@@ -46,7 +46,7 @@
- #include <sys/cdefs.h>
- __FBSDID("$FreeBSD$");
- 
--#include <sys/stdint.h>
-+#include <stdint.h>
- #include <sys/types.h>
- 
- #include <stdlib.h>
 --- a/sbin/camcontrol/Makefile
 +++ b/sbin/camcontrol/Makefile
 @@ -12,7 +12,7 @@

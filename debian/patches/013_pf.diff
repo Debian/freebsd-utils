@@ -113,7 +113,7 @@
  				end_session(s);
 --- a/contrib/pf/pfctl/parse.y
 +++ b/contrib/pf/pfctl/parse.y
-@@ -423,6 +423,7 @@
+@@ -427,6 +427,7 @@
  	} v;
  	int lineno;
  } YYSTYPE;

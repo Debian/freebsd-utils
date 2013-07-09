@@ -8,54 +8,6 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
 		-e 's/#\( \|\t\)*ifdef\( \|\t\)*__FreeBSD__/#ifdef __FreeBSD_kernel__/g' \
 		-e 's/#\( \|\t\)*ifndef\( \|\t\)*__FreeBSD__/#ifndef __FreeBSD_kernel__/g' \
 	; done
-
---- a/contrib/pf/pfctl/parse.y
-+++ b/contrib/pf/pfctl/parse.y
-@@ -2223,7 +2223,7 @@
- 				}
- 				free($9.queues.pqname);
- 			}
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			r.divert.port = $9.divert.port;
- #else
- 			if ((r.divert.port = $9.divert.port)) {
-@@ -2368,7 +2368,7 @@
- 			filter_opts.rtableid = $2;
- 		}
- 		| DIVERTTO portplain {
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			filter_opts.divert.port = $2.a;
- 			if (!filter_opts.divert.port) {
- 				yyerror("invalid divert port: %u", ntohs($2.a));
-@@ -2377,7 +2377,7 @@
- #endif
- 		}
- 		| DIVERTTO STRING PORT portplain {
--#ifndef __FreeBSD__
-+#ifndef __FreeBSD_kernel__
- 			if ((filter_opts.divert.addr = host($2)) == NULL) {
- 				yyerror("could not parse divert address: %s",
- 				    $2);
-@@ -2395,7 +2395,7 @@
- 			}
- 		}
- 		| DIVERTREPLY {
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			yyerror("divert-reply has no meaning in FreeBSD pf(4)");
- 			YYERROR;
- #else
-@@ -2861,7 +2861,7 @@
- 			char	*buf;
- 
- 			/* ie. for 10/8 parsing */
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			if (asprintf(&buf, "%lld/%lld", (long long)$1, (long long)$3) == -1)
- #else
- 			if (asprintf(&buf, "%lld/%lld", $1, $3) == -1)
 --- a/contrib/pf/authpf/authpf.c
 +++ b/contrib/pf/authpf/authpf.c
 @@ -33,7 +33,7 @@
@@ -134,73 +86,71 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #define INTPTR(x)	(intptr_t)x
  #else
  #define INTPTR(x)	x
---- a/contrib/pf/pfctl/pf_print_state.c
-+++ b/contrib/pf/pfctl/pf_print_state.c
-@@ -35,7 +35,7 @@
- 
+--- a/contrib/pf/pfctl/parse.y
++++ b/contrib/pf/pfctl/parse.y
+@@ -33,7 +33,7 @@
  #include <sys/types.h>
  #include <sys/socket.h>
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- #include <sys/endian.h>
- #define	betoh64	be64toh
- #endif
-@@ -322,7 +322,7 @@
- 		bcopy(s->bytes[0], &bytes[0], sizeof(u_int64_t));
- 		bcopy(s->bytes[1], &bytes[1], sizeof(u_int64_t));
- 		printf(", %llu:%llu pkts, %llu:%llu bytes",
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		    (unsigned long long)betoh64(packets[0]),
- 		    (unsigned long long)betoh64(packets[1]),
- 		    (unsigned long long)betoh64(bytes[0]),
-@@ -352,7 +352,7 @@
- 
- 		bcopy(&s->id, &id, sizeof(u_int64_t));
- 		printf("   id: %016llx creatorid: %08x",
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		    (unsigned long long)betoh64(id), ntohl(s->creatorid));
- #else
- 		    betoh64(id), ntohl(s->creatorid));
---- a/contrib/pf/pfctl/pfctl.c
-+++ b/contrib/pf/pfctl/pfctl.c
-@@ -39,7 +39,7 @@
- #include <sys/socket.h>
  #include <sys/stat.h>
- 
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- #include <sys/endian.h>
+ #include <sys/sysctl.h>
  #endif
- 
-@@ -251,7 +251,7 @@
- 	if (ioctl(dev, DIOCSTART)) {
- 		if (errno == EEXIST)
- 			errx(1, "pf already enabled");
+ #include <net/if.h>
+@@ -2227,7 +2227,7 @@
+ 				}
+ 				free($9.queues.pqname);
+ 			}
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 		else if (errno == ESRCH)
- 			errx(1, "pfil registeration failed");
+ 			r.divert.port = $9.divert.port;
+ #else
+ 			if ((r.divert.port = $9.divert.port)) {
+@@ -2372,7 +2372,7 @@
+ 			filter_opts.rtableid = $2;
+ 		}
+ 		| DIVERTTO portplain {
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 			filter_opts.divert.port = $2.a;
+ 			if (!filter_opts.divert.port) {
+ 				yyerror("invalid divert port: %u", ntohs($2.a));
+@@ -2381,7 +2381,7 @@
  #endif
-@@ -1585,7 +1585,7 @@
- 	pf->limit[PF_LIMIT_TABLE_ENTRIES] = PFR_KENTRY_HIWAT;
- 
- 	mib[0] = CTL_HW;
+ 		}
+ 		| DIVERTTO STRING PORT portplain {
+-#ifndef __FreeBSD__
++#ifndef __FreeBSD_kernel__
+ 			if ((filter_opts.divert.addr = host($2)) == NULL) {
+ 				yyerror("could not parse divert address: %s",
+ 				    $2);
+@@ -2399,7 +2399,7 @@
+ 			}
+ 		}
+ 		| DIVERTREPLY {
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 	mib[1] = HW_PHYSMEM;
+ 			yyerror("divert-reply has no meaning in FreeBSD pf(4)");
+ 			YYERROR;
  #else
- 	mib[1] = HW_PHYSMEM64;
-@@ -2202,7 +2202,7 @@
- 		/* turn off options */
- 		opts &= ~ (PF_OPT_DISABLE | PF_OPT_ENABLE);
- 		clearopt = showopt = debugopt = NULL;
--#if defined(__FreeBSD__) && !defined(ENABLE_ALTQ)
-+#if defined(__FreeBSD_kernel__) && !defined(ENABLE_ALTQ)
- 		altqsupport = 0;
+@@ -2865,7 +2865,7 @@
+ 			char	*buf;
+ 
+ 			/* ie. for 10/8 parsing */
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 			if (asprintf(&buf, "%lld/%lld", (long long)$1, (long long)$3) == -1)
  #else
- 		altqsupport = 1;
+ 			if (asprintf(&buf, "%lld/%lld", $1, $3) == -1)
+@@ -6059,7 +6059,7 @@
+ int
+ rt_tableid_max(void)
+ {
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 	int fibs;
+ 	size_t l = sizeof(fibs);
+ 
 --- a/contrib/pf/pfctl/pfctl_altq.c
 +++ b/contrib/pf/pfctl/pfctl_altq.c
 @@ -77,7 +77,7 @@
@@ -257,6 +207,44 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		ifr.ifr_mtu = 1500;
  #else
  		err(1, "SIOCGIFMTU");
+--- a/contrib/pf/pfctl/pfctl.c
++++ b/contrib/pf/pfctl/pfctl.c
+@@ -39,7 +39,7 @@
+ #include <sys/socket.h>
+ #include <sys/stat.h>
+ 
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ #include <sys/endian.h>
+ #endif
+ 
+@@ -251,7 +251,7 @@
+ 	if (ioctl(dev, DIOCSTART)) {
+ 		if (errno == EEXIST)
+ 			errx(1, "pf already enabled");
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 		else if (errno == ESRCH)
+ 			errx(1, "pfil registeration failed");
+ #endif
+@@ -1585,7 +1585,7 @@
+ 	pf->limit[PF_LIMIT_TABLE_ENTRIES] = PFR_KENTRY_HIWAT;
+ 
+ 	mib[0] = CTL_HW;
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 	mib[1] = HW_PHYSMEM;
+ #else
+ 	mib[1] = HW_PHYSMEM64;
+@@ -2202,7 +2202,7 @@
+ 		/* turn off options */
+ 		opts &= ~ (PF_OPT_DISABLE | PF_OPT_ENABLE);
+ 		clearopt = showopt = debugopt = NULL;
+-#if defined(__FreeBSD__) && !defined(ENABLE_ALTQ)
++#if defined(__FreeBSD_kernel__) && !defined(ENABLE_ALTQ)
+ 		altqsupport = 0;
+ #else
+ 		altqsupport = 1;
 --- a/contrib/pf/pfctl/pfctl_optimize.c
 +++ b/contrib/pf/pfctl/pfctl_optimize.c
 @@ -862,7 +862,7 @@
@@ -353,6 +341,35 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (a->altq.local_flags & PFALTQ_FLAG_IF_REMOVED)
  		return;
  #endif
+--- a/contrib/pf/pfctl/pf_print_state.c
++++ b/contrib/pf/pfctl/pf_print_state.c
+@@ -35,7 +35,7 @@
+ 
+ #include <sys/types.h>
+ #include <sys/socket.h>
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ #include <sys/endian.h>
+ #define	betoh64	be64toh
+ #endif
+@@ -322,7 +322,7 @@
+ 		bcopy(s->bytes[0], &bytes[0], sizeof(u_int64_t));
+ 		bcopy(s->bytes[1], &bytes[1], sizeof(u_int64_t));
+ 		printf(", %llu:%llu pkts, %llu:%llu bytes",
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 		    (unsigned long long)betoh64(packets[0]),
+ 		    (unsigned long long)betoh64(packets[1]),
+ 		    (unsigned long long)betoh64(bytes[0]),
+@@ -352,7 +352,7 @@
+ 
+ 		bcopy(&s->id, &id, sizeof(u_int64_t));
+ 		printf("   id: %016llx creatorid: %08x",
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 		    (unsigned long long)betoh64(id), ntohl(s->creatorid));
+ #else
+ 		    betoh64(id), ntohl(s->creatorid));
 --- a/contrib/pf/pflogd/pflogd.c
 +++ b/contrib/pf/pflogd/pflogd.c
 @@ -51,7 +51,7 @@
@@ -689,16 +706,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  {
 --- a/sys/contrib/pf/net/if_pfsync.c
 +++ b/sys/contrib/pf/net/if_pfsync.c
-@@ -42,7 +42,7 @@
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+@@ -52,7 +52,7 @@
+  * 1.170 - SIOCSIFMTU checks
   */
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  #include "opt_inet.h"
  #include "opt_inet6.h"
- #include "opt_bpf.h"
-@@ -72,7 +72,7 @@
+ #include "opt_pf.h"
+@@ -71,7 +71,7 @@
  
  #include <sys/param.h>
  #include <sys/kernel.h>
@@ -707,7 +724,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <sys/bus.h>
  #include <sys/interrupt.h>
  #include <sys/priv.h>
-@@ -82,7 +82,7 @@
+@@ -81,7 +81,7 @@
  #include <sys/time.h>
  #include <sys/mbuf.h>
  #include <sys/socket.h>
@@ -810,7 +827,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct callout		 sc_bulk_tmo;
  #else
  	struct timeout		 sc_bulk_tmo;
-@@ -291,18 +291,18 @@
+@@ -291,14 +291,14 @@
  
  	TAILQ_HEAD(, tdb)	 sc_tdb_q;
  
@@ -820,28 +837,14 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #else
  	struct timeout		 sc_tmo;
  #endif
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 	eventhandler_tag	 sc_detachtag;
- #endif
- 
  };
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
+ static MALLOC_DEFINE(M_PFSYNC, "pfsync", "pfsync data");
  static VNET_DEFINE(struct pfsync_softc	*, pfsyncif) = NULL;
  #define	V_pfsyncif		VNET(pfsyncif)
- 
-@@ -319,7 +319,7 @@
- #define	V_pfsyncstats	 pfsyncstats
- #endif
- 
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- static void	pfsyncintr(void *);
- struct pfsync_swi {
- 	void *	pfsync_swi_cookie;
-@@ -330,7 +330,7 @@
+@@ -327,7 +327,7 @@
  #endif
  
  void	pfsyncattach(int);
@@ -850,7 +853,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  int	pfsync_clone_create(struct if_clone *, int, caddr_t);
  void	pfsync_clone_destroy(struct ifnet *);
  #else
-@@ -341,7 +341,7 @@
+@@ -338,7 +338,7 @@
  	    struct pf_state_peer *);
  void	pfsync_update_net_tdb(struct pfsync_tdb *);
  int	pfsyncoutput(struct ifnet *, struct mbuf *, struct sockaddr *,
@@ -859,16 +862,15 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	    struct route *);
  #else
  	    struct rtentry *);
-@@ -373,7 +373,7 @@
+@@ -366,18 +366,18 @@
  void	pfsync_bulk_update(void *);
  void	pfsync_bulk_fail(void *);
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- void	pfsync_ifdetach(void *, struct ifnet *);
- 
  /* XXX: ugly */
-@@ -382,11 +382,11 @@
+ #define	betoh64		(unsigned long long)be64toh
+ #define	timeout_del	callout_stop
  #endif
  
  #define PFSYNC_MAX_BULKTRIES	12
@@ -879,10 +881,10 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- IFC_SIMPLE_DECLARE(pfsync, 1);
- #else
- struct if_clone	pfsync_cloner =
-@@ -399,7 +399,7 @@
+ VNET_DEFINE(struct ifc_simple_data, pfsync_cloner_data);
+ VNET_DEFINE(struct if_clone, pfsync_cloner);
+ #define	V_pfsync_cloner_data	VNET(pfsync_cloner_data)
+@@ -394,7 +394,7 @@
  	if_clone_attach(&pfsync_cloner);
  }
  int
@@ -891,34 +893,33 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pfsync_clone_create(struct if_clone *ifc, int unit, caddr_t param)
  #else
  pfsync_clone_create(struct if_clone *ifc, int unit)
-@@ -412,7 +412,7 @@
+@@ -407,7 +407,7 @@
  	if (unit != 0)
  		return (EINVAL);
  
--#ifndef __FreeBSD__
-+#ifndef __FreeBSD_kernel__
- 	pfsync_sync_ok = 1;
- #endif
- 
-@@ -423,7 +423,7 @@
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 	sc = malloc(sizeof(struct pfsync_softc), M_PFSYNC, M_WAITOK | M_ZERO);
+ 	sc->pfsync_sync_ok = 1;
+ #else
+@@ -418,7 +418,7 @@
  	for (q = 0; q < PFSYNC_S_COUNT; q++)
  		TAILQ_INIT(&sc->sc_qs[q]);
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 	sc->pfsync_sync_ok = 1;
- 	sc->sc_pool = uma_zcreate("pfsync", PFSYNC_PLSIZE,
- 			NULL, NULL, NULL, NULL, UMA_ALIGN_PTR, 0);
-@@ -443,7 +443,7 @@
+ 	sc->sc_pool = uma_zcreate("pfsync", PFSYNC_PLSIZE, NULL, NULL, NULL,
+ 	    NULL, UMA_ALIGN_PTR, 0);
+ #else
+@@ -433,14 +433,14 @@
  	sc->sc_len = PFSYNC_MINPKT;
  	sc->sc_maxupdates = 128;
  
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
+-#ifndef __FreeBSD__
++#ifndef __FreeBSD_kernel__
  	sc->sc_imo.imo_membership = (struct in_multi **)malloc(
- 	    (sizeof(struct in_multi *) * IP_MIN_MEMBERSHIPS), M_DEVBUF,
- 	    M_NOWAIT | M_ZERO);
-@@ -456,7 +456,7 @@
+ 	    (sizeof(struct in_multi *) * IP_MIN_MEMBERSHIPS), M_IPMOPTS,
+ 	    M_WAITOK | M_ZERO);
  	sc->sc_imo.imo_max_memberships = IP_MIN_MEMBERSHIPS;
  #endif
  
@@ -926,26 +927,17 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
 +#ifdef __FreeBSD_kernel__
  	ifp = sc->sc_ifp = if_alloc(IFT_PFSYNC);
  	if (ifp == NULL) {
- 		free(sc->sc_imo.imo_membership, M_DEVBUF);
-@@ -467,7 +467,7 @@
- 	if_initname(ifp, ifc->ifc_name, unit);
- 
- 	sc->sc_detachtag = EVENTHANDLER_REGISTER(ifnet_departure_event,
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 	    pfsync_ifdetach, V_pfsyncif, EVENTHANDLER_PRI_ANY);
- #else
- 	    pfsync_ifdetach, pfsyncif, EVENTHANDLER_PRI_ANY);
-@@ -491,7 +491,7 @@
+ 		uma_zdestroy(sc->sc_pool);
+@@ -460,7 +460,7 @@
  	ifp->if_snd.ifq_maxlen = ifqmaxlen;
  	ifp->if_hdrlen = sizeof(struct pfsync_header);
- 	ifp->if_mtu = 1500; /* XXX */
+ 	ifp->if_mtu = ETHERMTU;
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  	callout_init(&sc->sc_tmo, CALLOUT_MPSAFE);
  	callout_init_mtx(&sc->sc_bulk_tmo, &pf_task_mtx, 0);
  	callout_init(&sc->sc_bulkfail_tmo, CALLOUT_MPSAFE);
-@@ -503,7 +503,7 @@
+@@ -471,7 +471,7 @@
  #endif
  
  	if_attach(ifp);
@@ -954,7 +946,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if_alloc_sadl(ifp);
  #endif
  
-@@ -512,14 +512,14 @@
+@@ -480,14 +480,14 @@
  #endif
  
  #if NBPFILTER > 0
@@ -971,7 +963,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	V_pfsyncif = sc;
  #else
  	pfsyncif = sc;
-@@ -528,7 +528,7 @@
+@@ -496,7 +496,7 @@
  	return (0);
  }
  
@@ -980,16 +972,21 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  void
  #else
  int
-@@ -537,14 +537,14 @@
+@@ -505,18 +505,18 @@
  {
  	struct pfsync_softc *sc = ifp->if_softc;
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 	EVENTHANDLER_DEREGISTER(ifnet_departure_event, sc->sc_detachtag);
+ 	PF_LOCK();
  #endif
- 	timeout_del(&sc->sc_bulk_tmo);	/* XXX: need PF_LOCK() before */
+ 	timeout_del(&sc->sc_bulkfail_tmo);
+ 	timeout_del(&sc->sc_bulk_tmo);
  	timeout_del(&sc->sc_tmo);
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 	PF_UNLOCK();
+ #endif
  #if NCARP > 0
  #ifdef notyet
 -#ifdef __FreeBSD__
@@ -997,7 +994,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (!sc->pfsync_sync_ok)
  #else
  	if (!pfsync_sync_ok)
-@@ -562,12 +562,12 @@
+@@ -534,12 +534,12 @@
  	while (sc->sc_deferred > 0)
  		pfsync_undefer(TAILQ_FIRST(&sc->sc_deferrals), 0);
  
@@ -1010,11 +1007,11 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  	if_free(ifp);
- 	free(sc->sc_imo.imo_membership, M_DEVBUF);
- #else
-@@ -575,13 +575,13 @@
- #endif
+ 	if (sc->sc_imo.imo_membership)
+ 		pfsync_multicast_cleanup(sc);
+@@ -549,13 +549,13 @@
  	free(sc, M_DEVBUF);
+ #endif
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
@@ -1028,7 +1025,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	return (0);
  #endif
  }
-@@ -590,11 +590,11 @@
+@@ -564,11 +564,11 @@
  pfsync_if_dequeue(struct ifnet *ifp)
  {
  	struct mbuf *m;
@@ -1042,7 +1039,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	IF_LOCK(&ifp->if_snd);
  	_IF_DROP(&ifp->if_snd);
  	_IF_DEQUEUE(&ifp->if_snd, m);
-@@ -617,7 +617,7 @@
+@@ -591,7 +591,7 @@
  	struct mbuf *m;
  
  	while ((m = pfsync_if_dequeue(ifp)) != NULL) {
@@ -1051,7 +1048,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		IF_DROP(&ifp->if_snd);
  #endif
  		m_freem(m);
-@@ -629,7 +629,7 @@
+@@ -603,7 +603,7 @@
      struct pf_state_peer *d)
  {
  	if (s->scrub.scrub_flag && d->scrub == NULL) {
@@ -1060,7 +1057,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		d->scrub = pool_get(&V_pf_state_scrub_pl, PR_NOWAIT | PR_ZERO);
  #else
  		d->scrub = pool_get(&pf_state_scrub_pl, PR_NOWAIT | PR_ZERO);
-@@ -641,7 +641,7 @@
+@@ -615,7 +615,7 @@
  	return (0);
  }
  
@@ -1069,16 +1066,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  void
  pfsync_state_export(struct pfsync_state *sp, struct pf_state *st)
  {
-@@ -716,7 +716,7 @@
- 
- 	PF_LOCK_ASSERT();
+@@ -688,7 +688,7 @@
+ 	int pool_flags;
+ 	int error;
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
+ 	PF_LOCK_ASSERT();
+ 
  	if (sp->creatorid == 0 && V_pf_status.debug >= PF_DEBUG_MISC) {
- #else
- 	if (sp->creatorid == 0 && pf_status.debug >= PF_DEBUG_MISC) {
-@@ -727,7 +727,7 @@
+@@ -701,7 +701,7 @@
  	}
  
  	if ((kif = pfi_kif_get(sp->ifname)) == NULL) {
@@ -1087,7 +1084,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (V_pf_status.debug >= PF_DEBUG_MISC)
  #else
  		if (pf_status.debug >= PF_DEBUG_MISC)
-@@ -749,7 +749,7 @@
+@@ -723,7 +723,7 @@
  		r = pf_main_ruleset.rules[
  		    PF_RULESET_FILTER].active.ptr_array[ntohl(sp->rule)];
  	else
@@ -1096,7 +1093,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		r = &V_pf_default_rule;
  #else
  		r = &pf_default_rule;
-@@ -758,7 +758,7 @@
+@@ -732,7 +732,7 @@
  	if ((r->max_states && r->states_cur >= r->max_states))
  		goto cleanup;
  
@@ -1105,16 +1102,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (flags & PFSYNC_SI_IOCTL)
  		pool_flags = PR_WAITOK | PR_ZERO;
  	else
-@@ -856,7 +856,7 @@
- 		CLR(st->state_flags, PFSTATE_NOSYNC);
- 		if (ISSET(st->state_flags, PFSTATE_ACK)) {
- 			pfsync_q_ins(st, PFSYNC_S_IACK);
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			pfsync_sendout();
- #else
- 			schednetisr(NETISR_PFSYNC);
-@@ -871,7 +871,7 @@
+@@ -841,7 +841,7 @@
  	error = ENOMEM;
  	if (skw == sks)
  		sks = NULL;
@@ -1123,7 +1111,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (skw != NULL)
  		pool_put(&V_pf_state_key_pl, skw);
  	if (sks != NULL)
-@@ -885,7 +885,7 @@
+@@ -855,7 +855,7 @@
  
  cleanup_state:	/* pf_state_insert frees the state keys */
  	if (st) {
@@ -1132,7 +1120,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (st->dst.scrub)
  			pool_put(&V_pf_state_scrub_pl, st->dst.scrub);
  		if (st->src.scrub)
-@@ -903,13 +903,13 @@
+@@ -873,13 +873,13 @@
  }
  
  void
@@ -1148,7 +1136,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -925,7 +925,7 @@
+@@ -895,7 +895,7 @@
  	V_pfsyncstats.pfsyncs_ipackets++;
  
  	/* verify that we have a sync interface configured */
@@ -1157,7 +1145,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (!sc || !sc->sc_sync_if || !V_pf_status.running)
  #else
  	if (!sc || !sc->sc_sync_if || !pf_status.running)
-@@ -938,7 +938,7 @@
+@@ -908,7 +908,7 @@
  		goto done;
  	}
  
@@ -1166,7 +1154,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	sc->sc_ifp->if_ipackets++;
  	sc->sc_ifp->if_ibytes += m->m_pkthdr.len;
  #else
-@@ -984,7 +984,7 @@
+@@ -954,7 +954,7 @@
  	pkt.src = ip->ip_src;
  	pkt.flags = 0;
  
@@ -1175,7 +1163,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (!bcmp(&ph->pfcksum, &V_pf_status.pf_chksum, PF_MD5_DIGEST_LENGTH))
  #else
  	if (!bcmp(&ph->pfcksum, &pf_status.pf_chksum, PF_MD5_DIGEST_LENGTH))
-@@ -1035,14 +1035,14 @@
+@@ -1005,14 +1005,14 @@
  	clr = (struct pfsync_clr *)(mp->m_data + offp);
  
  	s = splsoftnet();
@@ -1192,7 +1180,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			for (st = RB_MIN(pf_state_tree_id, &V_tree_id);
  			    st; st = nexts) {
  				nexts = RB_NEXT(pf_state_tree_id, &V_tree_id, st);
-@@ -1061,14 +1061,14 @@
+@@ -1031,14 +1031,14 @@
  				continue;
  
  			/* XXX correct? */
@@ -1209,7 +1197,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				    &V_pf_statetbl, sk);
  #else
  				    &pf_statetbl, sk);
-@@ -1083,7 +1083,7 @@
+@@ -1053,7 +1053,7 @@
  			}
  		}
  	}
@@ -1218,7 +1206,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  #endif
  	splx(s);
-@@ -1109,7 +1109,7 @@
+@@ -1079,7 +1079,7 @@
  	sa = (struct pfsync_state *)(mp->m_data + offp);
  
  	s = splsoftnet();
@@ -1227,7 +1215,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  #endif
  	for (i = 0; i < count; i++) {
-@@ -1121,7 +1121,7 @@
+@@ -1091,7 +1091,7 @@
  		    sp->dst.state > PF_TCPS_PROXY_DST ||
  		    sp->direction > PF_OUT ||
  		    (sp->af != AF_INET && sp->af != AF_INET6)) {
@@ -1236,7 +1224,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  			if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -1138,7 +1138,7 @@
+@@ -1108,7 +1108,7 @@
  			break;
  		}
  	}
@@ -1245,7 +1233,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  #endif
  	splx(s);
-@@ -1166,7 +1166,7 @@
+@@ -1136,7 +1136,7 @@
  	iaa = (struct pfsync_ins_ack *)(mp->m_data + offp);
  
  	s = splsoftnet();
@@ -1254,7 +1242,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  #endif
  	for (i = 0; i < count; i++) {
-@@ -1182,7 +1182,7 @@
+@@ -1152,7 +1152,7 @@
  		if (ISSET(st->state_flags, PFSTATE_ACK))
  			pfsync_deferred(st, 0);
  	}
@@ -1263,7 +1251,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  #endif
  	splx(s);
-@@ -1250,7 +1250,7 @@
+@@ -1220,7 +1220,7 @@
  	sa = (struct pfsync_state *)(mp->m_data + offp);
  
  	s = splsoftnet();
@@ -1272,7 +1260,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  #endif
  	for (i = 0; i < count; i++) {
-@@ -1260,7 +1260,7 @@
+@@ -1230,7 +1230,7 @@
  		if (sp->timeout >= PFTM_MAX ||
  		    sp->src.state > PF_TCPS_PROXY_DST ||
  		    sp->dst.state > PF_TCPS_PROXY_DST) {
@@ -1281,7 +1269,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  			if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -1302,7 +1302,7 @@
+@@ -1272,7 +1272,7 @@
  		}
  
  		if (sfail) {
@@ -1290,25 +1278,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  			if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -1316,7 +1316,7 @@
- 			V_pfsyncstats.pfsyncs_stale++;
- 
- 			pfsync_update_state(st);
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			pfsync_sendout();
- #else
- 			schednetisr(NETISR_PFSYNC);
-@@ -1330,7 +1330,7 @@
+@@ -1296,7 +1296,7 @@
  		st->timeout = sp->timeout;
- 		st->pfsync_time = time_second;
+ 		st->pfsync_time = time_uptime;
  	}
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  	PF_UNLOCK();
  #endif
  	splx(s);
-@@ -1361,7 +1361,7 @@
+@@ -1327,7 +1327,7 @@
  	ua = (struct pfsync_upd_c *)(mp->m_data + offp);
  
  	s = splsoftnet();
@@ -1317,7 +1296,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  #endif
  	for (i = 0; i < count; i++) {
-@@ -1371,7 +1371,7 @@
+@@ -1337,7 +1337,7 @@
  		if (up->timeout >= PFTM_MAX ||
  		    up->src.state > PF_TCPS_PROXY_DST ||
  		    up->dst.state > PF_TCPS_PROXY_DST) {
@@ -1326,7 +1305,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  			if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -1412,7 +1412,7 @@
+@@ -1378,7 +1378,7 @@
  		}
  
  		if (sfail) {
@@ -1335,25 +1314,34 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  			if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -1426,7 +1426,7 @@
- 			V_pfsyncstats.pfsyncs_stale++;
- 
- 			pfsync_update_state(st);
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			pfsync_sendout();
- #else
- 			schednetisr(NETISR_PFSYNC);
-@@ -1440,7 +1440,7 @@
+@@ -1402,7 +1402,7 @@
  		st->timeout = up->timeout;
- 		st->pfsync_time = time_second;
+ 		st->pfsync_time = time_uptime;
  	}
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  	PF_UNLOCK();
  #endif
  	splx(s);
-@@ -1511,7 +1511,7 @@
+@@ -1428,7 +1428,7 @@
+ 	}
+ 	ura = (struct pfsync_upd_req *)(mp->m_data + offp);
+ 
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 	PF_LOCK();
+ #endif
+ 	for (i = 0; i < count; i++) {
+@@ -1451,7 +1451,7 @@
+ 			pfsync_update_state_req(st);
+ 		}
+ 	}
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 	PF_UNLOCK();
+ #endif
+ 
+@@ -1477,7 +1477,7 @@
  	sa = (struct pfsync_state *)(mp->m_data + offp);
  
  	s = splsoftnet();
@@ -1362,7 +1350,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  #endif
  	for (i = 0; i < count; i++) {
-@@ -1528,7 +1528,7 @@
+@@ -1494,7 +1494,7 @@
  		SET(st->state_flags, PFSTATE_NOSYNC);
  		pf_unlink_state(st);
  	}
@@ -1371,7 +1359,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  #endif
  	splx(s);
-@@ -1555,7 +1555,7 @@
+@@ -1521,7 +1521,7 @@
  	sa = (struct pfsync_del_c *)(mp->m_data + offp);
  
  	s = splsoftnet();
@@ -1380,7 +1368,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  #endif
  	for (i = 0; i < count; i++) {
-@@ -1573,7 +1573,7 @@
+@@ -1539,7 +1539,7 @@
  		SET(st->state_flags, PFSTATE_NOSYNC);
  		pf_unlink_state(st);
  	}
@@ -1389,7 +1377,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  #endif
  	splx(s);
-@@ -1584,7 +1584,7 @@
+@@ -1550,7 +1550,7 @@
  int
  pfsync_in_bus(struct pfsync_pkt *pkt, struct mbuf *m, int offset, int count)
  {
@@ -1398,25 +1386,25 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -1607,7 +1607,7 @@
+@@ -1573,7 +1573,7 @@
  
  	switch (bus->status) {
  	case PFSYNC_BUS_START:
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 		callout_reset(&sc->sc_bulkfail_tmo, 5 * hz, pfsync_bulk_fail,
- 		    V_pfsyncif);
- #else
-@@ -1617,7 +1617,7 @@
- 		    pf_pool_limits[PF_LIMIT_STATES].limit /
- 		    (PFSYNC_BULKPACKETS * sc->sc_maxcount));
+ 		callout_reset(&sc->sc_bulkfail_tmo, 4 * hz +
+ 		    V_pf_pool_limits[PF_LIMIT_STATES].limit /
+ 		    ((sc->sc_ifp->if_mtu - PFSYNC_MINPKT) /
+@@ -1585,7 +1585,7 @@
+ 		    ((sc->sc_if.if_mtu - PFSYNC_MINPKT) /
+ 		    sizeof(struct pfsync_state)));
  #endif
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  		if (V_pf_status.debug >= PF_DEBUG_MISC)
  #else
  		if (pf_status.debug >= PF_DEBUG_MISC)
-@@ -1634,7 +1634,7 @@
+@@ -1602,7 +1602,7 @@
  			timeout_del(&sc->sc_bulkfail_tmo);
  #if NCARP > 0
  #ifdef notyet
@@ -1425,7 +1413,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (!sc->pfsync_sync_ok)
  #else
  			if (!pfsync_sync_ok)
-@@ -1642,12 +1642,12 @@
+@@ -1610,12 +1610,12 @@
  				carp_group_demote_adj(&sc->sc_if, -1);
  #endif
  #endif
@@ -1440,7 +1428,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_status.debug >= PF_DEBUG_MISC)
  #else
  			if (pf_status.debug >= PF_DEBUG_MISC)
-@@ -1655,7 +1655,7 @@
+@@ -1623,7 +1623,7 @@
  				printf("pfsync: received valid "
  				    "bulk update end\n");
  		} else {
@@ -1449,7 +1437,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_status.debug >= PF_DEBUG_MISC)
  #else
  			if (pf_status.debug >= PF_DEBUG_MISC)
-@@ -1689,12 +1689,12 @@
+@@ -1657,12 +1657,12 @@
  	tp = (struct pfsync_tdb *)(mp->m_data + offp);
  
  	s = splsoftnet();
@@ -1464,7 +1452,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  #endif
  	splx(s);
-@@ -1737,7 +1737,7 @@
+@@ -1705,7 +1705,7 @@
  	return;
  
  bad:
@@ -1473,7 +1461,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (V_pf_status.debug >= PF_DEBUG_MISC)
  #else
  	if (pf_status.debug >= PF_DEBUG_MISC)
-@@ -1773,7 +1773,7 @@
+@@ -1741,7 +1741,7 @@
  
  int
  pfsyncoutput(struct ifnet *ifp, struct mbuf *m, struct sockaddr *dst,
@@ -1482,7 +1470,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct route *rt)
  #else
  	struct rtentry *rt)
-@@ -1787,7 +1787,7 @@
+@@ -1755,7 +1755,7 @@
  int
  pfsyncioctl(struct ifnet *ifp, u_long cmd, caddr_t data)
  {
@@ -1491,7 +1479,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct proc *p = curproc;
  #endif
  	struct pfsync_softc *sc = ifp->if_softc;
-@@ -1805,7 +1805,7 @@
+@@ -1773,7 +1773,7 @@
  	case SIOCSIFDSTADDR:
  #endif
  	case SIOCSIFFLAGS:
@@ -1500,8 +1488,8 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (ifp->if_flags & IFF_UP)
  			ifp->if_drv_flags |= IFF_DRV_RUNNING;
  		else
-@@ -1824,11 +1824,11 @@
- 			ifr->ifr_mtu = MCLBYTES;
+@@ -1792,11 +1792,11 @@
+ 			return (EINVAL);
  		if (ifr->ifr_mtu < ifp->if_mtu) {
  			s = splnet();
 -#ifdef __FreeBSD__
@@ -1514,7 +1502,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_UNLOCK();
  #endif
  			splx(s);
-@@ -1846,7 +1846,7 @@
+@@ -1814,7 +1814,7 @@
  		return (copyout(&pfsyncr, ifr->ifr_data, sizeof(pfsyncr)));
  
  	case SIOCSETPFSYNC:
@@ -1523,7 +1511,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if ((error = priv_check(curthread, PRIV_NETINET_PF)) != 0)
  #else
  		if ((error = suser(p, p->p_acflag)) != 0)
-@@ -1855,11 +1855,11 @@
+@@ -1823,11 +1823,11 @@
  		if ((error = copyin(ifr->ifr_data, &pfsyncr, sizeof(pfsyncr))))
  			return (error);
  
@@ -1537,7 +1525,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			sc->sc_sync_peer.s_addr = htonl(INADDR_PFSYNC_GROUP);
  #else
  			sc->sc_sync_peer.s_addr = INADDR_PFSYNC_GROUP;
-@@ -1869,19 +1869,19 @@
+@@ -1837,19 +1837,19 @@
  			    pfsyncr.pfsyncr_syncpeer.s_addr;
  
  		if (pfsyncr.pfsyncr_maxupdates > 255)
@@ -1558,9 +1546,9 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  			PF_UNLOCK();
- #endif
- 			if (imo->imo_num_memberships > 0) {
-@@ -1892,17 +1892,17 @@
+ 			if (imo->imo_membership)
+ 				pfsync_multicast_cleanup(sc);
+@@ -1863,17 +1863,17 @@
  			break;
  		}
  
@@ -1581,62 +1569,25 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (sifp->if_mtu < sc->sc_ifp->if_mtu ||
  #else
  		if (sifp->if_mtu < sc->sc_if.if_mtu ||
-@@ -1914,18 +1914,18 @@
+@@ -1884,7 +1884,7 @@
+ 			pfsync_sendout();
  		sc->sc_sync_if = sifp;
  
- 		if (imo->imo_num_memberships > 0) {
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
+ 		if (imo->imo_membership) {
  			PF_UNLOCK();
- #endif
- 			in_delmulti(imo->imo_membership[--imo->imo_num_memberships]);
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			PF_LOCK();
- #endif
- 			imo->imo_multicast_ifp = NULL;
+ 			pfsync_multicast_cleanup(sc);
+@@ -1897,7 +1897,7 @@
  		}
+ #endif
  
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
  		if (sc->sc_sync_if &&
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
  		    sc->sc_sync_peer.s_addr == htonl(INADDR_PFSYNC_GROUP)) {
- #else
- 		    sc->sc_sync_peer.s_addr == INADDR_PFSYNC_GROUP) {
-@@ -1934,20 +1934,20 @@
- 
- 			if (!(sc->sc_sync_if->if_flags & IFF_MULTICAST)) {
- 				sc->sc_sync_if = NULL;
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 				PF_UNLOCK();
- #endif
- 				splx(s);
- 				return (EADDRNOTAVAIL);
- 			}
- 
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			addr.s_addr = htonl(INADDR_PFSYNC_GROUP);
- #else
- 			addr.s_addr = INADDR_PFSYNC_GROUP;
- #endif
- 
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
  			PF_UNLOCK();
- #endif
- 			if ((imo->imo_membership[0] =
-@@ -1956,7 +1956,7 @@
- 				splx(s);
- 				return (ENOBUFS);
- 			}
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 			PF_LOCK();
- #endif
- 			imo->imo_num_memberships++;
-@@ -1971,7 +1971,7 @@
+@@ -1938,7 +1938,7 @@
  		ip->ip_hl = sizeof(sc->sc_template) >> 2;
  		ip->ip_tos = IPTOS_LOWDELAY;
  		/* len and id are set later */
@@ -1645,7 +1596,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		ip->ip_off = IP_DF;
  #else
  		ip->ip_off = htons(IP_DF);
-@@ -1986,7 +1986,7 @@
+@@ -1953,7 +1953,7 @@
  			sc->sc_ureq_sent = time_uptime;
  #if NCARP > 0
  #ifdef notyet
@@ -1654,7 +1605,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (sc->pfsync_sync_ok)
  #else
  			if (pfsync_sync_ok)
-@@ -1994,18 +1994,18 @@
+@@ -1961,18 +1961,18 @@
  				carp_group_demote_adj(&sc->sc_if, 1);
  #endif
  #endif
@@ -1676,7 +1627,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			callout_reset(&sc->sc_bulkfail_tmo, 5 * hz,
  			    pfsync_bulk_fail, V_pfsyncif);
  #else
-@@ -2013,7 +2013,7 @@
+@@ -1980,7 +1980,7 @@
  #endif
  			pfsync_request_update(0, 0);
  		}
@@ -1685,23 +1636,25 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_UNLOCK();
  #endif
  		splx(s);
-@@ -2100,7 +2100,7 @@
+@@ -2066,7 +2066,7 @@
  
  		TAILQ_FOREACH(st, &sc->sc_qs[q], sync_list) {
  #ifdef PFSYNC_DEBUG
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  			KASSERT(st->sync_state == q,
- 				("%s: st->sync_state == q", 
+ 				("%s: st->sync_state == q",
  					__FUNCTION__));
-@@ -2135,13 +2135,13 @@
- void
- pfsync_sendout(void)
- {
+@@ -2098,7 +2098,7 @@
+ 	sc->sc_len = PFSYNC_MINPKT;
+ }
+ 
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 	struct pfsync_softc *sc = V_pfsyncif;
- #else
+ void pfsync_sendout()
+ {
+ 	pfsync_sendout1(1);
+@@ -2115,7 +2115,7 @@
  	struct pfsync_softc *sc = pfsyncif;
  #endif
  #if NBPFILTER > 0
@@ -1710,14 +1663,13 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct ifnet *ifp = sc->sc_ifp;
  #else
  	struct ifnet *ifp = &sc->sc_if;
-@@ -2156,14 +2156,14 @@
+@@ -2130,13 +2130,13 @@
  #ifdef notyet
  	struct tdb *t;
  #endif
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  	size_t pktlen;
- 	int dummy_error;
  #endif
  	int offset;
  	int q, count = 0;
@@ -1727,7 +1679,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK_ASSERT();
  #else
  	splassert(IPL_NET);
-@@ -2183,7 +2183,7 @@
+@@ -2156,7 +2156,7 @@
  
  	MGETHDR(m, M_DONTWAIT, MT_DATA);
  	if (m == NULL) {
@@ -1736,7 +1688,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		sc->sc_ifp->if_oerrors++;
  #else
  		sc->sc_if.if_oerrors++;
-@@ -2193,7 +2193,7 @@
+@@ -2166,7 +2166,7 @@
  		return;
  	}
  
@@ -1745,7 +1697,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	pktlen = max_linkhdr + sc->sc_len;
  	if (pktlen > MHLEN) {
  		/* Find the right pool to allocate from. */
-@@ -2210,7 +2210,7 @@
+@@ -2182,7 +2182,7 @@
  #endif
  		if (!ISSET(m->m_flags, M_EXT)) {
  			m_free(m);
@@ -1754,7 +1706,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			sc->sc_ifp->if_oerrors++;
  #else
  			sc->sc_if.if_oerrors++;
-@@ -2228,7 +2228,7 @@
+@@ -2200,7 +2200,7 @@
  	bcopy(&sc->sc_template, ip, sizeof(*ip));
  	offset = sizeof(*ip);
  
@@ -1763,7 +1715,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	ip->ip_len = m->m_pkthdr.len;
  #else
  	ip->ip_len = htons(m->m_pkthdr.len);
-@@ -2242,7 +2242,7 @@
+@@ -2214,7 +2214,7 @@
  
  	ph->version = PFSYNC_VERSION;
  	ph->len = htons(sc->sc_len - sizeof(*ip));
@@ -1772,7 +1724,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	bcopy(V_pf_status.pf_chksum, ph->pfcksum, PF_MD5_DIGEST_LENGTH);
  #else
  	bcopy(pf_status.pf_chksum, ph->pfcksum, PF_MD5_DIGEST_LENGTH);
-@@ -2259,7 +2259,7 @@
+@@ -2231,7 +2231,7 @@
  		count = 0;
  		TAILQ_FOREACH(st, &sc->sc_qs[q], sync_list) {
  #ifdef PFSYNC_DEBUG
@@ -1781,7 +1733,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			KASSERT(st->sync_state == q,
  				("%s: st->sync_state == q",
  					__FUNCTION__));
-@@ -2343,7 +2343,7 @@
+@@ -2315,7 +2315,7 @@
  	if (ifp->if_bpf) {
  		m->m_data += sizeof(*ip);
  		m->m_len = m->m_pkthdr.len = sc->sc_len - sizeof(*ip);
@@ -1790,7 +1742,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		BPF_MTAP(ifp, m);
  #else
  		bpf_mtap(ifp->if_bpf, m, BPF_DIRECTION_OUT);
-@@ -2359,7 +2359,7 @@
+@@ -2331,7 +2331,7 @@
  	}
  #endif
  
@@ -1799,7 +1751,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	sc->sc_ifp->if_opackets++;
  	sc->sc_ifp->if_obytes += m->m_pkthdr.len;
  	sc->sc_len = PFSYNC_MINPKT;
-@@ -2383,13 +2383,13 @@
+@@ -2361,13 +2361,13 @@
  void
  pfsync_insert_state(struct pf_state *st)
  {
@@ -1815,7 +1767,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK_ASSERT();
  #else
  	splassert(IPL_SOFTNET);
-@@ -2405,7 +2405,7 @@
+@@ -2383,7 +2383,7 @@
  		return;
  
  #ifdef PFSYNC_DEBUG
@@ -1824,7 +1776,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	KASSERT(st->sync_state == PFSYNC_S_NONE,
  		("%s: st->sync_state == PFSYNC_S_NONE", __FUNCTION__));
  #else
-@@ -2414,7 +2414,7 @@
+@@ -2392,7 +2392,7 @@
  #endif
  
  	if (sc->sc_len == PFSYNC_MINPKT)
@@ -1833,16 +1785,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		callout_reset(&sc->sc_tmo, 1 * hz, pfsync_timeout,
  		    V_pfsyncif);
  #else
-@@ -2424,7 +2424,7 @@
- 	pfsync_q_ins(st, PFSYNC_S_INS);
- 
- 	if (ISSET(st->state_flags, PFSTATE_ACK))
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		pfsync_sendout();
- #else
- 		schednetisr(NETISR_PFSYNC);
-@@ -2438,14 +2438,14 @@
+@@ -2412,14 +2412,14 @@
  int
  pfsync_defer(struct pf_state *st, struct mbuf *m)
  {
@@ -1859,7 +1802,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK_ASSERT();
  #else
  	splassert(IPL_SOFTNET);
-@@ -2459,7 +2459,7 @@
+@@ -2433,7 +2433,7 @@
  		return (0);
  	sc->sc_deferred++;
  
@@ -1868,7 +1811,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	m->m_flags |= M_SKIP_FIREWALL;
  #else
  	m->m_pkthdr.pf.flags |= PF_TAG_GENERATED;
-@@ -2470,7 +2470,7 @@
+@@ -2444,7 +2444,7 @@
  	pd->pd_m = m;
  
  	TAILQ_INSERT_TAIL(&sc->sc_deferrals, pd, pd_entry);
@@ -1877,7 +1820,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	callout_init(&pd->pd_tmo, CALLOUT_MPSAFE);
  	callout_reset(&pd->pd_tmo, defer, pfsync_defer_tmo,
  		pd);
-@@ -2485,14 +2485,14 @@
+@@ -2459,14 +2459,14 @@
  void
  pfsync_undefer(struct pfsync_deferral *pd, int drop)
  {
@@ -1894,7 +1837,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK_ASSERT();
  #else
  	splassert(IPL_SOFTNET);
-@@ -2507,13 +2507,13 @@
+@@ -2481,13 +2481,13 @@
  		m_freem(pd->pd_m);
  	else {
  		s = splnet();
@@ -1910,7 +1853,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_LOCK();
  #endif
  		splx(s);
-@@ -2525,18 +2525,18 @@
+@@ -2499,18 +2499,18 @@
  void
  pfsync_defer_tmo(void *arg)
  {
@@ -1932,7 +1875,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  	CURVNET_RESTORE();
  #endif
-@@ -2546,7 +2546,7 @@
+@@ -2520,7 +2520,7 @@
  void
  pfsync_deferred(struct pf_state *st, int drop)
  {
@@ -1941,7 +1884,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -2568,14 +2568,14 @@
+@@ -2542,14 +2542,14 @@
  void
  pfsync_update_state(struct pf_state *st)
  {
@@ -1958,7 +1901,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK_ASSERT();
  #else
  	splassert(IPL_SOFTNET);
-@@ -2593,7 +2593,7 @@
+@@ -2567,7 +2567,7 @@
  	}
  
  	if (sc->sc_len == PFSYNC_MINPKT)
@@ -1967,16 +1910,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		callout_reset(&sc->sc_tmo, 1 * hz, pfsync_timeout,
  		    V_pfsyncif);
  #else
-@@ -2625,7 +2625,7 @@
- 
- 	if (sync || (time_second - st->pfsync_time) < 2) {
- 		pfsync_upds++;
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		pfsync_sendout();
- #else
- 		schednetisr(NETISR_PFSYNC);
-@@ -2636,7 +2636,7 @@
+@@ -2608,7 +2608,7 @@
  void
  pfsync_request_update(u_int32_t creatorid, u_int64_t id)
  {
@@ -1985,7 +1919,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -2664,7 +2664,7 @@
+@@ -2636,7 +2636,7 @@
  	if (TAILQ_EMPTY(&sc->sc_upd_req_list))
  		nlen += sizeof(struct pfsync_subheader);
  
@@ -1994,16 +1928,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (sc->sc_len + nlen > sc->sc_ifp->if_mtu) {
  #else
  	if (sc->sc_len + nlen > sc->sc_if.if_mtu) {
-@@ -2680,7 +2680,7 @@
- 	TAILQ_INSERT_TAIL(&sc->sc_upd_req_list, item, ur_entry);
- 	sc->sc_len += nlen;
- 
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 	pfsync_sendout();
- #else
- 	schednetisr(NETISR_PFSYNC);
-@@ -2690,7 +2690,7 @@
+@@ -2658,7 +2658,7 @@
  void
  pfsync_update_state_req(struct pf_state *st)
  {
@@ -2012,16 +1937,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -2713,7 +2713,7 @@
- 		pfsync_q_del(st);
- 	case PFSYNC_S_NONE:
- 		pfsync_q_ins(st, PFSYNC_S_UPD);
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		pfsync_sendout();
- #else
- 		schednetisr(NETISR_PFSYNC);
-@@ -2735,13 +2735,13 @@
+@@ -2699,13 +2699,13 @@
  void
  pfsync_delete_state(struct pf_state *st)
  {
@@ -2037,7 +1953,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK_ASSERT();
  #else
  	splassert(IPL_SOFTNET);
-@@ -2759,7 +2759,7 @@
+@@ -2723,7 +2723,7 @@
  	}
  
  	if (sc->sc_len == PFSYNC_MINPKT)
@@ -2046,7 +1962,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		callout_reset(&sc->sc_tmo, 1 * hz, pfsync_timeout,
  		    V_pfsyncif);
  #else
-@@ -2796,13 +2796,13 @@
+@@ -2760,13 +2760,13 @@
  		struct pfsync_clr clr;
  	} __packed r;
  
@@ -2062,7 +1978,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK_ASSERT();
  #else
  	splassert(IPL_SOFTNET);
-@@ -2825,7 +2825,7 @@
+@@ -2789,7 +2789,7 @@
  void
  pfsync_q_ins(struct pf_state *st, int q)
  {
@@ -2071,7 +1987,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -2835,7 +2835,7 @@
+@@ -2799,7 +2799,7 @@
  
  	PF_LOCK_ASSERT();
  
@@ -2080,7 +1996,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	KASSERT(st->sync_state == PFSYNC_S_NONE,
  		("%s: st->sync_state == PFSYNC_S_NONE", __FUNCTION__));
  #else
-@@ -2844,7 +2844,7 @@
+@@ -2808,7 +2808,7 @@
  
  #if 1 || defined(PFSYNC_DEBUG)
  	if (sc->sc_len < PFSYNC_MINPKT)
@@ -2089,7 +2005,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		panic("pfsync pkt len is too low %zu", sc->sc_len);
  #else
  		panic("pfsync pkt len is too low %d", sc->sc_len);
-@@ -2853,7 +2853,7 @@
+@@ -2817,7 +2817,7 @@
  	if (TAILQ_EMPTY(&sc->sc_qs[q]))
  		nlen += sizeof(struct pfsync_subheader);
  
@@ -2098,7 +2014,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (sc->sc_len + nlen > sc->sc_ifp->if_mtu) {
  #else
  	if (sc->sc_len + nlen > sc->sc_if.if_mtu) {
-@@ -2873,14 +2873,14 @@
+@@ -2837,14 +2837,14 @@
  void
  pfsync_q_del(struct pf_state *st)
  {
@@ -2112,10 +2028,10 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 	KASSERT(st->sync_state != PFSYNC_S_NONE, 
+ 	KASSERT(st->sync_state != PFSYNC_S_NONE,
  		("%s: st->sync_state != PFSYNC_S_NONE", __FUNCTION__));
  #else
-@@ -2899,7 +2899,7 @@
+@@ -2863,7 +2863,7 @@
  void
  pfsync_update_tdb(struct tdb *t, int output)
  {
@@ -2124,7 +2040,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -2943,7 +2943,7 @@
+@@ -2907,7 +2907,7 @@
  void
  pfsync_delete_tdb(struct tdb *t)
  {
@@ -2133,7 +2049,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -2998,20 +2998,20 @@
+@@ -2962,20 +2962,20 @@
  void
  pfsync_bulk_start(void)
  {
@@ -2154,10 +2070,10 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 	PF_LOCK();
+ 	PF_LOCK_ASSERT();
  	if (TAILQ_EMPTY(&V_state_list))
  #else
-@@ -3021,7 +3021,7 @@
+@@ -2985,7 +2985,7 @@
  	else {
  		sc->sc_ureq_received = time_uptime;
  		if (sc->sc_bulk_next == NULL)
@@ -2166,16 +2082,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			sc->sc_bulk_next = TAILQ_FIRST(&V_state_list);
  #else
  			sc->sc_bulk_next = TAILQ_FIRST(&state_list);
-@@ -3032,7 +3032,7 @@
- 			callout_reset(&sc->sc_bulk_tmo, 1,
- 			    pfsync_bulk_update, sc);
- 	}
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 	PF_UNLOCK();
- #endif
- }
-@@ -3048,7 +3048,7 @@
+@@ -3008,7 +3008,7 @@
  	PF_LOCK_ASSERT();
  
  	s = splsoftnet();
@@ -2184,7 +2091,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	CURVNET_SET(sc->sc_ifp->if_vnet);
  #endif
  	for (;;) {
-@@ -3061,7 +3061,7 @@
+@@ -3021,7 +3021,7 @@
  
  		st = TAILQ_NEXT(st, entry_list);
  		if (st == NULL)
@@ -2193,7 +2100,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			st = TAILQ_FIRST(&V_state_list);
  #else
  			st = TAILQ_FIRST(&state_list);
-@@ -3075,7 +3075,7 @@
+@@ -3035,7 +3035,7 @@
  			break;
  		}
  
@@ -2202,7 +2109,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (i > 1 && (sc->sc_ifp->if_mtu - sc->sc_len) <
  #else
  		if (i > 1 && (sc->sc_if.if_mtu - sc->sc_len) <
-@@ -3083,7 +3083,7 @@
+@@ -3043,7 +3043,7 @@
  		    sizeof(struct pfsync_state)) {
  			/* we've filled a packet */
  			sc->sc_bulk_next = st;
@@ -2211,7 +2118,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			callout_reset(&sc->sc_bulk_tmo, 1,
  			    pfsync_bulk_update, sc);
  #else
-@@ -3093,7 +3093,7 @@
+@@ -3053,7 +3053,7 @@
  		}
  	}
  
@@ -2220,7 +2127,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	CURVNET_RESTORE();
  #endif
  	splx(s);
-@@ -3107,7 +3107,7 @@
+@@ -3067,7 +3067,7 @@
  		struct pfsync_bus bus;
  	} __packed r;
  
@@ -2229,7 +2136,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -3120,7 +3120,7 @@
+@@ -3080,7 +3080,7 @@
  	r.subh.action = PFSYNC_ACT_BUS;
  	r.subh.count = htons(1);
  
@@ -2238,7 +2145,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	r.bus.creatorid = V_pf_status.hostid;
  #else
  	r.bus.creatorid = pf_status.hostid;
-@@ -3136,13 +3136,13 @@
+@@ -3096,13 +3096,13 @@
  {
  	struct pfsync_softc *sc = arg;
  
@@ -2254,7 +2161,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		callout_reset(&sc->sc_bulkfail_tmo, 5 * hz,
  		    pfsync_bulk_fail, V_pfsyncif);
  #else
-@@ -3157,7 +3157,7 @@
+@@ -3117,7 +3117,7 @@
  		sc->sc_bulk_tries = 0;
  #if NCARP > 0
  #ifdef notyet
@@ -2263,7 +2170,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (!sc->pfsync_sync_ok)
  #else
  		if (!pfsync_sync_ok)
-@@ -3165,12 +3165,12 @@
+@@ -3125,12 +3125,12 @@
  			carp_group_demote_adj(&sc->sc_if, -1);
  #endif
  #endif
@@ -2278,7 +2185,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (V_pf_status.debug >= PF_DEBUG_MISC)
  #else
  		if (pf_status.debug >= PF_DEBUG_MISC)
-@@ -3178,7 +3178,7 @@
+@@ -3138,7 +3138,7 @@
  			printf("pfsync: failed to receive bulk update\n");
  	}
  
@@ -2287,7 +2194,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	CURVNET_RESTORE();
  #endif
  }
-@@ -3186,7 +3186,7 @@
+@@ -3146,7 +3146,7 @@
  void
  pfsync_send_plus(void *plus, size_t pluslen)
  {
@@ -2296,7 +2203,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -3195,7 +3195,7 @@
+@@ -3155,7 +3155,7 @@
  
  	PF_LOCK_ASSERT();
  
@@ -2305,7 +2212,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (sc->sc_len + pluslen > sc->sc_ifp->if_mtu) {
  #else
  	if (sc->sc_len + pluslen > sc->sc_if.if_mtu) {
-@@ -3216,13 +3216,13 @@
+@@ -3176,13 +3176,13 @@
  int
  pfsync_up(void)
  {
@@ -2321,7 +2228,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (sc == NULL || !ISSET(sc->sc_ifp->if_flags, IFF_DRV_RUNNING))
  #else
  	if (sc == NULL || !ISSET(sc->sc_if.if_flags, IFF_RUNNING))
-@@ -3235,7 +3235,7 @@
+@@ -3195,7 +3195,7 @@
  int
  pfsync_state_in_use(struct pf_state *st)
  {
@@ -2330,7 +2237,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfsync_softc *sc = V_pfsyncif;
  #else
  	struct pfsync_softc *sc = pfsyncif;
-@@ -3258,35 +3258,35 @@
+@@ -3218,35 +3218,35 @@
  void
  pfsync_timeout(void *arg)
  {
@@ -2372,30 +2279,15 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pfsyncintr(void *arg)
  {
  	struct pfsync_softc *sc = arg;
-@@ -3342,7 +3342,7 @@
+@@ -3307,7 +3307,7 @@
  	return (ENOPROTOOPT);
  }
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- void
- pfsync_ifdetach(void *arg, struct ifnet *ifp)
+ static int
+ pfsync_multicast_setup(struct pfsync_softc *sc)
  {
-@@ -3449,12 +3449,12 @@
- 
- 	switch (type) {
- 	case MOD_LOAD:
--#ifndef __FreeBSD__
-+#ifndef __FreeBSD_kernel__
- 		pfsyncattach(0);
- #endif
- 		break;
- 	case MOD_UNLOAD:
--#ifndef __FreeBSD__
-+#ifndef __FreeBSD_kernel__
- 		if_clone_detach(&pfsync_cloner);
- #endif
- 		break;
 --- a/sys/contrib/pf/net/pf.c
 +++ b/sys/contrib/pf/net/pf.c
 @@ -35,7 +35,7 @@
@@ -2416,7 +2308,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include "opt_bpf.h"
  #include "opt_pf.h"
  
-@@ -86,7 +86,7 @@
+@@ -70,7 +70,7 @@
  #include <sys/socketvar.h>
  #include <sys/kernel.h>
  #include <sys/time.h>
@@ -2425,7 +2317,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <sys/random.h>
  #include <sys/sysctl.h>
  #include <sys/endian.h>
-@@ -95,7 +95,7 @@
+@@ -79,7 +79,7 @@
  #include <sys/pool.h>
  #endif
  #include <sys/proc.h>
@@ -2434,7 +2326,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <sys/kthread.h>
  #include <sys/lock.h>
  #include <sys/sx.h>
-@@ -103,7 +103,7 @@
+@@ -87,7 +87,7 @@
  #include <sys/rwlock.h>
  #endif
  
@@ -2443,7 +2335,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <sys/md5.h>
  #else
  #include <crypto/md5.h>
-@@ -113,7 +113,7 @@
+@@ -97,7 +97,7 @@
  #include <net/if_types.h>
  #include <net/bpf.h>
  #include <net/route.h>
@@ -2452,7 +2344,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #ifdef RADIX_MPATH
  #include <net/radix_mpath.h>
  #endif
-@@ -136,12 +136,12 @@
+@@ -120,12 +120,12 @@
  #include <netinet/udp_var.h>
  #include <netinet/icmp_var.h>
  #include <netinet/if_ether.h>
@@ -2467,7 +2359,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <dev/rndvar.h>
  #endif
  #include <net/pfvar.h>
-@@ -154,13 +154,13 @@
+@@ -138,13 +138,13 @@
  #include <netinet/in_pcb.h>
  #include <netinet/icmp6.h>
  #include <netinet6/nd6.h>
@@ -2483,7 +2375,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <machine/in_cksum.h>
  #include <sys/limits.h>
  #include <sys/ucred.h>
-@@ -169,7 +169,7 @@
+@@ -153,7 +153,7 @@
  extern int ip_optcopy(struct ip *, struct ip *);
  #endif
  
@@ -2492,7 +2384,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #define	DPFPRINTF(n, x)	if (V_pf_status.debug >= (n)) printf x
  #else
  #define	DPFPRINTF(n, x)	if (pf_status.debug >= (n)) printf x
-@@ -180,7 +180,7 @@
+@@ -164,7 +164,7 @@
   */
  
  /* state tables */
@@ -2501,7 +2393,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  VNET_DEFINE(struct pf_state_tree,	 pf_statetbl);
  
  VNET_DEFINE(struct pf_altqqueue,	 pf_altqs[2]);
-@@ -268,7 +268,7 @@
+@@ -252,7 +252,7 @@
  			    struct pf_addr *, struct pf_addr *, u_int16_t,
  			    u_int16_t *, u_int16_t *, u_int16_t *,
  			    u_int16_t *, u_int8_t, sa_family_t);
@@ -2510,7 +2402,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  void			 pf_send_tcp(struct mbuf *,
  			    const struct pf_rule *, sa_family_t,
  #else
-@@ -286,7 +286,7 @@
+@@ -270,7 +270,7 @@
  int			 pf_test_rule(struct pf_rule **, struct pf_state **,
  			    int, struct pfi_kif *, struct mbuf *, int,
  			    void *, struct pf_pdesc *, struct pf_rule **,
@@ -2519,7 +2411,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			    struct pf_ruleset **, struct ifqueue *,
  			    struct inpcb *);
  #else
-@@ -328,7 +328,7 @@
+@@ -312,7 +312,7 @@
  void			 pf_route6(struct mbuf **, struct pf_rule *, int,
  			    struct ifnet *, struct pf_state *,
  			    struct pf_pdesc *);
@@ -2528,7 +2420,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  int			 pf_socket_lookup(int, struct pf_pdesc *);
  #endif
  u_int8_t		 pf_get_wscale(struct mbuf *, int, u_int16_t,
-@@ -341,7 +341,7 @@
+@@ -325,7 +325,7 @@
  			    struct pf_addr *);
  int			 pf_check_proto_cksum(struct mbuf *, int, int,
  			    u_int8_t, sa_family_t);
@@ -2537,7 +2429,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  struct pf_divert	*pf_get_divert(struct mbuf *);
  #endif
  void			 pf_print_state_parts(struct pf_state *,
-@@ -350,7 +350,7 @@
+@@ -334,7 +334,7 @@
  			    struct pf_addr_wrap *);
  int			 pf_compare_state_keys(struct pf_state_key *,
  			    struct pf_state_key *, struct pfi_kif *, u_int);
@@ -2546,7 +2438,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  struct pf_state		*pf_find_state(struct pfi_kif *,
  			    struct pf_state_key_cmp *, u_int, struct mbuf *,
  			    struct pf_mtag *);
-@@ -361,7 +361,7 @@
+@@ -345,7 +345,7 @@
  int			 pf_src_connlimit(struct pf_state **);
  int			 pf_check_congestion(struct ifqueue *);
  
@@ -2555,7 +2447,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  int in4_cksum(struct mbuf *m, u_int8_t nxt, int off, int len);
  
  VNET_DECLARE(int, pf_end_threads);
-@@ -380,7 +380,7 @@
+@@ -364,7 +364,7 @@
  };
  #endif
  
@@ -2564,7 +2456,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #define	PPACKET_LOOPED()						\
  	(pd->pf_mtag->flags & PF_PACKET_LOOPED)
  
-@@ -420,7 +420,7 @@
+@@ -404,7 +404,7 @@
  	} while (0)
  #endif
  
@@ -2573,7 +2465,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #define	BOUND_IFACE(r, k) \
  	((r)->rule_flag & PFRULE_IFBOUND) ? (k) : V_pfi_all
  #else
-@@ -457,7 +457,7 @@
+@@ -441,7 +441,7 @@
  static __inline int pf_state_compare_id(struct pf_state *,
  	struct pf_state *);
  
@@ -2582,7 +2474,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  VNET_DEFINE(struct pf_src_tree,	 	 tree_src_tracking);
  
  VNET_DEFINE(struct pf_state_tree_id,	 tree_id);
-@@ -580,7 +580,7 @@
+@@ -564,7 +564,7 @@
  	if ((*state)->rule.ptr->max_src_conn &&
  	    (*state)->rule.ptr->max_src_conn <
  	    (*state)->src_node->conn) {
@@ -2591,7 +2483,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.lcounters[LCNT_SRCCONN]++;
  #else
  		pf_status.lcounters[LCNT_SRCCONN]++;
-@@ -590,7 +590,7 @@
+@@ -574,7 +574,7 @@
  
  	if ((*state)->rule.ptr->max_src_conn_rate.limit &&
  	    pf_check_threshold(&(*state)->src_node->conn_rate)) {
@@ -2600,7 +2492,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.lcounters[LCNT_SRCCONNRATE]++;
  #else
  		pf_status.lcounters[LCNT_SRCCONNRATE]++;
-@@ -605,7 +605,7 @@
+@@ -589,7 +589,7 @@
  		struct pfr_addr p;
  		u_int32_t	killed = 0;
  
@@ -2609,7 +2501,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.lcounters[LCNT_OVERLOAD_TABLE]++;
  		if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
-@@ -642,7 +642,7 @@
+@@ -626,7 +626,7 @@
  			struct pf_state_key *sk;
  			struct pf_state *st;
  
@@ -2618,7 +2510,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			V_pf_status.lcounters[LCNT_OVERLOAD_FLUSH]++;
  			RB_FOREACH(st, pf_state_tree_id, &V_tree_id) {
  #else
-@@ -672,14 +672,14 @@
+@@ -656,14 +656,14 @@
  					killed++;
  				}
  			}
@@ -2635,7 +2527,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (V_pf_status.debug >= PF_DEBUG_MISC)
  #else
  		if (pf_status.debug >= PF_DEBUG_MISC)
-@@ -707,7 +707,7 @@
+@@ -691,7 +691,7 @@
  			k.rule.ptr = rule;
  		else
  			k.rule.ptr = NULL;
@@ -2644,7 +2536,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.scounters[SCNT_SRC_NODE_SEARCH]++;
  		*sn = RB_FIND(pf_src_tree, &V_tree_src_tracking, &k);
  #else
-@@ -718,13 +718,13 @@
+@@ -702,13 +702,13 @@
  	if (*sn == NULL) {
  		if (!rule->max_src_nodes ||
  		    rule->src_nodes < rule->max_src_nodes)
@@ -2660,7 +2552,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			V_pf_status.lcounters[LCNT_SRCNODES]++;
  #else
  			pf_status.lcounters[LCNT_SRCNODES]++;
-@@ -744,7 +744,7 @@
+@@ -728,7 +728,7 @@
  			(*sn)->rule.ptr = NULL;
  		PF_ACPY(&(*sn)->addr, src, af);
  		if (RB_INSERT(pf_src_tree,
@@ -2669,7 +2561,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		    &V_tree_src_tracking, *sn) != NULL) {
  			if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
-@@ -755,7 +755,7 @@
+@@ -739,7 +739,7 @@
  				pf_print_host(&(*sn)->addr, 0, af);
  				printf("\n");
  			}
@@ -2678,7 +2570,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_src_tree_pl, *sn);
  #else
  			pool_put(&pf_src_tree_pl, *sn);
-@@ -766,7 +766,7 @@
+@@ -750,7 +750,7 @@
  		(*sn)->ruletype = rule->action;
  		if ((*sn)->rule.ptr != NULL)
  			(*sn)->rule.ptr->src_nodes++;
@@ -2687,7 +2579,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.scounters[SCNT_SRC_NODE_INSERT]++;
  		V_pf_status.src_nodes++;
  #else
-@@ -776,7 +776,7 @@
+@@ -760,7 +760,7 @@
  	} else {
  		if (rule->max_src_states &&
  		    (*sn)->states >= rule->max_src_states) {
@@ -2696,7 +2588,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			V_pf_status.lcounters[LCNT_SRCSTATES]++;
  #else
  			pf_status.lcounters[LCNT_SRCSTATES]++;
-@@ -879,13 +879,13 @@
+@@ -863,13 +863,13 @@
  	struct pf_state_key	*cur;
  	struct pf_state		*olds = NULL;
  
@@ -2712,7 +2604,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if ((cur = RB_INSERT(pf_state_tree, &V_pf_statetbl, sk)) != NULL) {
  #else
  	if ((cur = RB_INSERT(pf_state_tree, &pf_statetbl, sk)) != NULL) {
-@@ -902,7 +902,7 @@
+@@ -886,7 +886,7 @@
  					/* unlink late or sks can go away */
  					olds = si->s;
  				} else {
@@ -2721,7 +2613,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  					if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -925,7 +925,7 @@
+@@ -909,7 +909,7 @@
  						    sk : NULL);
  						printf("\n");
  					}
@@ -2730,7 +2622,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					pool_put(&V_pf_state_key_pl, sk);
  #else
  					pool_put(&pf_state_key_pl, sk);
-@@ -933,7 +933,7 @@
+@@ -917,7 +917,7 @@
  					return (-1);	/* collision! */
  				}
  			}
@@ -2739,7 +2631,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pool_put(&V_pf_state_key_pl, sk);
  #else
  		pool_put(&pf_state_key_pl, sk);
-@@ -942,7 +942,7 @@
+@@ -926,7 +926,7 @@
  	} else
  		s->key[idx] = sk;
  
@@ -2748,7 +2640,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if ((si = pool_get(&V_pf_state_item_pl, PR_NOWAIT)) == NULL) {
  #else
  	if ((si = pool_get(&pf_state_item_pl, PR_NOWAIT)) == NULL) {
-@@ -953,7 +953,7 @@
+@@ -937,7 +937,7 @@
  	si->s = s;
  
  	/* list is sorted, if-bound states before floating */
@@ -2757,7 +2649,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (s->kif == V_pfi_all)
  #else
  	if (s->kif == pfi_all)
-@@ -992,7 +992,7 @@
+@@ -976,7 +976,7 @@
  
  	if (si) {
  		TAILQ_REMOVE(&s->key[idx]->states, si, entry);
@@ -2766,7 +2658,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pool_put(&V_pf_state_item_pl, si);
  #else
  		pool_put(&pf_state_item_pl, si);
-@@ -1000,20 +1000,20 @@
+@@ -984,20 +984,20 @@
  	}
  
  	if (TAILQ_EMPTY(&s->key[idx]->states)) {
@@ -2790,7 +2682,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pool_put(&V_pf_state_key_pl, s->key[idx]);
  #else
  		pool_put(&pf_state_key_pl, s->key[idx]);
-@@ -1027,7 +1027,7 @@
+@@ -1011,7 +1011,7 @@
  {
  	struct pf_state_key	*sk;
  
@@ -2799,7 +2691,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if ((sk = pool_get(&V_pf_state_key_pl, pool_flags)) == NULL)
  #else
  	if ((sk = pool_get(&pf_state_key_pl, pool_flags)) == NULL)
-@@ -1045,7 +1045,7 @@
+@@ -1029,7 +1029,7 @@
  	struct pf_addr *saddr, struct pf_addr *daddr,
  	u_int16_t sport, u_int16_t dport)
  {
@@ -2808,7 +2700,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	KASSERT((*skp == NULL && *nkp == NULL),
  		("%s: skp == NULL && nkp == NULL", __FUNCTION__));
  #else
-@@ -1091,7 +1091,7 @@
+@@ -1075,7 +1075,7 @@
  pf_state_insert(struct pfi_kif *kif, struct pf_state_key *skw,
      struct pf_state_key *sks, struct pf_state *s)
  {
@@ -2817,7 +2709,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	splassert(IPL_SOFTNET);
  #endif
  
-@@ -1103,7 +1103,7 @@
+@@ -1087,7 +1087,7 @@
  		s->key[PF_SK_STACK] = s->key[PF_SK_WIRE];
  	} else {
  		if (pf_state_key_attach(skw, s, PF_SK_WIRE)) {
@@ -2826,7 +2718,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_state_key_pl, sks);
  #else
  			pool_put(&pf_state_key_pl, sks);
-@@ -1117,7 +1117,7 @@
+@@ -1101,7 +1101,7 @@
  	}
  
  	if (s->id == 0 && s->creatorid == 0) {
@@ -2835,7 +2727,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		s->id = htobe64(V_pf_status.stateid++);
  		s->creatorid = V_pf_status.hostid;
  #else
-@@ -1125,7 +1125,7 @@
+@@ -1109,7 +1109,7 @@
  		s->creatorid = pf_status.hostid;
  #endif
  	}
@@ -2844,7 +2736,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (RB_INSERT(pf_state_tree_id, &V_tree_id, s) != NULL) {
  		if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
-@@ -1134,7 +1134,7 @@
+@@ -1118,7 +1118,7 @@
  #endif
  			printf("pf: state insert failed: "
  			    "id: %016llx creatorid: %08x",
@@ -2853,7 +2745,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			    (unsigned long long)betoh64(s->id), ntohl(s->creatorid));
  #else
  			    betoh64(s->id), ntohl(s->creatorid));
-@@ -1144,7 +1144,7 @@
+@@ -1128,7 +1128,7 @@
  		pf_detach_state(s);
  		return (-1);
  	}
@@ -2862,7 +2754,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	TAILQ_INSERT_TAIL(&V_state_list, s, entry_list);
  	V_pf_status.fcounters[FCNT_STATE_INSERT]++;
  	V_pf_status.states++;
-@@ -1155,7 +1155,7 @@
+@@ -1139,7 +1139,7 @@
  #endif
  	pfi_kif_ref(kif, PFI_KIF_REF_STATE);
  #if NPFSYNC > 0
@@ -2871,7 +2763,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (pfsync_insert_state_ptr != NULL)
  		pfsync_insert_state_ptr(s);
  #else
-@@ -1168,7 +1168,7 @@
+@@ -1152,7 +1152,7 @@
  struct pf_state *
  pf_find_state_byid(struct pf_state_cmp *key)
  {
@@ -2880,7 +2772,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	V_pf_status.fcounters[FCNT_STATE_SEARCH]++;
  
  	return (RB_FIND(pf_state_tree_id, &V_tree_id, (struct pf_state *)key));
-@@ -1211,7 +1211,7 @@
+@@ -1195,7 +1195,7 @@
  }
  
  struct pf_state *
@@ -2889,7 +2781,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pf_find_state(struct pfi_kif *kif, struct pf_state_key_cmp *key, u_int dir,
      struct mbuf *m, struct pf_mtag *pftag)
  #else
-@@ -1222,18 +1222,18 @@
+@@ -1206,18 +1206,18 @@
  	struct pf_state_key	*sk;
  	struct pf_state_item	*si;
  
@@ -2911,7 +2803,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if ((sk = RB_FIND(pf_state_tree, &V_pf_statetbl,
  #else
  		if ((sk = RB_FIND(pf_state_tree, &pf_statetbl,
-@@ -1253,7 +1253,7 @@
+@@ -1237,7 +1237,7 @@
  	    ((struct pf_state_key *)m->m_pkthdr.pf.statekey)->reverse)
  		sk = ((struct pf_state_key *)m->m_pkthdr.pf.statekey)->reverse;
  	else {
@@ -2920,7 +2812,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if ((sk = RB_FIND(pf_state_tree, &V_pf_statetbl,
  #else
  		if ((sk = RB_FIND(pf_state_tree, &pf_statetbl,
-@@ -1271,7 +1271,7 @@
+@@ -1255,7 +1255,7 @@
  #endif
  
  	if (dir == PF_OUT)
@@ -2929,7 +2821,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pftag->statekey = NULL;
  #else
  		m->m_pkthdr.pf.statekey = NULL;
-@@ -1279,7 +1279,7 @@
+@@ -1263,7 +1263,7 @@
  
  	/* list is sorted, if-bound states before floating ones */
  	TAILQ_FOREACH(si, &sk->states, entry)
@@ -2938,7 +2830,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if ((si->s->kif == V_pfi_all || si->s->kif == kif) &&
  #else
  		if ((si->s->kif == pfi_all || si->s->kif == kif) &&
-@@ -1297,13 +1297,13 @@
+@@ -1281,13 +1281,13 @@
  	struct pf_state_key	*sk;
  	struct pf_state_item	*si, *ret = NULL;
  
@@ -2954,7 +2846,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	sk = RB_FIND(pf_state_tree, &V_pf_statetbl, (struct pf_state_key *)key);
  #else
  	sk = RB_FIND(pf_state_tree, &pf_statetbl, (struct pf_state_key *)key);
-@@ -1332,7 +1332,7 @@
+@@ -1316,7 +1316,7 @@
  pf_purge_thread(void *v)
  {
  	int nloops = 0, s;
@@ -2963,7 +2855,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	int locked;
  #endif
  
-@@ -1341,7 +1341,7 @@
+@@ -1325,7 +1325,7 @@
  	for (;;) {
  		tsleep(pf_purge_thread, PWAIT, "pftm", 1 * hz);
  
@@ -2972,7 +2864,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		sx_slock(&V_pf_consistency_lock);
  		PF_LOCK();
  		locked = 0;
-@@ -1366,7 +1366,7 @@
+@@ -1350,7 +1350,7 @@
  		s = splsoftnet();
  
  		/* process a fraction of the state table every second */
@@ -2981,7 +2873,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (!pf_purge_expired_states(1 + (V_pf_status.states /
  		    V_pf_default_rule.timeout[PFTM_INTERVAL]), 0)) {
  			PF_UNLOCK();
-@@ -1384,7 +1384,7 @@
+@@ -1368,7 +1368,7 @@
  #endif
  
  		/* purge other expired types every PFTM_INTERVAL seconds */
@@ -2990,7 +2882,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (++nloops >= V_pf_default_rule.timeout[PFTM_INTERVAL]) {
  #else
  		if (++nloops >= pf_default_rule.timeout[PFTM_INTERVAL]) {
-@@ -1395,7 +1395,7 @@
+@@ -1379,7 +1379,7 @@
  		}
  
  		splx(s);
@@ -2999,7 +2891,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_UNLOCK();
  		if (locked)
  			sx_xunlock(&V_pf_consistency_lock);
-@@ -1419,7 +1419,7 @@
+@@ -1403,7 +1403,7 @@
  		return (time_second);
  	if (state->timeout == PFTM_UNTIL_PACKET)
  		return (0);
@@ -3008,7 +2900,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	KASSERT(state->timeout != PFTM_UNLINKED,
  	    ("pf_state_expires: timeout == PFTM_UNLINKED"));
  	KASSERT((state->timeout < PFTM_MAX), 
-@@ -1430,7 +1430,7 @@
+@@ -1414,7 +1414,7 @@
  #endif
  	timeout = state->rule.ptr->timeout[state->timeout];
  	if (!timeout)
@@ -3017,7 +2909,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		timeout = V_pf_default_rule.timeout[state->timeout];
  #else
  		timeout = pf_default_rule.timeout[state->timeout];
-@@ -1440,7 +1440,7 @@
+@@ -1424,7 +1424,7 @@
  		end = state->rule.ptr->timeout[PFTM_ADAPTIVE_END];
  		states = state->rule.ptr->states_cur;
  	} else {
@@ -3026,7 +2918,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		start = V_pf_default_rule.timeout[PFTM_ADAPTIVE_START];
  		end = V_pf_default_rule.timeout[PFTM_ADAPTIVE_END];
  		states = V_pf_status.states;
-@@ -1460,7 +1460,7 @@
+@@ -1444,7 +1444,7 @@
  	return (state->expire + timeout);
  }
  
@@ -3035,7 +2927,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  int
  pf_purge_expired_src_nodes(int waslocked)
  #else
-@@ -1471,7 +1471,7 @@
+@@ -1455,7 +1455,7 @@
  	struct pf_src_node		*cur, *next;
  	int				 locked = waslocked;
  
@@ -3044,7 +2936,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	for (cur = RB_MIN(pf_src_tree, &V_tree_src_tracking); cur; cur = next) {
  	next = RB_NEXT(pf_src_tree, &V_tree_src_tracking, cur);
  #else
-@@ -1481,14 +1481,14 @@
+@@ -1465,14 +1465,14 @@
  
  		if (cur->states <= 0 && cur->expire <= time_second) {
  			if (! locked) {
@@ -3061,7 +2953,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				    &V_tree_src_tracking, cur);
  #else
  				    &tree_src_tracking, cur);
-@@ -1501,7 +1501,7 @@
+@@ -1485,7 +1485,7 @@
  				    cur->rule.ptr->max_src_nodes <= 0)
  					pf_rm_rule(NULL, cur->rule.ptr);
  			}
@@ -3070,7 +2962,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			RB_REMOVE(pf_src_tree, &V_tree_src_tracking, cur);
  			V_pf_status.scounters[SCNT_SRC_NODE_REMOVALS]++;
  			V_pf_status.src_nodes--;
-@@ -1516,7 +1516,7 @@
+@@ -1500,7 +1500,7 @@
  	}
  
  	if (locked && !waslocked)
@@ -3079,7 +2971,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	{
  		sx_downgrade(&V_pf_consistency_lock);
  	}
-@@ -1538,7 +1538,7 @@
+@@ -1522,7 +1522,7 @@
  			timeout = s->rule.ptr->timeout[PFTM_SRC_NODE];
  			if (!timeout)
  				timeout =
@@ -3088,7 +2980,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				    V_pf_default_rule.timeout[PFTM_SRC_NODE];
  #else
  				    pf_default_rule.timeout[PFTM_SRC_NODE];
-@@ -1551,7 +1551,7 @@
+@@ -1535,7 +1535,7 @@
  			timeout = s->rule.ptr->timeout[PFTM_SRC_NODE];
  			if (!timeout)
  				timeout =
@@ -3097,7 +2989,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				    V_pf_default_rule.timeout[PFTM_SRC_NODE];
  #else
  				    pf_default_rule.timeout[PFTM_SRC_NODE];
-@@ -1566,7 +1566,7 @@
+@@ -1550,7 +1550,7 @@
  void
  pf_unlink_state(struct pf_state *cur)
  {
@@ -3106,7 +2998,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (cur->local_flags & PFSTATE_EXPIRING)
  		return;
  	cur->local_flags |= PFSTATE_EXPIRING;
-@@ -1576,7 +1576,7 @@
+@@ -1560,7 +1560,7 @@
  
  	if (cur->src.state == PF_TCPS_PROXY_DST) {
  		/* XXX wire key the right one? */
@@ -3115,7 +3007,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pf_send_tcp(NULL, cur->rule.ptr, cur->key[PF_SK_WIRE]->af,
  #else
  		pf_send_tcp(cur->rule.ptr, cur->key[PF_SK_WIRE]->af,
-@@ -1588,14 +1588,14 @@
+@@ -1572,14 +1572,14 @@
  		    cur->src.seqhi, cur->src.seqlo + 1,
  		    TH_RST|TH_ACK, 0, 0, 0, 1, cur->tag, NULL, NULL);
  	}
@@ -3132,7 +3024,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (export_pflow_ptr != NULL)
  			export_pflow_ptr(cur);
  #else
-@@ -1603,7 +1603,7 @@
+@@ -1587,7 +1587,7 @@
  #endif
  #endif
  #if NPFSYNC > 0
@@ -3141,7 +3033,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (pfsync_delete_state_ptr != NULL)
  		pfsync_delete_state_ptr(cur);
  #else
-@@ -1620,12 +1620,12 @@
+@@ -1604,12 +1604,12 @@
  void
  pf_free_state(struct pf_state *cur)
  {
@@ -3156,7 +3048,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (pfsync_state_in_use_ptr != NULL &&
  		pfsync_state_in_use_ptr(cur))
  #else
-@@ -1633,7 +1633,7 @@
+@@ -1617,7 +1617,7 @@
  #endif
  		return;
  #endif
@@ -3165,7 +3057,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	KASSERT(cur->timeout == PFTM_UNLINKED,
  	    ("pf_free_state: cur->timeout != PFTM_UNLINKED"));
  #else
-@@ -1651,14 +1651,14 @@
+@@ -1635,14 +1635,14 @@
  			pf_rm_rule(NULL, cur->anchor.ptr);
  	pf_normalize_tcp_cleanup(cur);
  	pfi_kif_unref(cur->kif, PFI_KIF_REF_STATE);
@@ -3182,7 +3074,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	pool_put(&V_pf_state_pl, cur);
  	V_pf_status.fcounters[FCNT_STATE_REMOVALS]++;
  	V_pf_status.states--;
-@@ -1669,7 +1669,7 @@
+@@ -1653,7 +1653,7 @@
  #endif
  }
  
@@ -3191,7 +3083,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  int
  pf_purge_expired_states(u_int32_t maxcheck, int waslocked)
  #else
-@@ -1679,7 +1679,7 @@
+@@ -1663,7 +1663,7 @@
  {
  	static struct pf_state	*cur = NULL;
  	struct pf_state		*next;
@@ -3200,7 +3092,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	int			 locked = waslocked;
  #else
  	int			 locked = 0;
-@@ -1688,7 +1688,7 @@
+@@ -1672,7 +1672,7 @@
  	while (maxcheck--) {
  		/* wrap to start of list when we hit the end */
  		if (cur == NULL) {
@@ -3209,7 +3101,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			cur = TAILQ_FIRST(&V_state_list);
  #else
  			cur = TAILQ_FIRST(&state_list);
-@@ -1703,7 +1703,7 @@
+@@ -1687,7 +1687,7 @@
  		if (cur->timeout == PFTM_UNLINKED) {
  			/* free unlinked state */
  			if (! locked) {
@@ -3218,7 +3110,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				if (!sx_try_upgrade(&V_pf_consistency_lock))
  					return (0);
  #else
-@@ -1716,7 +1716,7 @@
+@@ -1700,7 +1700,7 @@
  			/* unlink and free expired state */
  			pf_unlink_state(cur);
  			if (! locked) {
@@ -3227,7 +3119,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				if (!sx_try_upgrade(&V_pf_consistency_lock))
  					return (0);
  #else
-@@ -1729,7 +1729,7 @@
+@@ -1713,7 +1713,7 @@
  		cur = next;
  	}
  
@@ -3236,7 +3128,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (!waslocked && locked)
  		sx_downgrade(&V_pf_consistency_lock);
  
-@@ -2216,7 +2216,7 @@
+@@ -2200,7 +2200,7 @@
      struct tcphdr *th, struct pf_state_peer *dst)
  {
  	int hlen = (th->th_off << 2) - sizeof(*th), thoptlen = hlen;
@@ -3245,7 +3137,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	u_int8_t opts[TCP_MAXOLEN], *opt = opts;
  #else
  	u_int8_t opts[MAX_TCPOPTLEN], *opt = opts;
-@@ -2264,7 +2264,7 @@
+@@ -2248,7 +2248,7 @@
  	}
  
  	if (copyback)
@@ -3254,7 +3146,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		m_copyback(m, off + sizeof(*th), thoptlen, (caddr_t)opts);
  #else
  		m_copyback(m, off + sizeof(*th), thoptlen, opts);
-@@ -2273,7 +2273,7 @@
+@@ -2257,7 +2257,7 @@
  }
  
  void
@@ -3263,7 +3155,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pf_send_tcp(struct mbuf *replyto, const struct pf_rule *r, sa_family_t af,
  #else
  pf_send_tcp(const struct pf_rule *r, sa_family_t af,
-@@ -2293,7 +2293,7 @@
+@@ -2277,7 +2277,7 @@
  #endif /* INET6 */
  	struct tcphdr	*th;
  	char		*opt;
@@ -3272,7 +3164,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pf_mtag  *pf_mtag;
  
  	KASSERT(
-@@ -2341,7 +2341,7 @@
+@@ -2325,7 +2325,7 @@
  	m = m_gethdr(M_DONTWAIT, MT_HEADER);
  	if (m == NULL)
  		return;
@@ -3281,7 +3173,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #ifdef MAC
  	mac_netinet_firewall_send(m);
  #endif
-@@ -2351,7 +2351,7 @@
+@@ -2335,7 +2335,7 @@
  	}
  #endif
  	if (tag)
@@ -3290,7 +3182,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		m->m_flags |= M_SKIP_FIREWALL;
  	pf_mtag->tag = rtag;
  #else
-@@ -2360,20 +2360,20 @@
+@@ -2344,20 +2344,20 @@
  #endif
  
  	if (r != NULL && r->rtableid >= 0)
@@ -3314,7 +3206,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pf_mtag->qid = r->qid;
  
  		/* add hints for ecn */
-@@ -2445,7 +2445,7 @@
+@@ -2429,7 +2429,7 @@
  		h->ip_v = 4;
  		h->ip_hl = sizeof(*h) >> 2;
  		h->ip_tos = IPTOS_LOWDELAY;
@@ -3323,7 +3215,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		h->ip_off = V_path_mtu_discovery ? IP_DF : 0;
  		h->ip_len = len;
  		h->ip_ttl = ttl ? ttl : V_ip_defttl;
-@@ -2456,7 +2456,7 @@
+@@ -2440,7 +2440,7 @@
  #endif
  		h->ip_sum = 0;
  		if (eh == NULL) {
@@ -3332,7 +3224,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_UNLOCK();
  		ip_output(m, (void *)NULL, (void *)NULL, 0,
  		    (void *)NULL, (void *)NULL);
-@@ -2481,7 +2481,7 @@
+@@ -2465,7 +2465,7 @@
  			bcopy(eh->ether_dhost, e->ether_shost, ETHER_ADDR_LEN);
  			bcopy(eh->ether_shost, e->ether_dhost, ETHER_ADDR_LEN);
  			e->ether_type = eh->ether_type;
@@ -3341,7 +3233,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_UNLOCK();
  			/* XXX_IMPORT: later */
  			ip_output(m, (void *)NULL, &ro, 0,
-@@ -2503,7 +2503,7 @@
+@@ -2487,7 +2487,7 @@
  		h6->ip6_vfc |= IPV6_VERSION;
  		h6->ip6_hlim = IPV6_DEFHLIM;
  
@@ -3350,7 +3242,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_UNLOCK();
  		ip6_output(m, NULL, NULL, 0, NULL, NULL, NULL);
  		PF_LOCK();
-@@ -2520,14 +2520,14 @@
+@@ -2504,14 +2504,14 @@
      struct pf_rule *r)
  {
  	struct mbuf	*m0;
@@ -3367,7 +3259,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	m0 = m_copypacket(m, M_DONTWAIT);
  	if (m0 == NULL)
  		return;
-@@ -2536,7 +2536,7 @@
+@@ -2520,7 +2520,7 @@
  		return;
  #endif
  
@@ -3376,7 +3268,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if ((pf_mtag = pf_get_mtag(m0)) == NULL)
  		return;
  	/* XXX: revisit */
-@@ -2546,20 +2546,20 @@
+@@ -2530,20 +2530,20 @@
  #endif
  
  	if (r->rtableid >= 0)
@@ -3400,7 +3292,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pf_mtag->qid = r->qid;
  		/* add hints for ecn */
  		pf_mtag->hdr = mtod(m0, struct ip *);
-@@ -2574,7 +2574,7 @@
+@@ -2558,7 +2558,7 @@
  	switch (af) {
  #ifdef INET
  	case AF_INET:
@@ -3409,7 +3301,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		/* icmp_error() expects host byte ordering */
  		ip = mtod(m0, struct ip *);
  		NTOHS(ip->ip_len);
-@@ -2589,11 +2589,11 @@
+@@ -2573,11 +2573,11 @@
  #endif /* INET */
  #ifdef INET6
  	case AF_INET6:
@@ -3423,7 +3315,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_LOCK();
  #endif
  		break;
-@@ -2737,7 +2737,7 @@
+@@ -2721,7 +2721,7 @@
  }
  
  int
@@ -3432,7 +3324,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pf_match_tag(struct mbuf *m, struct pf_rule *r, int *tag,
      struct pf_mtag *pf_mtag)
  #else
-@@ -2745,7 +2745,7 @@
+@@ -2729,7 +2729,7 @@
  #endif
  {
  	if (*tag == -1)
@@ -3441,7 +3333,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		*tag = pf_mtag->tag;
  #else
  		*tag = m->m_pkthdr.pf.tag;
-@@ -2756,7 +2756,7 @@
+@@ -2740,7 +2740,7 @@
  }
  
  int
@@ -3450,7 +3342,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pf_tag_packet(struct mbuf *m, int tag, int rtableid,
      struct pf_mtag *pf_mtag)
  #else
-@@ -2767,13 +2767,13 @@
+@@ -2751,13 +2751,13 @@
  		return (0);
  
  	if (tag > 0)
@@ -3466,7 +3358,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	{
  		M_SETFIB(m, rtableid);
  	}
-@@ -2793,7 +2793,7 @@
+@@ -2777,7 +2777,7 @@
  	(*r)->anchor->match = 0;
  	if (match)
  		*match = 0;
@@ -3475,7 +3367,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (*depth >= sizeof(V_pf_anchor_stack) /
  	    sizeof(V_pf_anchor_stack[0])) {
  #else
-@@ -2805,7 +2805,7 @@
+@@ -2789,7 +2789,7 @@
  		return;
  	} else if (*depth == 0 && a != NULL)
  		*a = *r;
@@ -3484,7 +3376,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	f = V_pf_anchor_stack + (*depth)++;
  #else
  	f = pf_anchor_stack + (*depth)++;
-@@ -2838,7 +2838,7 @@
+@@ -2822,7 +2822,7 @@
  	do {
  		if (*depth <= 0)
  			break;
@@ -3493,7 +3385,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		f = V_pf_anchor_stack + *depth - 1;
  #else
  		f = pf_anchor_stack + *depth - 1;
-@@ -2929,7 +2929,7 @@
+@@ -2913,7 +2913,7 @@
  #endif /* INET6 */
  
  int
@@ -3502,7 +3394,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pf_socket_lookup(int direction, struct pf_pdesc *pd, struct inpcb *inp_arg)
  #else
  pf_socket_lookup(int direction, struct pf_pdesc *pd)
-@@ -2937,7 +2937,7 @@
+@@ -2921,7 +2921,7 @@
  {
  	struct pf_addr		*saddr, *daddr;
  	u_int16_t		 sport, dport;
@@ -3511,7 +3403,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct inpcbinfo	*pi;
  #else
  	struct inpcbtable	*tb;
-@@ -2950,7 +2950,7 @@
+@@ -2934,7 +2934,7 @@
  	pd->lookup.gid = GID_MAX;
  	pd->lookup.pid = NO_PID;
  
@@ -3520,7 +3412,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (inp_arg != NULL) {
  		INP_LOCK_ASSERT(inp_arg);
  		pd->lookup.uid = inp_arg->inp_cred->cr_uid;
-@@ -2965,7 +2965,7 @@
+@@ -2949,7 +2949,7 @@
  			return (-1);
  		sport = pd->hdr.tcp->th_sport;
  		dport = pd->hdr.tcp->th_dport;
@@ -3529,7 +3421,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pi = &V_tcbinfo;
  #else
  		tb = &tcbtable;
-@@ -2976,7 +2976,7 @@
+@@ -2960,7 +2960,7 @@
  			return (-1);
  		sport = pd->hdr.udp->uh_sport;
  		dport = pd->hdr.udp->uh_dport;
@@ -3538,7 +3430,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pi = &V_udbinfo;
  #else
  		tb = &udbtable;
-@@ -3000,7 +3000,7 @@
+@@ -2984,7 +2984,7 @@
  	switch (pd->af) {
  #ifdef INET
  	case AF_INET:
@@ -3547,7 +3439,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		/*
  		 * XXXRW: would be nice if we had an mbuf here so that we
  		 * could use in_pcblookup_mbuf().
-@@ -3027,7 +3027,7 @@
+@@ -3011,7 +3011,7 @@
  #endif /* INET */
  #ifdef INET6
  	case AF_INET6:
@@ -3556,7 +3448,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		/*
  		 * XXXRW: would be nice if we had an mbuf here so that we
  		 * could use in6_pcblookup_mbuf().
-@@ -3057,7 +3057,7 @@
+@@ -3041,7 +3041,7 @@
  	default:
  		return (-1);
  	}
@@ -3565,7 +3457,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	INP_RLOCK_ASSERT(inp);
  	pd->lookup.uid = inp->inp_cred->cr_uid;
  	pd->lookup.gid = inp->inp_cred->cr_groups[0];
-@@ -3116,7 +3116,7 @@
+@@ -3100,7 +3100,7 @@
  	int		 hlen;
  	u_int8_t	 hdr[60];
  	u_int8_t	*opt, optlen;
@@ -3574,7 +3466,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	u_int16_t	 mss = V_tcp_mssdflt;
  #else
  	u_int16_t	 mss = tcp_mssdflt;
-@@ -3164,7 +3164,7 @@
+@@ -3148,7 +3148,7 @@
  	struct route_in6	 ro6;
  #endif /* INET6 */
  	struct rtentry		*rt = NULL;
@@ -3583,25 +3475,25 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	int			 hlen = 0;
  	u_int16_t		 mss = V_tcp_mssdflt;
  #else
-@@ -3181,7 +3181,7 @@
+@@ -3165,7 +3165,7 @@
  		dst->sin_family = AF_INET;
  		dst->sin_len = sizeof(*dst);
  		dst->sin_addr = addr->v4;
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- #ifdef RTF_PRCLONING
- 		rtalloc_ign(&ro, (RTF_CLONING | RTF_PRCLONING));
- #else /* !RTF_PRCLONING */
-@@ -3201,7 +3201,7 @@
+ 		in_rtalloc_ign(&ro, 0, rtableid);
+ #else /* ! __FreeBSD__ */
+ 		rtalloc_noclone(&ro, NO_CLONING);
+@@ -3181,7 +3181,7 @@
  		dst6->sin6_family = AF_INET6;
  		dst6->sin6_len = sizeof(*dst6);
  		dst6->sin6_addr = addr->v6;
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- #ifdef RTF_PRCLONING
- 		rtalloc_ign((struct route *)&ro6,
- 		    (RTF_CLONING | RTF_PRCLONING));
-@@ -3218,7 +3218,7 @@
+ 		in6_rtalloc_ign(&ro6, 0, rtableid);
+ #else /* ! __FreeBSD__ */
+ 		rtalloc_noclone((struct route *)&ro6, NO_CLONING);
+@@ -3193,7 +3193,7 @@
  
  	if (rt && rt->rt_ifp) {
  		mss = rt->rt_ifp->if_mtu - hlen - sizeof(struct tcphdr);
@@ -3610,7 +3502,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		mss = max(V_tcp_mssdflt, mss);
  #else
  		mss = max(tcp_mssdflt, mss);
-@@ -3261,7 +3261,7 @@
+@@ -3236,7 +3236,7 @@
  	MD5_CTX ctx;
  	u_int32_t digest[4];
  
@@ -3619,7 +3511,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (V_pf_tcp_secret_init == 0) {
  		read_random(&V_pf_tcp_secret, sizeof(V_pf_tcp_secret));
  		MD5Init(&V_pf_tcp_secret_ctx);
-@@ -3293,7 +3293,7 @@
+@@ -3268,7 +3268,7 @@
  		MD5Update(&ctx, (char *)&pd->dst->v4, sizeof(struct in_addr));
  	}
  	MD5Final((u_char *)digest, &ctx);
@@ -3628,7 +3520,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	V_pf_tcp_iss_off += 4096;
  #define	ISN_RANDOM_INCREMENT (4096 - 1)
  	return (digest[0] + (arc4random() & ISN_RANDOM_INCREMENT) +
-@@ -3309,7 +3309,7 @@
+@@ -3284,7 +3284,7 @@
  pf_test_rule(struct pf_rule **rm, struct pf_state **sm, int direction,
      struct pfi_kif *kif, struct mbuf *m, int off, void *h,
      struct pf_pdesc *pd, struct pf_rule **am, struct pf_ruleset **rsm,
@@ -3637,7 +3529,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
      struct ifqueue *ifq, struct inpcb *inp)
  #else
      struct ifqueue *ifq)
-@@ -3330,7 +3330,7 @@
+@@ -3305,7 +3305,7 @@
  	int			 asd = 0;
  	int			 match = 0;
  	int			 state_icmp = 0;
@@ -3646,7 +3538,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	u_int16_t		 sport = 0, dport = 0;
  	u_int16_t		 bproto_sum = 0, bip_sum = 0;
  #else
-@@ -3345,7 +3345,7 @@
+@@ -3320,7 +3320,7 @@
  		return (PF_DROP);
  	}
  
@@ -3655,7 +3547,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (inp != NULL)
  		pd->lookup.done = pf_socket_lookup(direction, pd, inp);
  	else if (V_debug_pfugidhack) {
-@@ -3576,7 +3576,7 @@
+@@ -3551,7 +3551,7 @@
  			r = TAILQ_NEXT(r, entries);
  		/* tcp/udp only. uid.op always 0 in other cases */
  		else if (r->uid.op && (pd->lookup.done || (pd->lookup.done =
@@ -3664,7 +3556,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		    pf_socket_lookup(direction, pd, inp), 1)) &&
  #else
  		    pf_socket_lookup(direction, pd), 1)) &&
-@@ -3586,7 +3586,7 @@
+@@ -3561,7 +3561,7 @@
  			r = TAILQ_NEXT(r, entries);
  		/* tcp/udp only. gid.op always 0 in other cases */
  		else if (r->gid.op && (pd->lookup.done || (pd->lookup.done =
@@ -3673,7 +3565,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		    pf_socket_lookup(direction, pd, inp), 1)) &&
  #else
  		    pf_socket_lookup(direction, pd), 1)) &&
-@@ -3595,13 +3595,13 @@
+@@ -3570,13 +3570,13 @@
  		    pd->lookup.gid))
  			r = TAILQ_NEXT(r, entries);
  		else if (r->prob &&
@@ -3689,7 +3581,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		else if (r->match_tag && !pf_match_tag(m, r, &tag, pd->pf_mtag))
  #else
  		else if (r->match_tag && !pf_match_tag(m, r, &tag))
-@@ -3699,7 +3699,7 @@
+@@ -3674,7 +3674,7 @@
  					ack++;
  				if (th->th_flags & TH_FIN)
  					ack++;
@@ -3698,7 +3590,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pf_send_tcp(m, r, af, pd->dst,
  #else
  				pf_send_tcp(r, af, pd->dst,
-@@ -3721,7 +3721,7 @@
+@@ -3696,7 +3696,7 @@
  	if (r->action == PF_DROP)
  		goto cleanup;
  
@@ -3707,7 +3599,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (pf_tag_packet(m, tag, rtableid, pd->pf_mtag)) {
  #else
  	if (pf_tag_packet(m, tag, rtableid)) {
-@@ -3739,7 +3739,7 @@
+@@ -3714,7 +3714,7 @@
  		if (action != PF_PASS)
  			return (action);
  	} else {
@@ -3716,7 +3608,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (sk != NULL)
  			pool_put(&V_pf_state_key_pl, sk);
  		if (nk != NULL)
-@@ -3758,7 +3758,7 @@
+@@ -3733,7 +3733,7 @@
  
  #if NPFSYNC > 0
  	if (*sm != NULL && !ISSET((*sm)->state_flags, PFSTATE_NOSYNC) &&
@@ -3725,7 +3617,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	    direction == PF_OUT && pfsync_up_ptr != NULL && pfsync_up_ptr()) {
  #else
  	    direction == PF_OUT && pfsync_up()) {
-@@ -3769,7 +3769,7 @@
+@@ -3744,7 +3744,7 @@
  		 * firewall has to know about it to allow
  		 * replies through it.
  		 */
@@ -3734,7 +3626,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pfsync_defer_ptr != NULL &&
  			pfsync_defer_ptr(*sm, m))
  #else
-@@ -3782,7 +3782,7 @@
+@@ -3757,7 +3757,7 @@
  	return (PF_PASS);
  
  cleanup:
@@ -3743,7 +3635,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (sk != NULL)
  		pool_put(&V_pf_state_key_pl, sk);
  	if (nk != NULL)
-@@ -3807,7 +3807,7 @@
+@@ -3782,7 +3782,7 @@
  	struct pf_state		*s = NULL;
  	struct pf_src_node	*sn = NULL;
  	struct tcphdr		*th = pd->hdr.tcp;
@@ -3752,7 +3644,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	u_int16_t		 mss = V_tcp_mssdflt;
  #else
  	u_int16_t		 mss = tcp_mssdflt;
-@@ -3816,7 +3816,7 @@
+@@ -3791,7 +3791,7 @@
  
  	/* check maximums */
  	if (r->max_states && (r->states_cur >= r->max_states)) {
@@ -3761,7 +3653,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.lcounters[LCNT_STATES]++;
  #else
  		pf_status.lcounters[LCNT_STATES]++;
-@@ -3837,7 +3837,7 @@
+@@ -3812,7 +3812,7 @@
  		REASON_SET(&reason, PFRES_SRCLIMIT);
  		goto csfailed;
  	}
@@ -3770,7 +3662,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	s = pool_get(&V_pf_state_pl, PR_NOWAIT | PR_ZERO);
  #else
  	s = pool_get(&pf_state_pl, PR_NOWAIT | PR_ZERO);
-@@ -3932,7 +3932,7 @@
+@@ -3907,7 +3907,7 @@
  			REASON_SET(&reason, PFRES_MEMORY);
  			pf_src_tree_remove_state(s);
  			STATE_DEC_COUNTERS(s);
@@ -3779,7 +3671,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_state_pl, s);
  #else
  			pool_put(&pf_state_pl, s);
-@@ -3948,7 +3948,7 @@
+@@ -3923,7 +3923,7 @@
  			pf_normalize_tcp_cleanup(s);
  			pf_src_tree_remove_state(s);
  			STATE_DEC_COUNTERS(s);
@@ -3788,7 +3680,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_state_pl, s);
  #else
  			pool_put(&pf_state_pl, s);
-@@ -3968,7 +3968,7 @@
+@@ -3943,7 +3943,7 @@
  		REASON_SET(&reason, PFRES_STATEINS);
  		pf_src_tree_remove_state(s);
  		STATE_DEC_COUNTERS(s);
@@ -3797,16 +3689,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pool_put(&V_pf_state_pl, s);
  #else
  		pool_put(&pf_state_pl, s);
-@@ -4008,7 +4008,7 @@
- 		mss = pf_calc_mss(pd->src, pd->af, mss);
- 		mss = pf_calc_mss(pd->dst, pd->af, mss);
+@@ -3984,7 +3984,7 @@
+ 		mss = pf_calc_mss(pd->src, pd->af, rtid, mss);
+ 		mss = pf_calc_mss(pd->dst, pd->af, rtid, mss);
  		s->src.mss = mss;
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  		pf_send_tcp(NULL, r, pd->af, pd->dst, pd->src, th->th_dport,
  #else
  		pf_send_tcp(r, pd->af, pd->dst, pd->src, th->th_dport,
-@@ -4022,7 +4022,7 @@
+@@ -3998,7 +3998,7 @@
  	return (PF_PASS);
  
  csfailed:
@@ -3815,7 +3707,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (sk != NULL)
  		pool_put(&V_pf_state_key_pl, sk);
  	if (nk != NULL)
-@@ -4035,7 +4035,7 @@
+@@ -4011,7 +4011,7 @@
  #endif
  
  	if (sn != NULL && sn->states == 0 && sn->expire == 0) {
@@ -3824,7 +3716,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		RB_REMOVE(pf_src_tree, &V_tree_src_tracking, sn);
  		V_pf_status.scounters[SCNT_SRC_NODE_REMOVALS]++;
  		V_pf_status.src_nodes--;
-@@ -4048,7 +4048,7 @@
+@@ -4024,7 +4024,7 @@
  #endif
  	}
  	if (nsn != sn && nsn != NULL && nsn->states == 0 && nsn->expire == 0) {
@@ -3833,7 +3725,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		RB_REMOVE(pf_src_tree, &V_tree_src_tracking, nsn);
  		V_pf_status.scounters[SCNT_SRC_NODE_REMOVALS]++;
  		V_pf_status.src_nodes--;
-@@ -4110,7 +4110,7 @@
+@@ -4086,7 +4086,7 @@
  		else if (r->prob && r->prob <=
  		    (arc4random() % (UINT_MAX - 1) + 1))
  			r = TAILQ_NEXT(r, entries);
@@ -3842,7 +3734,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		else if (r->match_tag && !pf_match_tag(m, r, &tag, pd->pf_mtag))
  #else
  		else if (r->match_tag && !pf_match_tag(m, r, &tag))
-@@ -4146,7 +4146,7 @@
+@@ -4122,7 +4122,7 @@
  	if (r->action != PF_PASS)
  		return (PF_DROP);
  
@@ -3851,7 +3743,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (pf_tag_packet(m, tag, -1, pd->pf_mtag)) {
  #else
  	if (pf_tag_packet(m, tag, -1)) {
-@@ -4405,7 +4405,7 @@
+@@ -4381,7 +4381,7 @@
  		 * and keep updating the state TTL.
  		 */
  
@@ -3860,7 +3752,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  		if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -4415,7 +4415,7 @@
+@@ -4391,7 +4391,7 @@
  			pf_print_flags(th->th_flags);
  			printf(" seq=%u (%u) ack=%u len=%u ackskew=%d "
  			    "pkts=%llu:%llu dir=%s,%s\n", seq, orig_seq, ack,
@@ -3869,7 +3761,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			    pd->p_len, ackskew, (unsigned long long)(*state)->packets[0],
  			    (unsigned long long)(*state)->packets[1],
  #else
-@@ -4460,7 +4460,7 @@
+@@ -4436,7 +4436,7 @@
  		    (*state)->src.state == TCPS_SYN_SENT) {
  			/* Send RST for state mismatches during handshake */
  			if (!(th->th_flags & TH_RST))
@@ -3878,7 +3770,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pf_send_tcp(NULL, (*state)->rule.ptr, pd->af,
  #else
  				pf_send_tcp((*state)->rule.ptr, pd->af,
-@@ -4473,7 +4473,7 @@
+@@ -4449,7 +4449,7 @@
  			src->seqlo = 0;
  			src->seqhi = 1;
  			src->max_win = 1;
@@ -3887,7 +3779,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		} else if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  		} else if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -4484,7 +4484,7 @@
+@@ -4460,7 +4460,7 @@
  			printf(" seq=%u (%u) ack=%u len=%u ackskew=%d "
  			    "pkts=%llu:%llu dir=%s,%s\n",
  			    seq, orig_seq, ack, pd->p_len, ackskew,
@@ -3896,7 +3788,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			    (unsigned long long)(*state)->packets[0],
  			    (unsigned long long)(*state)->packets[1],
  #else
-@@ -4604,7 +4604,7 @@
+@@ -4580,7 +4580,7 @@
  		key.port[0] = th->th_dport;
  	}
  
@@ -3905,7 +3797,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  	STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -4630,7 +4630,7 @@
+@@ -4606,7 +4606,7 @@
  				REASON_SET(reason, PFRES_SYNPROXY);
  				return (PF_DROP);
  			}
@@ -3914,7 +3806,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pf_send_tcp(NULL, (*state)->rule.ptr, pd->af, pd->dst,
  #else
  			pf_send_tcp((*state)->rule.ptr, pd->af, pd->dst,
-@@ -4664,7 +4664,7 @@
+@@ -4640,7 +4640,7 @@
  			(*state)->src.max_win = MAX(ntohs(th->th_win), 1);
  			if ((*state)->dst.seqhi == 1)
  				(*state)->dst.seqhi = htonl(arc4random());
@@ -3923,7 +3815,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pf_send_tcp(NULL, (*state)->rule.ptr, pd->af,
  #else
  			pf_send_tcp((*state)->rule.ptr, pd->af,
-@@ -4683,7 +4683,7 @@
+@@ -4659,7 +4659,7 @@
  		} else {
  			(*state)->dst.max_win = MAX(ntohs(th->th_win), 1);
  			(*state)->dst.seqlo = ntohl(th->th_seq);
@@ -3932,7 +3824,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pf_send_tcp(NULL, (*state)->rule.ptr, pd->af, pd->dst,
  #else
  			pf_send_tcp((*state)->rule.ptr, pd->af, pd->dst,
-@@ -4692,7 +4692,7 @@
+@@ -4668,7 +4668,7 @@
  			    ntohl(th->th_ack), ntohl(th->th_seq) + 1,
  			    TH_ACK, (*state)->src.max_win, 0, 0, 0,
  			    (*state)->tag, NULL, NULL);
@@ -3941,7 +3833,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pf_send_tcp(NULL, (*state)->rule.ptr, pd->af,
  #else
  			pf_send_tcp((*state)->rule.ptr, pd->af,
-@@ -4721,7 +4721,7 @@
+@@ -4697,7 +4697,7 @@
  	if (((th->th_flags & (TH_SYN|TH_ACK)) == TH_SYN) &&
  	    dst->state >= TCPS_FIN_WAIT_2 &&
  	    src->state >= TCPS_FIN_WAIT_2) {
@@ -3950,7 +3842,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  		if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -4767,7 +4767,7 @@
+@@ -4743,7 +4743,7 @@
  
  	/* Copyback sequence modulation or stateful scrub changes if needed */
  	if (copyback)
@@ -3959,7 +3851,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		m_copyback(m, off, sizeof(*th), (caddr_t)th);
  #else
  		m_copyback(m, off, sizeof(*th), th);
-@@ -4798,7 +4798,7 @@
+@@ -4774,7 +4774,7 @@
  		key.port[0] = uh->uh_dport;
  	}
  
@@ -3968,7 +3860,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  	STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -4840,7 +4840,7 @@
+@@ -4816,7 +4816,7 @@
  			pf_change_ap(pd->dst, &uh->uh_dport, pd->ip_sum,
  			    &uh->uh_sum, &nk->addr[pd->didx],
  			    nk->port[pd->didx], 1, pd->af);
@@ -3977,7 +3869,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		m_copyback(m, off, sizeof(*uh), (caddr_t)uh);
  #else
  		m_copyback(m, off, sizeof(*uh), uh);
-@@ -4855,7 +4855,7 @@
+@@ -4831,7 +4831,7 @@
      struct mbuf *m, int off, void *h, struct pf_pdesc *pd, u_short *reason)
  {
  	struct pf_addr  *saddr = pd->src, *daddr = pd->dst;
@@ -3986,7 +3878,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	u_int16_t	 icmpid = 0, *icmpsum;
  #else
  	u_int16_t	 icmpid, *icmpsum;
-@@ -4911,7 +4911,7 @@
+@@ -4887,7 +4887,7 @@
  			PF_ACPY(&key.addr[0], pd->dst, key.af);
  		}
  
@@ -3995,7 +3887,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  		STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -4950,7 +4950,7 @@
+@@ -4926,7 +4926,7 @@
  				}
  
  				m_copyback(m, off, ICMP_MINLEN,
@@ -4004,7 +3896,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				    (caddr_t)
  #endif
  				    pd->hdr.icmp);
-@@ -4972,7 +4972,7 @@
+@@ -4948,7 +4948,7 @@
  
  				m_copyback(m, off,
  				    sizeof(struct icmp6_hdr),
@@ -4013,7 +3905,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				    (caddr_t)
  #endif
  				    pd->hdr.icmp6);
-@@ -4989,7 +4989,7 @@
+@@ -4965,7 +4965,7 @@
  		 */
  
  		struct pf_pdesc	pd2;
@@ -4022,7 +3914,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		bzero(&pd2, sizeof pd2);
  #endif
  #ifdef INET
-@@ -4999,7 +4999,7 @@
+@@ -4975,7 +4975,7 @@
  		struct ip6_hdr	h2_6;
  		int		terminal = 0;
  #endif /* INET6 */
@@ -4031,7 +3923,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		int		ipoff2 = 0;
  		int		off2 = 0;
  #else
-@@ -5126,7 +5126,7 @@
+@@ -5102,7 +5102,7 @@
  			key.port[pd2.sidx] = th.th_sport;
  			key.port[pd2.didx] = th.th_dport;
  
@@ -4040,7 +3932,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  			STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -5156,7 +5156,7 @@
+@@ -5132,7 +5132,7 @@
  			if (!((*state)->state_flags & PFSTATE_SLOPPY) &&
  			    (!SEQ_GEQ(src->seqhi, seq) ||
  			    !SEQ_GEQ(seq, src->seqlo - (dst->max_win << dws)))) {
@@ -4049,7 +3941,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  				if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -5173,7 +5173,7 @@
+@@ -5149,7 +5149,7 @@
  				REASON_SET(reason, PFRES_BADSTATE);
  				return (PF_DROP);
  			} else {
@@ -4058,7 +3950,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  				if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -5221,12 +5221,12 @@
+@@ -5197,12 +5197,12 @@
  #ifdef INET
  				case AF_INET:
  					m_copyback(m, off, ICMP_MINLEN,
@@ -4073,7 +3965,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					    (caddr_t)
  #endif
  					    &h2);
-@@ -5236,19 +5236,19 @@
+@@ -5212,19 +5212,19 @@
  				case AF_INET6:
  					m_copyback(m, off,
  					    sizeof(struct icmp6_hdr),
@@ -4096,7 +3988,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				m_copyback(m, off2, 8, (caddr_t)&th);
  #else
  				m_copyback(m, off2, 8, &th);
-@@ -5276,7 +5276,7 @@
+@@ -5252,7 +5252,7 @@
  			key.port[pd2.sidx] = uh.uh_sport;
  			key.port[pd2.didx] = uh.uh_dport;
  
@@ -4105,7 +3997,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  			STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -5311,11 +5311,11 @@
+@@ -5287,11 +5287,11 @@
  #ifdef INET
  				case AF_INET:
  					m_copyback(m, off, ICMP_MINLEN,
@@ -4119,7 +4011,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					m_copyback(m, ipoff2, sizeof(h2), (caddr_t)&h2);
  #else
  					m_copyback(m, ipoff2, sizeof(h2), &h2);
-@@ -5326,19 +5326,19 @@
+@@ -5302,19 +5302,19 @@
  				case AF_INET6:
  					m_copyback(m, off,
  					    sizeof(struct icmp6_hdr),
@@ -4142,7 +4034,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				m_copyback(m, off2, sizeof(uh), (caddr_t)&uh);
  #else
  				m_copyback(m, off2, sizeof(uh), &uh);
-@@ -5365,7 +5365,7 @@
+@@ -5341,7 +5341,7 @@
  			PF_ACPY(&key.addr[pd2.didx], pd2.dst, key.af);
  			key.port[0] = key.port[1] = iih.icmp_id;
  
@@ -4151,7 +4043,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  			STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -5396,7 +5396,7 @@
+@@ -5372,7 +5372,7 @@
  					    pd2.ip_sum, icmpsum,
  					    pd->ip_sum, 0, AF_INET);
  
@@ -4160,7 +4052,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				m_copyback(m, off, ICMP_MINLEN, (caddr_t)pd->hdr.icmp);
  				m_copyback(m, ipoff2, sizeof(h2), (caddr_t)&h2);
  				m_copyback(m, off2, ICMP_MINLEN, (caddr_t)&iih);
-@@ -5428,7 +5428,7 @@
+@@ -5404,7 +5404,7 @@
  			PF_ACPY(&key.addr[pd2.didx], pd2.dst, key.af);
  			key.port[0] = key.port[1] = iih.icmp6_id;
  
@@ -4169,7 +4061,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  			STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -5459,7 +5459,7 @@
+@@ -5435,7 +5435,7 @@
  					    pd2.ip_sum, icmpsum,
  					    pd->ip_sum, 0, AF_INET6);
  
@@ -4178,7 +4070,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				m_copyback(m, off, sizeof(struct icmp6_hdr),
  				    (caddr_t)pd->hdr.icmp6);
  				m_copyback(m, ipoff2, sizeof(h2_6), (caddr_t)&h2_6);
-@@ -5484,7 +5484,7 @@
+@@ -5460,7 +5460,7 @@
  			PF_ACPY(&key.addr[pd2.didx], pd2.dst, key.af);
  			key.port[0] = key.port[1] = 0;
  
@@ -4187,7 +4079,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  			STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -5514,7 +5514,7 @@
+@@ -5490,7 +5490,7 @@
  				switch (pd2.af) {
  #ifdef INET
  				case AF_INET:
@@ -4196,7 +4088,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					m_copyback(m, off, ICMP_MINLEN,
  					    (caddr_t)pd->hdr.icmp);
  					m_copyback(m, ipoff2, sizeof(h2), (caddr_t)&h2);
-@@ -5529,12 +5529,12 @@
+@@ -5505,12 +5505,12 @@
  				case AF_INET6:
  					m_copyback(m, off,
  					    sizeof(struct icmp6_hdr),
@@ -4211,7 +4103,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					    (caddr_t)
  #endif
  					    &h2_6);
-@@ -5568,7 +5568,7 @@
+@@ -5544,7 +5544,7 @@
  		key.port[1] = key.port[0] = 0;
  	}
  
@@ -4220,7 +4112,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	STATE_LOOKUP(kif, &key, direction, *state, m, pd->pf_mtag);
  #else
  	STATE_LOOKUP(kif, &key, direction, *state, m);
-@@ -5599,7 +5599,7 @@
+@@ -5575,7 +5575,7 @@
  	if ((*state)->key[PF_SK_WIRE] != (*state)->key[PF_SK_STACK]) {
  		struct pf_state_key *nk = (*state)->key[pd->didx];
  
@@ -4229,16 +4121,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		KASSERT(nk, ("%s: nk is null", __FUNCTION__));
  		KASSERT(pd, ("%s: pd is null", __FUNCTION__));
  		KASSERT(pd->src, ("%s: pd->src is null", __FUNCTION__));
-@@ -5695,7 +5695,7 @@
- int
- pf_routable(struct pf_addr *addr, sa_family_t af, struct pfi_kif *kif)
+@@ -5672,7 +5672,7 @@
+ pf_routable(struct pf_addr *addr, sa_family_t af, struct pfi_kif *kif,
+     int rtableid)
  {
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  #ifdef RADIX_MPATH
  	struct radix_node_head	*rnh;
  #endif
-@@ -5703,11 +5703,11 @@
+@@ -5680,11 +5680,11 @@
  	struct sockaddr_in	*dst;
  	int			 ret = 1;
  	int			 check_mpath;
@@ -4252,7 +4144,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	extern int		 ip6_multipath;
  #endif
  	struct sockaddr_in6	*dst6;
-@@ -5720,7 +5720,7 @@
+@@ -5697,7 +5697,7 @@
  	struct ifnet		*ifp;
  
  	check_mpath = 0;
@@ -4261,7 +4153,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #ifdef RADIX_MPATH
  	/* XXX: stick to table 0 for now */
  	rnh = rt_tables_get_rnh(0, af);
-@@ -5735,7 +5735,7 @@
+@@ -5712,7 +5712,7 @@
  		dst->sin_family = AF_INET;
  		dst->sin_len = sizeof(*dst);
  		dst->sin_addr = addr->v4;
@@ -4270,7 +4162,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (ipmultipath)
  			check_mpath = 1;
  #endif
-@@ -5752,7 +5752,7 @@
+@@ -5729,7 +5729,7 @@
  		dst6->sin6_family = AF_INET6;
  		dst6->sin6_len = sizeof(*dst6);
  		dst6->sin6_addr = addr->v6;
@@ -4279,16 +4171,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (ip6_multipath)
  			check_mpath = 1;
  #endif
-@@ -5766,7 +5766,7 @@
+@@ -5743,7 +5743,7 @@
  	if (kif != NULL && kif->pfik_ifp->if_type == IFT_ENC)
  		goto out;
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- /* XXX MRT not always INET */ /* stick with table 0 though */
- #ifdef INET
- 	if (af == AF_INET)
-@@ -5793,7 +5793,7 @@
+ 	switch (af) {
+ #ifdef INET6
+ 	case AF_INET6:
+@@ -5778,7 +5778,7 @@
  		rn = (struct radix_node *)ro.ro_rt;
  		do {
  			rt = (struct rtentry *)rn;
@@ -4297,7 +4189,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (rt->rt_ifp->if_type == IFT_CARP)
  				ifp = rt->rt_ifp->if_carpdev;
  			else
-@@ -5802,7 +5802,7 @@
+@@ -5787,7 +5787,7 @@
  
  			if (kif->pfik_ifp == ifp)
  				ret = 1;
@@ -4306,16 +4198,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #ifdef RADIX_MPATH
  			rn = rn_mpath_next(rn);
  #endif
-@@ -5850,7 +5850,7 @@
+@@ -5836,7 +5836,7 @@
  		return (0);
  	}
  
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- # ifdef RTF_PRCLONING
- 	rtalloc_ign((struct route *)&ro, (RTF_CLONING|RTF_PRCLONING));
- # else /* !RTF_PRCLONING */
-@@ -5866,7 +5866,7 @@
+ 	switch (af) {
+ #ifdef INET6
+ 	case AF_INET6:
+@@ -5857,7 +5857,7 @@
  #endif
  
  	if (ro.ro_rt != NULL) {
@@ -4324,7 +4216,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		/* XXX_IMPORT: later */
  #else
  		if (ro.ro_rt->rt_labelid == aw->v.rtlabel)
-@@ -5892,7 +5892,7 @@
+@@ -5883,7 +5883,7 @@
  	struct pf_addr		 naddr;
  	struct pf_src_node	*sn = NULL;
  	int			 error = 0;
@@ -4333,7 +4225,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	int sw_csum;
  #endif
  #ifdef IPSEC
-@@ -5903,7 +5903,7 @@
+@@ -5894,7 +5894,7 @@
  	    (dir != PF_IN && dir != PF_OUT) || oifp == NULL)
  		panic("pf_route: invalid parameters");
  
@@ -4342,7 +4234,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (pd->pf_mtag->routed++ > 3) {
  #else
  	if ((*m)->m_pkthdr.pf.routed++ > 3) {
-@@ -5914,7 +5914,7 @@
+@@ -5905,7 +5905,7 @@
  	}
  
  	if (r->rt == PF_DUPTO) {
@@ -4351,13 +4243,13 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if ((m0 = m_dup(*m, M_DONTWAIT)) == NULL)
  #else
  		if ((m0 = m_copym2(*m, 0, M_COPYALL, M_NOWAIT)) == NULL)
-@@ -5942,13 +5942,13 @@
+@@ -5933,13 +5933,13 @@
  	dst->sin_addr = ip->ip_dst;
  
  	if (r->rt == PF_FASTROUTE) {
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 		in_rtalloc(ro, 0);
+ 		in_rtalloc_ign(ro, 0, M_GETFIB(m0));
  #else
  		rtalloc(ro);
  #endif
@@ -4367,7 +4259,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			KMOD_IPSTAT_INC(ips_noroute);
  #else
  			ipstat.ips_noroute++;
-@@ -5985,7 +5985,7 @@
+@@ -5976,7 +5976,7 @@
  		goto bad;
  
  	if (oifp != ifp) {
@@ -4376,7 +4268,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_UNLOCK();
  		if (pf_test(PF_OUT, ifp, &m0, NULL, NULL) != PF_PASS) {
  			PF_LOCK();
-@@ -6009,7 +6009,7 @@
+@@ -6000,7 +6000,7 @@
  		ip = mtod(m0, struct ip *);
  	}
  
@@ -4385,7 +4277,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	/* Copied from FreeBSD 5.1-CURRENT ip_output. */
  	m0->m_pkthdr.csum_flags |= CSUM_IP;
  	sw_csum = m0->m_pkthdr.csum_flags & ~ifp->if_hwassist;
-@@ -6083,7 +6083,7 @@
+@@ -6074,7 +6074,7 @@
  		if ((ifp->if_capabilities & IFCAP_CSUM_IPv4) &&
  		    ifp->if_bridge == NULL) {
  			m0->m_pkthdr.csum_flags |= M_IPV4_CSUM_OUT;
@@ -4394,7 +4286,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			KMOD_IPSTAT_INC(ips_outhwcsum);
  #else
  			ipstat.ips_outhwcsum++;
-@@ -6105,13 +6105,13 @@
+@@ -6096,13 +6096,13 @@
  	 * Must be able to put at least 8 bytes per fragment.
  	 */
  	if (ip->ip_off & htons(IP_DF)) {
@@ -4410,7 +4302,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			/* icmp_error() expects host byte ordering */
  			NTOHS(ip->ip_len);
  			NTOHS(ip->ip_off);
-@@ -6129,7 +6129,7 @@
+@@ -6120,7 +6120,7 @@
  	}
  
  	m1 = m0;
@@ -4419,7 +4311,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	/*
  	 * XXX: is cheaper + less error prone than own function
  	 */
-@@ -6140,7 +6140,7 @@
+@@ -6131,7 +6131,7 @@
  	error = ip_fragment(m0, ifp, ifp->if_mtu);
  #endif
  	if (error) {
@@ -4428,7 +4320,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		m0 = NULL;
  #endif
  		goto bad;
-@@ -6149,7 +6149,7 @@
+@@ -6140,7 +6140,7 @@
  	for (m0 = m1; m0; m0 = m1) {
  		m1 = m0->m_nextpkt;
  		m0->m_nextpkt = 0;
@@ -4437,7 +4329,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (error == 0) {
  			PF_UNLOCK();
  			error = (*ifp->if_output)(ifp, m0, sintosa(dst),
-@@ -6166,7 +6166,7 @@
+@@ -6157,7 +6157,7 @@
  	}
  
  	if (error == 0)
@@ -4446,7 +4338,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		KMOD_IPSTAT_INC(ips_fragmented);
  #else
  		ipstat.ips_fragmented++;
-@@ -6203,7 +6203,7 @@
+@@ -6194,7 +6194,7 @@
  	    (dir != PF_IN && dir != PF_OUT) || oifp == NULL)
  		panic("pf_route6: invalid parameters");
  
@@ -4455,7 +4347,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (pd->pf_mtag->routed++ > 3) {
  #else
  	if ((*m)->m_pkthdr.pf.routed++ > 3) {
-@@ -6214,7 +6214,7 @@
+@@ -6205,7 +6205,7 @@
  	}
  
  	if (r->rt == PF_DUPTO) {
@@ -4464,7 +4356,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if ((m0 = m_dup(*m, M_DONTWAIT)) == NULL)
  #else
  		if ((m0 = m_copym2(*m, 0, M_COPYALL, M_NOWAIT)) == NULL)
-@@ -6242,7 +6242,7 @@
+@@ -6233,7 +6233,7 @@
  
  	/* Cheat. XXX why only in the v6 case??? */
  	if (r->rt == PF_FASTROUTE) {
@@ -4473,7 +4365,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		m0->m_flags |= M_SKIP_FIREWALL;
  		PF_UNLOCK();
  		ip6_output(m0, NULL, NULL, 0, NULL, NULL, NULL);
-@@ -6275,7 +6275,7 @@
+@@ -6266,7 +6266,7 @@
  		goto bad;
  
  	if (oifp != ifp) {
@@ -4482,7 +4374,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_UNLOCK();
  		if (pf_test6(PF_OUT, ifp, &m0, NULL, NULL) != PF_PASS) {
  			PF_LOCK();
-@@ -6306,16 +6306,16 @@
+@@ -6297,16 +6297,16 @@
  	if (IN6_IS_SCOPE_EMBED(&dst->sin6_addr))
  		dst->sin6_addr.s6_addr16[1] = htons(ifp->if_index);
  	if ((u_long)m0->m_pkthdr.len <= ifp->if_mtu) {
@@ -4502,7 +4394,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (r->rt != PF_DUPTO) {
  			PF_UNLOCK();
  			icmp6_error(m0, ICMP6_PACKET_TOO_BIG, 0, ifp->if_mtu);
-@@ -6340,7 +6340,7 @@
+@@ -6331,7 +6331,7 @@
  }
  #endif /* INET6 */
  
@@ -4511,7 +4403,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  /*
   * FreeBSD supports cksum offloads for the following drivers.
   *  em(4), fxp(4), ixgb(4), lge(4), ndis(4), nge(4), re(4),
-@@ -6570,7 +6570,7 @@
+@@ -6561,7 +6561,7 @@
  }
  #endif
  
@@ -4520,7 +4412,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  struct pf_divert *
  pf_find_divert(struct mbuf *m)
  {
-@@ -6602,7 +6602,7 @@
+@@ -6593,7 +6593,7 @@
  
  #ifdef INET
  int
@@ -4529,7 +4421,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pf_test(int dir, struct ifnet *ifp, struct mbuf **m0,
      struct ether_header *eh, struct inpcb *inp)
  #else
-@@ -6613,7 +6613,7 @@
+@@ -6604,7 +6604,7 @@
  	struct pfi_kif		*kif;
  	u_short			 action, reason = 0, log = 0;
  	struct mbuf		*m = *m0;
@@ -4538,7 +4430,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct ip		*h = NULL;
  	struct m_tag		*ipfwtag;
  	struct pf_rule		*a = NULL, *r = &V_pf_default_rule, *tr, *nr;
-@@ -6626,7 +6626,7 @@
+@@ -6617,7 +6617,7 @@
  	struct pf_pdesc		 pd;
  	int			 off, dirndx, pqid = 0;
  
@@ -4547,7 +4439,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  	if (!V_pf_status.running)
  	{
-@@ -6639,7 +6639,7 @@
+@@ -6630,7 +6630,7 @@
  #endif
  
  	memset(&pd, 0, sizeof(pd));
@@ -4556,7 +4448,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if ((pd.pf_mtag = pf_get_mtag(m)) == NULL) {
  		PF_UNLOCK();
  		DPFPRINTF(PF_DEBUG_URGENT,
-@@ -6647,7 +6647,7 @@
+@@ -6638,7 +6638,7 @@
  		return (PF_DROP);
  	}
  #endif
@@ -4565,7 +4457,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (ifp->if_type == IFT_CARP && ifp->if_carpdev)
  		kif = (struct pfi_kif *)ifp->if_carpdev->if_pf_kif;
  	else
-@@ -6655,7 +6655,7 @@
+@@ -6646,7 +6646,7 @@
  		kif = (struct pfi_kif *)ifp->if_pf_kif;
  
  	if (kif == NULL) {
@@ -4574,7 +4466,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_UNLOCK();
  #endif
  		DPFPRINTF(PF_DEBUG_URGENT,
-@@ -6663,16 +6663,16 @@
+@@ -6654,16 +6654,16 @@
  		return (PF_DROP);
  	}
  	if (kif->pfik_flags & PFI_IFLAG_SKIP)
@@ -4594,7 +4486,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	M_ASSERTPKTHDR(m);
  #else
  #ifdef DIAGNOSTIC
-@@ -6688,7 +6688,7 @@
+@@ -6679,7 +6679,7 @@
  		goto done;
  	}
  
@@ -4603,7 +4495,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (m->m_flags & M_SKIP_FIREWALL) {
  		PF_UNLOCK();
  		return (PF_PASS);
-@@ -6698,7 +6698,7 @@
+@@ -6689,7 +6689,7 @@
  		return (PF_PASS);
  #endif
  	
@@ -4612,7 +4504,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (ip_divert_ptr != NULL &&
  	    ((ipfwtag = m_tag_locate(m, MTAG_IPFW_RULE, 0, NULL)) != NULL)) {
  		struct ipfw_rule_ref *rr = (struct ipfw_rule_ref *)(ipfwtag+1);
-@@ -6770,7 +6770,7 @@
+@@ -6761,7 +6761,7 @@
  		    &reason);
  		if (action == PF_PASS) {
  #if NPFSYNC > 0
@@ -4621,7 +4513,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (pfsync_update_state_ptr != NULL)
  				pfsync_update_state_ptr(s);
  #else
-@@ -6781,7 +6781,7 @@
+@@ -6772,7 +6772,7 @@
  			a = s->anchor.ptr;
  			log = s->log;
  		} else if (s == NULL)
@@ -4630,7 +4522,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			action = pf_test_rule(&r, &s, dir, kif,
  			    m, off, h, &pd, &a, &ruleset, NULL, inp);
  #else
-@@ -6810,7 +6810,7 @@
+@@ -6801,7 +6801,7 @@
  		action = pf_test_state_udp(&s, dir, kif, m, off, h, &pd);
  		if (action == PF_PASS) {
  #if NPFSYNC > 0
@@ -4639,7 +4531,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (pfsync_update_state_ptr != NULL)
  				pfsync_update_state_ptr(s);
  #else
-@@ -6821,7 +6821,7 @@
+@@ -6812,7 +6812,7 @@
  			a = s->anchor.ptr;
  			log = s->log;
  		} else if (s == NULL)
@@ -4648,7 +4540,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			action = pf_test_rule(&r, &s, dir, kif,
  			    m, off, h, &pd, &a, &ruleset, NULL, inp);
  #else
-@@ -6844,7 +6844,7 @@
+@@ -6835,7 +6835,7 @@
  		    &reason);
  		if (action == PF_PASS) {
  #if NPFSYNC > 0
@@ -4657,7 +4549,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (pfsync_update_state_ptr != NULL)
  				pfsync_update_state_ptr(s);
  #else
-@@ -6855,7 +6855,7 @@
+@@ -6846,7 +6846,7 @@
  			a = s->anchor.ptr;
  			log = s->log;
  		} else if (s == NULL)
@@ -4666,7 +4558,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			action = pf_test_rule(&r, &s, dir, kif,
  			    m, off, h, &pd, &a, &ruleset, NULL, inp);
  #else
-@@ -6878,7 +6878,7 @@
+@@ -6869,7 +6869,7 @@
  		action = pf_test_state_other(&s, dir, kif, m, &pd);
  		if (action == PF_PASS) {
  #if NPFSYNC > 0
@@ -4675,7 +4567,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (pfsync_update_state_ptr != NULL)
  				pfsync_update_state_ptr(s);
  #else
-@@ -6889,7 +6889,7 @@
+@@ -6880,7 +6880,7 @@
  			a = s->anchor.ptr;
  			log = s->log;
  		} else if (s == NULL)
@@ -4684,10 +4576,10 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			action = pf_test_rule(&r, &s, dir, kif, m, off, h,
  			    &pd, &a, &ruleset, NULL, inp);
  #else
-@@ -6910,14 +6910,14 @@
+@@ -6901,14 +6901,14 @@
  	}
  
- 	if ((s && s->tag) || r->rtableid)
+ 	if ((s && s->tag) || r->rtableid >= 0)
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  		pf_tag_packet(m, s ? s->tag : 0, r->rtableid, pd.pf_mtag);
@@ -4701,7 +4593,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pd.pf_mtag->statekey = s->key[PF_SK_STACK];
  #else
  		m->m_pkthdr.pf.statekey = s->key[PF_SK_STACK];
-@@ -6925,7 +6925,7 @@
+@@ -6916,7 +6916,7 @@
  
  #ifdef ALTQ
  	if (action == PF_PASS && r->qid) {
@@ -4710,7 +4602,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pqid || (pd.tos & IPTOS_LOWDELAY))
  			pd.pf_mtag->qid = r->pqid;
  		else
-@@ -6954,13 +6954,13 @@
+@@ -6945,13 +6945,13 @@
  	    (s->nat_rule.ptr->action == PF_RDR ||
  	    s->nat_rule.ptr->action == PF_BINAT) &&
  	    (ntohl(pd.dst->v4.s_addr) >> IN_CLASSA_NSHIFT) == IN_LOOPBACKNET)
@@ -4726,7 +4618,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (action == PF_PASS && r->divert.port &&
  	    ip_divert_ptr != NULL && !PACKET_LOOPED()) {
  
-@@ -7047,7 +7047,7 @@
+@@ -7038,7 +7038,7 @@
  		}
  		tr = r;
  		nr = (s != NULL) ? s->nat_rule.ptr : pd.nat_rule;
@@ -4735,7 +4627,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (nr != NULL && r == &V_pf_default_rule)
  #else
  		if (nr != NULL && r == &pf_default_rule)
-@@ -7082,7 +7082,7 @@
+@@ -7073,7 +7073,7 @@
  			pf_route(m0, r, dir, kif->pfik_ifp, s, &pd);
  		break;
  	}
@@ -4744,7 +4636,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  #endif
  	return (action);
-@@ -7091,7 +7091,7 @@
+@@ -7082,7 +7082,7 @@
  
  #ifdef INET6
  int
@@ -4753,7 +4645,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pf_test6(int dir, struct ifnet *ifp, struct mbuf **m0,
      struct ether_header *eh, struct inpcb *inp)
  #else
-@@ -7102,7 +7102,7 @@
+@@ -7093,7 +7093,7 @@
  	struct pfi_kif		*kif;
  	u_short			 action, reason = 0, log = 0;
  	struct mbuf		*m = *m0, *n = NULL;
@@ -4762,7 +4654,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct ip6_hdr		*h = NULL;
  	struct pf_rule		*a = NULL, *r = &V_pf_default_rule, *tr, *nr;
  #else
-@@ -7114,7 +7114,7 @@
+@@ -7105,7 +7105,7 @@
  	struct pf_pdesc		 pd;
  	int			 off, terminal = 0, dirndx, rh_cnt = 0;
  
@@ -4771,7 +4663,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  	if (!V_pf_status.running) {
  		PF_UNLOCK();
-@@ -7126,7 +7126,7 @@
+@@ -7117,7 +7117,7 @@
  #endif
  
  	memset(&pd, 0, sizeof(pd));
@@ -4780,7 +4672,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if ((pd.pf_mtag = pf_get_mtag(m)) == NULL) {
  		PF_UNLOCK();
  		DPFPRINTF(PF_DEBUG_URGENT,
-@@ -7134,7 +7134,7 @@
+@@ -7125,7 +7125,7 @@
  		return (PF_DROP);
  	}
  #endif
@@ -4789,7 +4681,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (ifp->if_type == IFT_CARP && ifp->if_carpdev)
  		kif = (struct pfi_kif *)ifp->if_carpdev->if_pf_kif;
  	else
-@@ -7142,7 +7142,7 @@
+@@ -7133,7 +7133,7 @@
  		kif = (struct pfi_kif *)ifp->if_pf_kif;
  
  	if (kif == NULL) {
@@ -4798,7 +4690,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_UNLOCK();
  #endif
  		DPFPRINTF(PF_DEBUG_URGENT,
-@@ -7150,16 +7150,16 @@
+@@ -7141,16 +7141,16 @@
  		return (PF_DROP);
  	}
  	if (kif->pfik_flags & PFI_IFLAG_SKIP)
@@ -4818,7 +4710,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	M_ASSERTPKTHDR(m);
  #else
  #ifdef DIAGNOSTIC
-@@ -7175,14 +7175,14 @@
+@@ -7166,14 +7166,14 @@
  		goto done;
  	}
  
@@ -4835,7 +4727,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	}
  #endif
  
-@@ -7310,7 +7310,7 @@
+@@ -7301,7 +7301,7 @@
  		    &reason);
  		if (action == PF_PASS) {
  #if NPFSYNC > 0
@@ -4844,7 +4736,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (pfsync_update_state_ptr != NULL)
  				pfsync_update_state_ptr(s);
  #else
-@@ -7321,7 +7321,7 @@
+@@ -7312,7 +7312,7 @@
  			a = s->anchor.ptr;
  			log = s->log;
  		} else if (s == NULL)
@@ -4853,7 +4745,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			action = pf_test_rule(&r, &s, dir, kif,
  			    m, off, h, &pd, &a, &ruleset, NULL, inp);
  #else
-@@ -7350,7 +7350,7 @@
+@@ -7341,7 +7341,7 @@
  		action = pf_test_state_udp(&s, dir, kif, m, off, h, &pd);
  		if (action == PF_PASS) {
  #if NPFSYNC > 0
@@ -4862,7 +4754,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (pfsync_update_state_ptr != NULL)
  				pfsync_update_state_ptr(s);
  #else
-@@ -7361,7 +7361,7 @@
+@@ -7352,7 +7352,7 @@
  			a = s->anchor.ptr;
  			log = s->log;
  		} else if (s == NULL)
@@ -4871,7 +4763,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			action = pf_test_rule(&r, &s, dir, kif,
  			    m, off, h, &pd, &a, &ruleset, NULL, inp);
  #else
-@@ -7391,7 +7391,7 @@
+@@ -7382,7 +7382,7 @@
  		    m, off, h, &pd, &reason);
  		if (action == PF_PASS) {
  #if NPFSYNC > 0
@@ -4880,7 +4772,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (pfsync_update_state_ptr != NULL)
  				pfsync_update_state_ptr(s);
  #else
-@@ -7402,7 +7402,7 @@
+@@ -7393,7 +7393,7 @@
  			a = s->anchor.ptr;
  			log = s->log;
  		} else if (s == NULL)
@@ -4889,7 +4781,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			action = pf_test_rule(&r, &s, dir, kif,
  			    m, off, h, &pd, &a, &ruleset, NULL, inp);
  #else
-@@ -7416,7 +7416,7 @@
+@@ -7407,7 +7407,7 @@
  		action = pf_test_state_other(&s, dir, kif, m, &pd);
  		if (action == PF_PASS) {
  #if NPFSYNC > 0
@@ -4898,7 +4790,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (pfsync_update_state_ptr != NULL)
  				pfsync_update_state_ptr(s);
  #else
-@@ -7427,7 +7427,7 @@
+@@ -7418,7 +7418,7 @@
  			a = s->anchor.ptr;
  			log = s->log;
  		} else if (s == NULL)
@@ -4907,10 +4799,10 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			action = pf_test_rule(&r, &s, dir, kif, m, off, h,
  			    &pd, &a, &ruleset, NULL, inp);
  #else
-@@ -7454,14 +7454,14 @@
+@@ -7445,14 +7445,14 @@
  	}
  
- 	if ((s && s->tag) || r->rtableid)
+ 	if ((s && s->tag) || r->rtableid >= 0)
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
  		pf_tag_packet(m, s ? s->tag : 0, r->rtableid, pd.pf_mtag);
@@ -4924,7 +4816,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pd.pf_mtag->statekey = s->key[PF_SK_STACK];
  #else
  		m->m_pkthdr.pf.statekey = s->key[PF_SK_STACK];
-@@ -7469,7 +7469,7 @@
+@@ -7460,7 +7460,7 @@
  
  #ifdef ALTQ
  	if (action == PF_PASS && r->qid) {
@@ -4933,7 +4825,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pd.tos & IPTOS_LOWDELAY)
  			pd.pf_mtag->qid = r->pqid;
  		else
-@@ -7492,13 +7492,13 @@
+@@ -7483,13 +7483,13 @@
  	    (s->nat_rule.ptr->action == PF_RDR ||
  	    s->nat_rule.ptr->action == PF_BINAT) &&
  	    IN6_IS_ADDR_LOOPBACK(&pd.dst->v6))
@@ -4949,7 +4841,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	/* XXX: Anybody working on it?! */
  	if (r->divert.port)
  		printf("pf: divert(9) is not supported for IPv6\n");
-@@ -7556,7 +7556,7 @@
+@@ -7547,7 +7547,7 @@
  		}
  		tr = r;
  		nr = (s != NULL) ? s->nat_rule.ptr : pd.nat_rule;
@@ -4958,7 +4850,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (nr != NULL && r == &V_pf_default_rule)
  #else
  		if (nr != NULL && r == &pf_default_rule)
-@@ -7590,7 +7590,7 @@
+@@ -7581,7 +7581,7 @@
  		break;
  	}
  
@@ -4967,7 +4859,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  #endif
  	return (action);
-@@ -7600,7 +7600,7 @@
+@@ -7591,7 +7591,7 @@
  int
  pf_check_congestion(struct ifqueue *ifq)
  {
@@ -4976,7 +4868,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	/* XXX_IMPORT: later */
  	return (0);
  #else
-@@ -7618,7 +7618,7 @@
+@@ -7609,7 +7609,7 @@
  void
  pf_pkt_addr_changed(struct mbuf *m)
  {
@@ -5213,10 +5105,10 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		return (0);
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- 	/* XXX: revisit! */
- 	if ((dyn = pool_get(&V_pfi_addr_pl, PR_WAITOK | PR_ZERO))
+ 	if ((dyn = pool_get(&V_pfi_addr_pl, PR_NOWAIT | PR_ZERO))
  #else
-@@ -567,7 +567,7 @@
+ 	if ((dyn = pool_get(&pfi_addr_pl, PR_WAITOK | PR_LIMITFAIL | PR_ZERO))
+@@ -566,7 +566,7 @@
  		pf_remove_if_empty_ruleset(ruleset);
  	if (dyn->pfid_kif != NULL)
  		pfi_kif_unref(dyn->pfid_kif, PFI_KIF_REF_RULE);
@@ -5225,7 +5117,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	pool_put(&V_pfi_addr_pl, dyn);
  #else
  	pool_put(&pfi_addr_pl, dyn);
-@@ -605,14 +605,14 @@
+@@ -604,14 +604,14 @@
  	kif = dyn->pfid_kif;
  	kt = dyn->pfid_kt;
  
@@ -5242,7 +5134,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		kt->pfrkt_larg = V_pfi_update;
  #else
  		kt->pfrkt_larg = pfi_update;
-@@ -627,7 +627,7 @@
+@@ -626,7 +626,7 @@
  	int			 e, size2 = 0;
  	struct ifg_member	*ifgm;
  
@@ -5251,7 +5143,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	V_pfi_buffer_cnt = 0;
  #else
  	pfi_buffer_cnt = 0;
-@@ -639,7 +639,7 @@
+@@ -638,7 +638,7 @@
  		TAILQ_FOREACH(ifgm, &kif->pfik_group->ifg_members, ifgm_next)
  			pfi_instance_add(ifgm->ifgm_ifp, net, flags);
  
@@ -5260,7 +5152,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if ((e = pfr_set_addrs(&kt->pfrkt_t, V_pfi_buffer, V_pfi_buffer_cnt, &size2,
  	    NULL, NULL, NULL, 0, PFR_TFLAG_ALLMASK)))
  		printf("pfi_table_update: cannot set %d new addresses "
-@@ -667,7 +667,7 @@
+@@ -666,7 +666,7 @@
  		af = ia->ifa_addr->sa_family;
  		if (af != AF_INET && af != AF_INET6)
  			continue;
@@ -5269,7 +5161,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		/*
  		 * XXX: For point-to-point interfaces, (ifname:0) and IPv4,
  		 *      jump over addresses without a proper route to work
-@@ -727,7 +727,7 @@
+@@ -726,7 +726,7 @@
  	struct pfr_addr	*p;
  	int		 i;
  
@@ -5278,7 +5170,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (V_pfi_buffer_cnt >= V_pfi_buffer_max) {
  		int		 new_max = V_pfi_buffer_max * 2;
  #else
-@@ -737,7 +737,7 @@
+@@ -736,7 +736,7 @@
  
  		if (new_max > PFI_BUFFER_MAX) {
  			printf("pfi_address_add: address buffer full (%d/%d)\n",
@@ -5287,7 +5179,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			    V_pfi_buffer_cnt, PFI_BUFFER_MAX);
  #else
  			    pfi_buffer_cnt, PFI_BUFFER_MAX);
-@@ -745,21 +745,21 @@
+@@ -744,21 +744,21 @@
  			return;
  		}
  		p = malloc(new_max * sizeof(*V_pfi_buffer), PFI_MTYPE,
@@ -5312,7 +5204,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		memcpy(V_pfi_buffer, p, V_pfi_buffer_cnt * sizeof(*V_pfi_buffer));
  		/* no need to zero buffer */
  		free(V_pfi_buffer, PFI_MTYPE);
-@@ -775,7 +775,7 @@
+@@ -774,7 +774,7 @@
  	}
  	if (af == AF_INET && net > 32)
  		net = 128;
@@ -5321,7 +5213,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	p = V_pfi_buffer + V_pfi_buffer_cnt++;
  #else
  	p = pfi_buffer + pfi_buffer_cnt++;
-@@ -812,7 +812,7 @@
+@@ -811,7 +811,7 @@
  	aw->p.dyn->pfid_kif = NULL;
  	pfr_detach_table(aw->p.dyn->pfid_kt);
  	aw->p.dyn->pfid_kt = NULL;
@@ -5330,7 +5222,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	pool_put(&V_pfi_addr_pl, aw->p.dyn);
  #else
  	pool_put(&pfi_addr_pl, aw->p.dyn);
-@@ -837,7 +837,7 @@
+@@ -836,7 +836,7 @@
  	struct pfi_kif		*kif = (struct pfi_kif *)v;
  
  	s = splsoftnet();
@@ -5339,7 +5231,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	V_pfi_update++;
  #else
  	pfi_update++;
-@@ -863,7 +863,7 @@
+@@ -862,7 +862,7 @@
  
  	strlcpy(key.pfik_name, name, sizeof(key.pfik_name));
  	s = splsoftnet();
@@ -5348,7 +5240,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	p = RB_FIND(pfi_ifhead, &V_pfi_ifs, (struct pfi_kif *)&key);
  #else
  	p = RB_FIND(pfi_ifhead, &pfi_ifs, (struct pfi_kif *)&key);
-@@ -915,12 +915,12 @@
+@@ -914,12 +914,12 @@
  {
  	struct pfi_kif	*p, *nextp;
  	int		 s, n = 0;
@@ -5363,7 +5255,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	for (p = RB_MIN(pfi_ifhead, &V_pfi_ifs); p; p = nextp) {
  		nextp = RB_NEXT(pfi_ifhead, &V_pfi_ifs, p);
  #else
-@@ -933,7 +933,7 @@
+@@ -932,7 +932,7 @@
  			if (!p->pfik_tzero)
  				p->pfik_tzero = time_second;
  			pfi_kif_ref(p, PFI_KIF_REF_RULE);
@@ -5372,7 +5264,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_COPYOUT(p, buf++, sizeof(*buf), error);
  			if (error) {
  #else
-@@ -943,7 +943,7 @@
+@@ -942,7 +942,7 @@
  				splx(s);
  				return (EFAULT);
  			}
@@ -5381,7 +5273,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			nextp = RB_NEXT(pfi_ifhead, &V_pfi_ifs, p);
  #else
  			nextp = RB_NEXT(pfi_ifhead, &pfi_ifs, p);
-@@ -982,7 +982,7 @@
+@@ -981,7 +981,7 @@
  	int		 s;
  
  	s = splsoftnet();
@@ -5390,7 +5282,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	RB_FOREACH(p, pfi_ifhead, &V_pfi_ifs) {
  #else
  	RB_FOREACH(p, pfi_ifhead, &pfi_ifs) {
-@@ -1002,7 +1002,7 @@
+@@ -1001,7 +1001,7 @@
  	int		 s;
  
  	s = splsoftnet();
@@ -5399,7 +5291,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	RB_FOREACH(p, pfi_ifhead, &V_pfi_ifs) {
  #else
  	RB_FOREACH(p, pfi_ifhead, &pfi_ifs) {
-@@ -1035,7 +1035,7 @@
+@@ -1034,7 +1034,7 @@
  	return (b);
  }
  
@@ -5419,7 +5311,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <sys/cdefs.h>
  __FBSDID("$FreeBSD$");
  
-@@ -76,7 +76,7 @@
+@@ -66,7 +66,7 @@
  #include <sys/socketvar.h>
  #include <sys/kernel.h>
  #include <sys/time.h>
@@ -5428,7 +5320,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <sys/ucred.h>
  #include <sys/jail.h>
  #include <sys/module.h>
-@@ -90,14 +90,14 @@
+@@ -80,14 +80,14 @@
  #include <sys/proc.h>
  #include <sys/malloc.h>
  #include <sys/kthread.h>
@@ -5445,7 +5337,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <net/vnet.h>
  #endif
  #include <net/route.h>
-@@ -109,7 +109,7 @@
+@@ -99,7 +99,7 @@
  #include <netinet/ip_var.h>
  #include <netinet/ip_icmp.h>
  
@@ -5454,7 +5346,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #include <sys/md5.h>
  #else
  #include <dev/rndvar.h>
-@@ -132,14 +132,14 @@
+@@ -122,14 +122,14 @@
  #include <altq/altq.h>
  #endif
  
@@ -5471,7 +5363,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  void			 init_zone_var(void);
  void			 cleanup_pf_zone(void);
  int			 pfattach(void);
-@@ -154,7 +154,7 @@
+@@ -144,7 +144,7 @@
  
  void			 pf_mv_pool(struct pf_palist *, struct pf_palist *);
  void			 pf_empty_pool(struct pf_palist *);
@@ -5480,7 +5372,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  int			 pfioctl(struct cdev *, u_long, caddr_t, int, struct thread *);
  #else
  int			 pfioctl(dev_t, u_long, caddr_t, int, struct proc *);
-@@ -178,7 +178,7 @@
+@@ -168,7 +168,7 @@
  
  #define	TAGID_MAX	 50000
  
@@ -5489,7 +5381,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  VNET_DEFINE(struct pf_rule,	 pf_default_rule);
  VNET_DEFINE(struct sx,		 pf_consistency_lock);
  
-@@ -216,13 +216,13 @@
+@@ -206,13 +206,13 @@
  void			 pf_rtlabel_remove(struct pf_addr_wrap *);
  void			 pf_rtlabel_copyout(struct pf_addr_wrap *);
  
@@ -5505,7 +5397,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  struct cdev *pf_dev;
   
  /*
-@@ -607,7 +607,7 @@
+@@ -599,7 +599,7 @@
  		pf_tbladdr_remove(&empty_pool_pa->addr);
  		pfi_kif_unref(empty_pool_pa->kif, PFI_KIF_REF_RULE);
  		TAILQ_REMOVE(poola, empty_pool_pa, entries);
@@ -5514,7 +5406,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pool_put(&V_pf_pooladdr_pl, empty_pool_pa);
  #else
  		pool_put(&pf_pooladdr_pl, empty_pool_pa);
-@@ -658,7 +658,7 @@
+@@ -650,7 +650,7 @@
  	pfi_kif_unref(rule->kif, PFI_KIF_REF_RULE);
  	pf_anchor_remove(rule);
  	pf_empty_pool(&rule->rpool.list);
@@ -5523,7 +5415,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	pool_put(&V_pf_rule_pl, rule);
  #else
  	pool_put(&pf_rule_pl, rule);
-@@ -743,7 +743,7 @@
+@@ -735,7 +735,7 @@
  u_int16_t
  pf_tagname2tag(char *tagname)
  {
@@ -5532,7 +5424,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	return (tagname2tag(&V_pf_tags, tagname));
  #else
  	return (tagname2tag(&pf_tags, tagname));
-@@ -753,7 +753,7 @@
+@@ -745,7 +745,7 @@
  void
  pf_tag2tagname(u_int16_t tagid, char *p)
  {
@@ -5541,7 +5433,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	tag2tagname(&V_pf_tags, tagid, p);
  #else
  	tag2tagname(&pf_tags, tagid, p);
-@@ -765,7 +765,7 @@
+@@ -757,7 +757,7 @@
  {
  	struct pf_tagname *t;
  
@@ -5550,7 +5442,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	TAILQ_FOREACH(t, &V_pf_tags, entries)
  #else
  	TAILQ_FOREACH(t, &pf_tags, entries)
-@@ -779,7 +779,7 @@
+@@ -771,7 +771,7 @@
  void
  pf_tag_unref(u_int16_t tag)
  {
@@ -5559,7 +5451,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	tag_unref(&V_pf_tags, tag);
  #else
  	tag_unref(&pf_tags, tag);
-@@ -789,7 +789,7 @@
+@@ -781,7 +781,7 @@
  int
  pf_rtlabel_add(struct pf_addr_wrap *a)
  {
@@ -5568,7 +5460,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	/* XXX_IMPORT: later */
  	return (0);
  #else
-@@ -803,7 +803,7 @@
+@@ -795,7 +795,7 @@
  void
  pf_rtlabel_remove(struct pf_addr_wrap *a)
  {
@@ -5577,7 +5469,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	/* XXX_IMPORT: later */
  #else
  	if (a->type == PF_ADDR_RTLABEL)
-@@ -814,7 +814,7 @@
+@@ -806,7 +806,7 @@
  void
  pf_rtlabel_copyout(struct pf_addr_wrap *a)
  {
@@ -5586,7 +5478,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	/* XXX_IMPORT: later */
  	if (a->type == PF_ADDR_RTLABEL && a->v.rtlabel)
  		strlcpy(a->v.rtlabelname, "?", sizeof(a->v.rtlabelname));
-@@ -836,7 +836,7 @@
+@@ -828,7 +828,7 @@
  u_int32_t
  pf_qname2qid(char *qname)
  {
@@ -5595,7 +5487,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	return ((u_int32_t)tagname2tag(&V_pf_qids, qname));
  #else
  	return ((u_int32_t)tagname2tag(&pf_qids, qname));
-@@ -846,7 +846,7 @@
+@@ -838,7 +838,7 @@
  void
  pf_qid2qname(u_int32_t qid, char *p)
  {
@@ -5604,7 +5496,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	tag2tagname(&V_pf_qids, (u_int16_t)qid, p);
  #else
  	tag2tagname(&pf_qids, (u_int16_t)qid, p);
-@@ -856,7 +856,7 @@
+@@ -848,7 +848,7 @@
  void
  pf_qid_unref(u_int32_t qid)
  {
@@ -5613,7 +5505,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	tag_unref(&V_pf_qids, (u_int16_t)qid);
  #else
  	tag_unref(&pf_qids, (u_int16_t)qid);
-@@ -870,7 +870,7 @@
+@@ -862,7 +862,7 @@
  	int		 error = 0;
  
  	/* Purge the old altq list */
@@ -5622,7 +5514,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	while ((altq = TAILQ_FIRST(V_pf_altqs_inactive)) != NULL) {
  		TAILQ_REMOVE(V_pf_altqs_inactive, altq, entries);
  		if (altq->qname[0] == 0 &&
-@@ -884,7 +884,7 @@
+@@ -876,7 +876,7 @@
  			error = altq_remove(altq);
  		} else
  			pf_qid_unref(altq->qid);
@@ -5631,7 +5523,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pool_put(&V_pf_altq_pl, altq);
  #else
  		pool_put(&pf_altq_pl, altq);
-@@ -892,7 +892,7 @@
+@@ -884,7 +884,7 @@
  	}
  	if (error)
  		return (error);
@@ -5640,7 +5532,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	*ticket = ++V_ticket_altqs_inactive;
  	V_altqs_inactive_open = 1;
  #else
-@@ -908,7 +908,7 @@
+@@ -900,7 +900,7 @@
  	struct pf_altq	*altq;
  	int		 error = 0;
  
@@ -5649,7 +5541,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (!V_altqs_inactive_open || ticket != V_ticket_altqs_inactive)
  		return (0);
  	/* Purge the old altq list */
-@@ -928,13 +928,13 @@
+@@ -920,13 +920,13 @@
  			error = altq_remove(altq);
  		} else
  			pf_qid_unref(altq->qid);
@@ -5665,7 +5557,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	V_altqs_inactive_open = 0;
  #else
  	altqs_inactive_open = 0;
-@@ -949,7 +949,7 @@
+@@ -941,7 +941,7 @@
  	struct pf_altq		*altq;
  	int			 s, err, error = 0;
  
@@ -5674,7 +5566,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (!V_altqs_inactive_open || ticket != V_ticket_altqs_inactive)
  #else
  	if (!altqs_inactive_open || ticket != ticket_altqs_inactive)
-@@ -958,7 +958,7 @@
+@@ -950,7 +950,7 @@
  
  	/* swap altqs, keep the old. */
  	s = splsoftnet();
@@ -5683,7 +5575,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	old_altqs = V_pf_altqs_active;
  	V_pf_altqs_active = V_pf_altqs_inactive;
  	V_pf_altqs_inactive = old_altqs;
-@@ -971,7 +971,7 @@
+@@ -963,7 +963,7 @@
  #endif
  
  	/* Attach new disciplines */
@@ -5692,7 +5584,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	TAILQ_FOREACH(altq, V_pf_altqs_active, entries) {
  	if (altq->qname[0] == 0 &&
  	   (altq->local_flags & PFALTQ_FLAG_IF_REMOVED) == 0) {
-@@ -981,7 +981,7 @@
+@@ -973,7 +973,7 @@
  #endif
  			/* attach the discipline */
  			error = altq_pfattach(altq);
@@ -5701,7 +5593,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (error == 0 && V_pf_altq_running)
  #else
  			if (error == 0 && pf_altq_running)
-@@ -995,7 +995,7 @@
+@@ -987,7 +987,7 @@
  	}
  
  	/* Purge the old altq list */
@@ -5710,7 +5602,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	while ((altq = TAILQ_FIRST(V_pf_altqs_inactive)) != NULL) {
  		TAILQ_REMOVE(V_pf_altqs_inactive, altq, entries);
  		if (altq->qname[0] == 0 &&
-@@ -1006,7 +1006,7 @@
+@@ -998,7 +998,7 @@
  		if (altq->qname[0] == 0) {
  #endif
  			/* detach and destroy the discipline */
@@ -5719,7 +5611,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_altq_running)
  #else
  			if (pf_altq_running)
-@@ -1020,7 +1020,7 @@
+@@ -1012,7 +1012,7 @@
  				error = err;
  		} else
  			pf_qid_unref(altq->qid);
@@ -5728,7 +5620,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pool_put(&V_pf_altq_pl, altq);
  #else
  		pool_put(&pf_altq_pl, altq);
-@@ -1028,7 +1028,7 @@
+@@ -1020,7 +1020,7 @@
  	}
  	splx(s);
  
@@ -5737,7 +5629,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	V_altqs_inactive_open = 0;
  #else
  	altqs_inactive_open = 0;
-@@ -1054,11 +1054,11 @@
+@@ -1046,11 +1046,11 @@
  		tb.rate = altq->ifbandwidth;
  		tb.depth = altq->tbrsize;
  		s = splnet();
@@ -5751,7 +5643,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_LOCK();
  #endif
  		splx(s);
-@@ -1090,11 +1090,11 @@
+@@ -1082,11 +1082,11 @@
  		/* clear tokenbucket regulator */
  		tb.rate = 0;
  		s = splnet();
@@ -5765,7 +5657,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_LOCK();
  #endif
  		splx(s);
-@@ -1103,7 +1103,7 @@
+@@ -1095,7 +1095,7 @@
  	return (error);
  }
  
@@ -5774,7 +5666,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  void
  pf_altq_ifnet_event(struct ifnet *ifp, int remove)
  {
-@@ -1113,7 +1113,7 @@
+@@ -1105,7 +1105,7 @@
  	int		 error = 0;
  
  	/* Interrupt userland queue modifications */
@@ -5783,7 +5675,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (V_altqs_inactive_open)
  		pf_rollback_altq(V_ticket_altqs_inactive);
  #else
-@@ -1126,7 +1126,7 @@
+@@ -1118,7 +1118,7 @@
  		return;
  
  	/* Copy the current active set */
@@ -5792,7 +5684,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	TAILQ_FOREACH(a1, V_pf_altqs_active, entries) {
  		a2 = pool_get(&V_pf_altq_pl, PR_NOWAIT);
  #else
-@@ -1142,7 +1142,7 @@
+@@ -1134,7 +1134,7 @@
  		if (a2->qname[0] != 0) {
  			if ((a2->qid = pf_qname2qid(a2->qname)) == 0) {
  				error = EBUSY;
@@ -5801,7 +5693,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_altq_pl, a2);
  #else
  				pool_put(&pf_altq_pl, a2);
-@@ -1150,7 +1150,7 @@
+@@ -1142,7 +1142,7 @@
  				break;
  			}
  			a2->altq_disc = NULL;
@@ -5810,7 +5702,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			TAILQ_FOREACH(a3, V_pf_altqs_inactive, entries) {
  #else
  			TAILQ_FOREACH(a3, pf_altqs_inactive, entries) {
-@@ -1172,7 +1172,7 @@
+@@ -1164,7 +1164,7 @@
  			error = altq_add(a2);
  			PF_LOCK();
  
@@ -5819,7 +5711,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (ticket != V_ticket_altqs_inactive)
  #else
  			if (ticket != ticket_altqs_inactive)
-@@ -1180,7 +1180,7 @@
+@@ -1172,7 +1172,7 @@
  				error = EBUSY;
  
  			if (error) {
@@ -5828,7 +5720,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_altq_pl, a2);
  #else
  				pool_put(&pf_altq_pl, a2);
-@@ -1189,7 +1189,7 @@
+@@ -1181,7 +1181,7 @@
  			}
  		}
  
@@ -5837,7 +5729,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		TAILQ_INSERT_TAIL(V_pf_altqs_inactive, a2, entries);
  #else
  		TAILQ_INSERT_TAIL(pf_altqs_inactive, a2, entries);
-@@ -1420,7 +1420,7 @@
+@@ -1412,7 +1412,7 @@
  	}
  
  	MD5Final(digest, &ctx);
@@ -5846,7 +5738,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	memcpy(V_pf_status.pf_chksum, digest, sizeof(V_pf_status.pf_chksum));
  #else
  	memcpy(pf_status.pf_chksum, digest, sizeof(pf_status.pf_chksum));
-@@ -1448,7 +1448,7 @@
+@@ -1440,7 +1440,7 @@
  }
  
  int
@@ -5855,7 +5747,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  pfioctl(struct cdev *dev, u_long cmd, caddr_t addr, int flags, struct thread *td)
  #else
  pfioctl(dev_t dev, u_long cmd, caddr_t addr, int flags, struct proc *p)
-@@ -1456,7 +1456,7 @@
+@@ -1448,7 +1448,7 @@
  {
  	struct pf_pooladdr	*pa = NULL;
  	struct pf_pool		*pool = NULL;
@@ -5864,7 +5756,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	int			 s;
  #endif
  	int			 error = 0;
-@@ -1464,7 +1464,7 @@
+@@ -1456,7 +1456,7 @@
  	CURVNET_SET(TD_TO_VNET(td));
  
  	/* XXX keep in sync with switch() below */
@@ -5873,7 +5765,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (securelevel_gt(td->td_ucred, 2))
  #else
  	if (securelevel > 1)
-@@ -1504,7 +1504,7 @@
+@@ -1496,7 +1496,7 @@
  		case DIOCGETSRCNODES:
  		case DIOCCLRSRCNODES:
  		case DIOCIGETIFACES:
@@ -5882,7 +5774,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		case DIOCGIFSPEED:
  #endif
  		case DIOCSETIFFLAG:
-@@ -1546,7 +1546,7 @@
+@@ -1538,7 +1538,7 @@
  		case DIOCOSFPGET:
  		case DIOCGETSRCNODES:
  		case DIOCIGETIFACES:
@@ -5891,7 +5783,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		case DIOCGIFSPEED:
  #endif
  			break;
-@@ -1575,7 +1575,7 @@
+@@ -1567,7 +1567,7 @@
  		}
  
  	if (flags & FWRITE)
@@ -5900,7 +5792,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		sx_xlock(&V_pf_consistency_lock);
  	else
  		sx_slock(&V_pf_consistency_lock);
-@@ -1585,7 +1585,7 @@
+@@ -1577,7 +1577,7 @@
  		rw_enter_read(&pf_consistency_lock);
  #endif
  
@@ -5909,7 +5801,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_LOCK();
  #else
  	s = splsoftnet();
-@@ -1593,14 +1593,14 @@
+@@ -1585,14 +1585,14 @@
  	switch (cmd) {
  
  	case DIOCSTART:
@@ -5926,7 +5818,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_UNLOCK();
  			error = hook_pf();
  			PF_LOCK();
-@@ -1630,7 +1630,7 @@
+@@ -1622,7 +1622,7 @@
  		break;
  
  	case DIOCSTOP:
@@ -5935,7 +5827,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (!V_pf_status.running)
  			error = ENOENT;
  		else {
-@@ -1678,7 +1678,7 @@
+@@ -1670,7 +1670,7 @@
  			break;
  		}
  		if (pr->ticket != ruleset->rules[rs_num].inactive.ticket) {
@@ -5944,7 +5836,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			DPFPRINTF(PF_DEBUG_MISC,
  			    ("ticket: %d != [%d]%d\n", pr->ticket, rs_num,
  			    ruleset->rules[rs_num].inactive.ticket));
-@@ -1686,7 +1686,7 @@
+@@ -1678,7 +1678,7 @@
  			error = EBUSY;
  			break;
  		}
@@ -5953,7 +5845,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pr->pool_ticket != V_ticket_pabuf) {
  			DPFPRINTF(PF_DEBUG_MISC,
  			    ("pool_ticket: %d != %d\n", pr->pool_ticket,
-@@ -1697,7 +1697,7 @@
+@@ -1689,7 +1689,7 @@
  			error = EBUSY;
  			break;
  		}
@@ -5962,7 +5854,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		rule = pool_get(&V_pf_rule_pl, PR_NOWAIT);
  #else
  		rule = pool_get(&pf_rule_pl, PR_WAITOK|PR_LIMITFAIL);
-@@ -1707,7 +1707,7 @@
+@@ -1699,7 +1699,7 @@
  			break;
  		}
  		bcopy(&pr->rule, rule, sizeof(struct pf_rule));
@@ -5971,7 +5863,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		rule->cuid = td->td_ucred->cr_ruid;
  		rule->cpid = td->td_proc ? td->td_proc->p_pid : 0;
  #else
-@@ -1723,7 +1723,7 @@
+@@ -1715,7 +1715,7 @@
  		rule->entries.tqe_prev = NULL;
  #ifndef INET
  		if (rule->af == AF_INET) {
@@ -5980,7 +5872,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_rule_pl, rule);
  #else
  			pool_put(&pf_rule_pl, rule);
-@@ -1734,7 +1734,7 @@
+@@ -1726,7 +1726,7 @@
  #endif /* INET */
  #ifndef INET6
  		if (rule->af == AF_INET6) {
@@ -5989,7 +5881,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_rule_pl, rule);
  #else
  			pool_put(&pf_rule_pl, rule);
-@@ -1752,7 +1752,7 @@
+@@ -1744,7 +1744,7 @@
  		if (rule->ifname[0]) {
  			rule->kif = pfi_kif_get(rule->ifname);
  			if (rule->kif == NULL) {
@@ -5998,16 +5890,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_rule_pl, rule);
  #else
  				pool_put(&pf_rule_pl, rule);
-@@ -1763,7 +1763,7 @@
+@@ -1755,7 +1755,7 @@
  			pfi_kif_ref(rule->kif, PFI_KIF_REF_RULE);
  		}
  
 -#ifdef __FreeBSD__ /* ROUTING */
 +#ifdef __FreeBSD_kernel__ /* ROUTING */
- 		if (rule->rtableid > 0 && rule->rtableid > rt_numfibs)
+ 		if (rule->rtableid > 0 && rule->rtableid >= rt_numfibs)
  #else
  		if (rule->rtableid > 0 && !rtable_exists(rule->rtableid))
-@@ -1807,7 +1807,7 @@
+@@ -1799,7 +1799,7 @@
  			error = EINVAL;
  		if (pf_anchor_setup(rule, ruleset, pr->anchor_call))
  			error = EINVAL;
@@ -6016,7 +5908,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		TAILQ_FOREACH(pa, &V_pf_pabuf, entries)
  #else
  		TAILQ_FOREACH(pa, &pf_pabuf, entries)
-@@ -1824,7 +1824,7 @@
+@@ -1816,7 +1816,7 @@
  				    PFR_TFLAG_ACTIVE;
  		}
  
@@ -6025,7 +5917,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pf_mv_pool(&V_pf_pabuf, &rule->rpool.list);
  #else
  		pf_mv_pool(&pf_pabuf, &rule->rpool.list);
-@@ -1840,7 +1840,7 @@
+@@ -1832,7 +1832,7 @@
  			break;
  		}
  
@@ -6034,7 +5926,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (!V_debug_pfugidhack && (rule->uid.op || rule->gid.op ||
  		    rule->log & PF_LOG_SOCKET_LOOKUP)) {
  			DPFPRINTF(PF_DEBUG_MISC,
-@@ -1944,7 +1944,7 @@
+@@ -1936,7 +1936,7 @@
  
  		if (!(pcr->action == PF_CHANGE_REMOVE ||
  		    pcr->action == PF_CHANGE_GET_TICKET) &&
@@ -6043,7 +5935,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		    pcr->pool_ticket != V_ticket_pabuf) {
  #else
  		    pcr->pool_ticket != ticket_pabuf) {
-@@ -1985,7 +1985,7 @@
+@@ -1977,7 +1977,7 @@
  		}
  
  		if (pcr->action != PF_CHANGE_REMOVE) {
@@ -6052,7 +5944,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			newrule = pool_get(&V_pf_rule_pl, PR_NOWAIT);
  #else
  			newrule = pool_get(&pf_rule_pl, PR_WAITOK|PR_LIMITFAIL);
-@@ -1995,7 +1995,7 @@
+@@ -1987,7 +1987,7 @@
  				break;
  			}
  			bcopy(&pcr->rule, newrule, sizeof(struct pf_rule));
@@ -6061,7 +5953,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			newrule->cuid = td->td_ucred->cr_ruid;
  			newrule->cpid = td->td_proc ? td->td_proc->p_pid : 0;
  #else
-@@ -2008,7 +2008,7 @@
+@@ -2000,7 +2000,7 @@
  			newrule->entries.tqe_prev = NULL;
  #ifndef INET
  			if (newrule->af == AF_INET) {
@@ -6070,7 +5962,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_rule_pl, newrule);
  #else
  				pool_put(&pf_rule_pl, newrule);
-@@ -2019,7 +2019,7 @@
+@@ -2011,7 +2011,7 @@
  #endif /* INET */
  #ifndef INET6
  			if (newrule->af == AF_INET6) {
@@ -6079,7 +5971,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_rule_pl, newrule);
  #else
  				pool_put(&pf_rule_pl, newrule);
-@@ -2031,7 +2031,7 @@
+@@ -2023,7 +2023,7 @@
  			if (newrule->ifname[0]) {
  				newrule->kif = pfi_kif_get(newrule->ifname);
  				if (newrule->kif == NULL) {
@@ -6088,16 +5980,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					pool_put(&V_pf_rule_pl, newrule);
  #else
  					pool_put(&pf_rule_pl, newrule);
-@@ -2044,7 +2044,7 @@
+@@ -2036,7 +2036,7 @@
  				newrule->kif = NULL;
  
  			if (newrule->rtableid > 0 &&
 -#ifdef __FreeBSD__ /* ROUTING */
 +#ifdef __FreeBSD_kernel__ /* ROUTING */
- 			    newrule->rtableid > rt_numfibs)
+ 			    newrule->rtableid >= rt_numfibs)
  #else
  			    !rtable_exists(newrule->rtableid))
-@@ -2090,7 +2090,7 @@
+@@ -2082,7 +2082,7 @@
  				error = EINVAL;
  			if (pf_anchor_setup(newrule, ruleset, pcr->anchor_call))
  				error = EINVAL;
@@ -6106,7 +5998,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			TAILQ_FOREACH(pa, &V_pf_pabuf, entries)
  #else
  			TAILQ_FOREACH(pa, &pf_pabuf, entries)
-@@ -2108,7 +2108,7 @@
+@@ -2100,7 +2100,7 @@
  					    PFR_TFLAG_ACTIVE;
  			}
  
@@ -6115,7 +6007,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pf_mv_pool(&V_pf_pabuf, &newrule->rpool.list);
  #else
  			pf_mv_pool(&pf_pabuf, &newrule->rpool.list);
-@@ -2126,7 +2126,7 @@
+@@ -2118,7 +2118,7 @@
  				break;
  			}
  
@@ -6124,7 +6016,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (!V_debug_pfugidhack && (newrule->uid.op ||
  			    newrule->gid.op ||
  			    newrule->log & PF_LOG_SOCKET_LOOKUP)) {
-@@ -2141,7 +2141,7 @@
+@@ -2133,7 +2133,7 @@
  			newrule->packets[0] = newrule->packets[1] = 0;
  			newrule->bytes[0] = newrule->bytes[1] = 0;
  		}
@@ -6133,7 +6025,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pf_empty_pool(&V_pf_pabuf);
  #else
  		pf_empty_pool(&pf_pabuf);
-@@ -2202,7 +2202,7 @@
+@@ -2194,7 +2194,7 @@
  		struct pfioc_state_kill *psk = (struct pfioc_state_kill *)addr;
  		u_int			 killed = 0;
  
@@ -6142,7 +6034,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		for (s = RB_MIN(pf_state_tree_id, &V_tree_id); s; s = nexts) {
  			nexts = RB_NEXT(pf_state_tree_id, &V_tree_id, s);
  #else
-@@ -2222,7 +2222,7 @@
+@@ -2214,7 +2214,7 @@
  		}
  		psk->psk_killed = killed;
  #if NPFSYNC > 0
@@ -6151,7 +6043,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pfsync_clear_states_ptr != NULL)
  			pfsync_clear_states_ptr(V_pf_status.hostid, psk->psk_ifname);
  #else
-@@ -2242,7 +2242,7 @@
+@@ -2234,7 +2234,7 @@
  
  		if (psk->psk_pfcmp.id) {
  			if (psk->psk_pfcmp.creatorid == 0)
@@ -6160,7 +6052,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				psk->psk_pfcmp.creatorid = V_pf_status.hostid;
  #else
  				psk->psk_pfcmp.creatorid = pf_status.hostid;
-@@ -2254,7 +2254,7 @@
+@@ -2246,7 +2246,7 @@
  			break;
  		}
  
@@ -6169,7 +6061,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		for (s = RB_MIN(pf_state_tree_id, &V_tree_id); s;
  		    s = nexts) {
  			nexts = RB_NEXT(pf_state_tree_id, &V_tree_id, s);
-@@ -2316,7 +2316,7 @@
+@@ -2308,7 +2308,7 @@
  			error = EINVAL;
  			break;
  		}
@@ -6178,7 +6070,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pfsync_state_import_ptr != NULL)
  			error = pfsync_state_import_ptr(sp, PFSYNC_SI_IOCTL);
  #else
-@@ -2350,7 +2350,7 @@
+@@ -2342,7 +2342,7 @@
  		u_int32_t		 nr = 0;
  
  		if (ps->ps_len == 0) {
@@ -6187,7 +6079,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			nr = V_pf_status.states;
  #else
  			nr = pf_status.states;
-@@ -2359,17 +2359,17 @@
+@@ -2351,17 +2351,17 @@
  			break;
  		}
  
@@ -6208,7 +6100,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		state = TAILQ_FIRST(&V_state_list);
  #else
  		state = TAILQ_FIRST(&state_list);
-@@ -2379,7 +2379,7 @@
+@@ -2371,7 +2371,7 @@
  				if ((nr+1) * sizeof(*p) > (unsigned)ps->ps_len)
  					break;
  				pfsync_state_export(pstore, state);
@@ -6217,7 +6109,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				PF_COPYOUT(pstore, p, sizeof(*p), error);
  #else
  				error = copyout(pstore, p, sizeof(*p));
-@@ -2402,7 +2402,7 @@
+@@ -2394,7 +2394,7 @@
  
  	case DIOCGETSTATUS: {
  		struct pf_status *s = (struct pf_status *)addr;
@@ -6226,7 +6118,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		bcopy(&V_pf_status, s, sizeof(struct pf_status));
  #else
  		bcopy(&pf_status, s, sizeof(struct pf_status));
-@@ -2415,14 +2415,14 @@
+@@ -2407,14 +2407,14 @@
  		struct pfioc_if	*pi = (struct pfioc_if *)addr;
  
  		if (pi->ifname[0] == 0) {
@@ -6243,7 +6135,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		strlcpy(V_pf_status.ifname, pi->ifname, IFNAMSIZ);
  #else
  		strlcpy(pf_status.ifname, pi->ifname, IFNAMSIZ);
-@@ -2431,7 +2431,7 @@
+@@ -2423,7 +2423,7 @@
  	}
  
  	case DIOCCLRSTATUS: {
@@ -6252,7 +6144,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		bzero(V_pf_status.counters, sizeof(V_pf_status.counters));
  		bzero(V_pf_status.fcounters, sizeof(V_pf_status.fcounters));
  		bzero(V_pf_status.scounters, sizeof(V_pf_status.scounters));
-@@ -2501,14 +2501,14 @@
+@@ -2493,14 +2493,14 @@
  			error = EINVAL;
  			goto fail;
  		}
@@ -6269,7 +6161,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_default_rule.timeout[pt->timeout] = pt->seconds;
  #else
  		pf_default_rule.timeout[pt->timeout] = pt->seconds;
-@@ -2526,7 +2526,7 @@
+@@ -2518,7 +2518,7 @@
  			error = EINVAL;
  			goto fail;
  		}
@@ -6278,7 +6170,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pt->seconds = V_pf_default_rule.timeout[pt->timeout];
  #else
  		pt->seconds = pf_default_rule.timeout[pt->timeout];
-@@ -2541,7 +2541,7 @@
+@@ -2533,7 +2533,7 @@
  			error = EINVAL;
  			goto fail;
  		}
@@ -6287,7 +6179,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pl->limit = V_pf_pool_limits[pl->index].limit;
  #else
  		pl->limit = pf_pool_limits[pl->index].limit;
-@@ -2554,7 +2554,7 @@
+@@ -2546,7 +2546,7 @@
  		int			 old_limit;
  
  		if (pl->index < 0 || pl->index >= PF_LIMIT_MAX ||
@@ -6296,7 +6188,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		    V_pf_pool_limits[pl->index].pp == NULL) {
  #else
  		    pf_pool_limits[pl->index].pp == NULL) {
-@@ -2562,7 +2562,7 @@
+@@ -2554,7 +2554,7 @@
  			error = EINVAL;
  			goto fail;
  		}
@@ -6305,7 +6197,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		uma_zone_set_max(V_pf_pool_limits[pl->index].pp, pl->limit);
  		old_limit = V_pf_pool_limits[pl->index].limit;
  		V_pf_pool_limits[pl->index].limit = pl->limit;
-@@ -2583,7 +2583,7 @@
+@@ -2575,7 +2575,7 @@
  	case DIOCSETDEBUG: {
  		u_int32_t	*level = (u_int32_t *)addr;
  
@@ -6314,7 +6206,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.debug = *level;
  #else
  		pf_status.debug = *level;
-@@ -2605,7 +2605,7 @@
+@@ -2597,7 +2597,7 @@
  		break;
  	}
  
@@ -6323,7 +6215,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	case DIOCGIFSPEED: {
  		struct pf_ifspeed	*psp = (struct pf_ifspeed *)addr;
  		struct pf_ifspeed	ps;
-@@ -2630,7 +2630,7 @@
+@@ -2622,7 +2622,7 @@
  		struct pf_altq		*altq;
  
  		/* enable all altq interfaces on active list */
@@ -6332,7 +6224,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		TAILQ_FOREACH(altq, V_pf_altqs_active, entries) {
  			if (altq->qname[0] == 0 && (altq->local_flags &
  			    PFALTQ_FLAG_IF_REMOVED) == 0) {
-@@ -2644,7 +2644,7 @@
+@@ -2636,7 +2636,7 @@
  			}
  		}
  		if (error == 0)
@@ -6341,7 +6233,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			V_pf_altq_running = 1;
  #else
  			pf_altq_running = 1;
-@@ -2657,7 +2657,7 @@
+@@ -2649,7 +2649,7 @@
  		struct pf_altq		*altq;
  
  		/* disable all altq interfaces on active list */
@@ -6350,7 +6242,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		TAILQ_FOREACH(altq, V_pf_altqs_active, entries) {
  			if (altq->qname[0] == 0 && (altq->local_flags &
  			    PFALTQ_FLAG_IF_REMOVED) == 0) {
-@@ -2671,7 +2671,7 @@
+@@ -2663,7 +2663,7 @@
  			}
  		}
  		if (error == 0)
@@ -6359,7 +6251,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			V_pf_altq_running = 0;
  #else
  			pf_altq_running = 0;
-@@ -2684,7 +2684,7 @@
+@@ -2676,7 +2676,7 @@
  		struct pfioc_altq	*pa = (struct pfioc_altq *)addr;
  		struct pf_altq		*altq, *a;
  
@@ -6368,7 +6260,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pa->ticket != V_ticket_altqs_inactive) {
  #else
  		if (pa->ticket != ticket_altqs_inactive) {
-@@ -2692,7 +2692,7 @@
+@@ -2684,7 +2684,7 @@
  			error = EBUSY;
  			break;
  		}
@@ -6377,7 +6269,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		altq = pool_get(&V_pf_altq_pl, PR_NOWAIT);
  #else
  		altq = pool_get(&pf_altq_pl, PR_WAITOK|PR_LIMITFAIL);
-@@ -2702,7 +2702,7 @@
+@@ -2694,7 +2694,7 @@
  			break;
  		}
  		bcopy(&pa->altq, altq, sizeof(struct pf_altq));
@@ -6386,7 +6278,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		altq->local_flags = 0;
  #endif
  
-@@ -2713,7 +2713,7 @@
+@@ -2705,7 +2705,7 @@
  		if (altq->qname[0] != 0) {
  			if ((altq->qid = pf_qname2qid(altq->qname)) == 0) {
  				error = EBUSY;
@@ -6395,7 +6287,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_altq_pl, altq);
  #else
  				pool_put(&pf_altq_pl, altq);
-@@ -2721,7 +2721,7 @@
+@@ -2713,7 +2713,7 @@
  				break;
  			}
  			altq->altq_disc = NULL;
@@ -6404,7 +6296,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			TAILQ_FOREACH(a, V_pf_altqs_inactive, entries) {
  #else
  			TAILQ_FOREACH(a, pf_altqs_inactive, entries) {
-@@ -2734,7 +2734,7 @@
+@@ -2726,7 +2726,7 @@
  			}
  		}
  
@@ -6413,7 +6305,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		struct ifnet *ifp;
  
  		if ((ifp = ifunit(altq->ifname)) == NULL) {
-@@ -2743,12 +2743,12 @@
+@@ -2735,12 +2735,12 @@
  			PF_UNLOCK();
  #endif
  		error = altq_add(altq);
@@ -6428,7 +6320,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_altq_pl, altq);
  #else
  			pool_put(&pf_altq_pl, altq);
-@@ -2756,7 +2756,7 @@
+@@ -2748,7 +2748,7 @@
  			break;
  		}
  
@@ -6437,7 +6329,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		TAILQ_INSERT_TAIL(V_pf_altqs_inactive, altq, entries);
  #else
  		TAILQ_INSERT_TAIL(pf_altqs_inactive, altq, entries);
-@@ -2770,7 +2770,7 @@
+@@ -2762,7 +2762,7 @@
  		struct pf_altq		*altq;
  
  		pa->nr = 0;
@@ -6446,7 +6338,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		TAILQ_FOREACH(altq, V_pf_altqs_active, entries)
  			pa->nr++;
  		pa->ticket = V_ticket_altqs_active;
-@@ -2787,7 +2787,7 @@
+@@ -2779,7 +2779,7 @@
  		struct pf_altq		*altq;
  		u_int32_t		 nr;
  
@@ -6455,7 +6347,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pa->ticket != V_ticket_altqs_active) {
  #else
  		if (pa->ticket != ticket_altqs_active) {
-@@ -2796,7 +2796,7 @@
+@@ -2788,7 +2788,7 @@
  			break;
  		}
  		nr = 0;
@@ -6464,7 +6356,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		altq = TAILQ_FIRST(V_pf_altqs_active);
  #else
  		altq = TAILQ_FIRST(pf_altqs_active);
-@@ -2824,7 +2824,7 @@
+@@ -2816,7 +2816,7 @@
  		u_int32_t		 nr;
  		int			 nbytes;
  
@@ -6473,7 +6365,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pq->ticket != V_ticket_altqs_active) {
  #else
  		if (pq->ticket != ticket_altqs_active) {
-@@ -2834,7 +2834,7 @@
+@@ -2826,7 +2826,7 @@
  		}
  		nbytes = pq->nbytes;
  		nr = 0;
@@ -6482,7 +6374,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		altq = TAILQ_FIRST(V_pf_altqs_active);
  #else
  		altq = TAILQ_FIRST(pf_altqs_active);
-@@ -2848,7 +2848,7 @@
+@@ -2840,7 +2840,7 @@
  			break;
  		}
  
@@ -6491,7 +6383,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if ((altq->local_flags & PFALTQ_FLAG_IF_REMOVED) != 0) {
  			error = ENXIO;
  			break;
-@@ -2856,7 +2856,7 @@
+@@ -2848,7 +2848,7 @@
  		PF_UNLOCK();
  #endif
  		error = altq_getqstats(altq, pq->buf, &nbytes);
@@ -6500,7 +6392,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_LOCK();
  #endif
  		if (error == 0) {
-@@ -2870,7 +2870,7 @@
+@@ -2862,7 +2862,7 @@
  	case DIOCBEGINADDRS: {
  		struct pfioc_pooladdr	*pp = (struct pfioc_pooladdr *)addr;
  
@@ -6509,7 +6401,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pf_empty_pool(&V_pf_pabuf);
  		pp->ticket = ++V_ticket_pabuf;
  #else
-@@ -2883,7 +2883,7 @@
+@@ -2875,7 +2875,7 @@
  	case DIOCADDADDR: {
  		struct pfioc_pooladdr	*pp = (struct pfioc_pooladdr *)addr;
  
@@ -6518,7 +6410,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (pp->ticket != V_ticket_pabuf) {
  #else
  		if (pp->ticket != ticket_pabuf) {
-@@ -2909,7 +2909,7 @@
+@@ -2901,7 +2901,7 @@
  			error = EINVAL;
  			break;
  		}
@@ -6527,7 +6419,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pa = pool_get(&V_pf_pooladdr_pl, PR_NOWAIT);
  #else
  		pa = pool_get(&pf_pooladdr_pl, PR_WAITOK|PR_LIMITFAIL);
-@@ -2922,7 +2922,7 @@
+@@ -2914,7 +2914,7 @@
  		if (pa->ifname[0]) {
  			pa->kif = pfi_kif_get(pa->ifname);
  			if (pa->kif == NULL) {
@@ -6536,7 +6428,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_pooladdr_pl, pa);
  #else
  				pool_put(&pf_pooladdr_pl, pa);
-@@ -2935,7 +2935,7 @@
+@@ -2927,7 +2927,7 @@
  		if (pfi_dynaddr_setup(&pa->addr, pp->af)) {
  			pfi_dynaddr_remove(&pa->addr);
  			pfi_kif_unref(pa->kif, PFI_KIF_REF_RULE);
@@ -6545,7 +6437,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_pooladdr_pl, pa);
  #else
  			pool_put(&pf_pooladdr_pl, pa);
-@@ -2943,7 +2943,7 @@
+@@ -2935,7 +2935,7 @@
  			error = EINVAL;
  			break;
  		}
@@ -6554,7 +6446,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		TAILQ_INSERT_TAIL(&V_pf_pabuf, pa, entries);
  #else
  		TAILQ_INSERT_TAIL(&pf_pabuf, pa, entries);
-@@ -3019,7 +3019,7 @@
+@@ -3011,7 +3011,7 @@
  			break;
  		}
  		if (pca->action != PF_CHANGE_REMOVE) {
@@ -6563,7 +6455,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			newpa = pool_get(&V_pf_pooladdr_pl,
  			    PR_NOWAIT);
  #else
-@@ -3033,7 +3033,7 @@
+@@ -3025,7 +3025,7 @@
  			bcopy(&pca->addr, newpa, sizeof(struct pf_pooladdr));
  #ifndef INET
  			if (pca->af == AF_INET) {
@@ -6572,7 +6464,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_pooladdr_pl, newpa);
  #else
  				pool_put(&pf_pooladdr_pl, newpa);
-@@ -3044,7 +3044,7 @@
+@@ -3036,7 +3036,7 @@
  #endif /* INET */
  #ifndef INET6
  			if (pca->af == AF_INET6) {
@@ -6581,7 +6473,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_pooladdr_pl, newpa);
  #else
  				pool_put(&pf_pooladdr_pl, newpa);
-@@ -3056,7 +3056,7 @@
+@@ -3048,7 +3048,7 @@
  			if (newpa->ifname[0]) {
  				newpa->kif = pfi_kif_get(newpa->ifname);
  				if (newpa->kif == NULL) {
@@ -6590,7 +6482,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					pool_put(&V_pf_pooladdr_pl, newpa);
  #else
  					pool_put(&pf_pooladdr_pl, newpa);
-@@ -3071,7 +3071,7 @@
+@@ -3063,7 +3063,7 @@
  			    pf_tbladdr_setup(ruleset, &newpa->addr)) {
  				pfi_dynaddr_remove(&newpa->addr);
  				pfi_kif_unref(newpa->kif, PFI_KIF_REF_RULE);
@@ -6599,7 +6491,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				pool_put(&V_pf_pooladdr_pl, newpa);
  #else
  				pool_put(&pf_pooladdr_pl, newpa);
-@@ -3104,7 +3104,7 @@
+@@ -3096,7 +3096,7 @@
  			pfi_dynaddr_remove(&oldpa->addr);
  			pf_tbladdr_remove(&oldpa->addr);
  			pfi_kif_unref(oldpa->kif, PFI_KIF_REF_RULE);
@@ -6608,7 +6500,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pf_pooladdr_pl, oldpa);
  #else
  			pool_put(&pf_pooladdr_pl, oldpa);
-@@ -3139,7 +3139,7 @@
+@@ -3131,7 +3131,7 @@
  		pr->nr = 0;
  		if (ruleset->anchor == NULL) {
  			/* XXX kludge for pf_main_ruleset */
@@ -6617,7 +6509,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			RB_FOREACH(anchor, pf_anchor_global, &V_pf_anchors)
  #else
  			RB_FOREACH(anchor, pf_anchor_global, &pf_anchors)
-@@ -3168,7 +3168,7 @@
+@@ -3160,7 +3160,7 @@
  		pr->name[0] = 0;
  		if (ruleset->anchor == NULL) {
  			/* XXX kludge for pf_main_ruleset */
@@ -6626,7 +6518,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			RB_FOREACH(anchor, pf_anchor_global, &V_pf_anchors)
  #else
  			RB_FOREACH(anchor, pf_anchor_global, &pf_anchors)
-@@ -3414,16 +3414,16 @@
+@@ -3406,16 +3406,16 @@
  			error = ENODEV;
  			goto fail;
  		}
@@ -6646,7 +6538,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_COPYIN(io->array+i, ioe, sizeof(*ioe), error);
  		if (error) {
  #else
-@@ -3470,7 +3470,7 @@
+@@ -3462,7 +3462,7 @@
  				}
  				break;
  			}
@@ -6655,7 +6547,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_COPYOUT(ioe, io->array+i, sizeof(io->array[i]),
  			    error);
  			if (error) {
-@@ -3498,16 +3498,16 @@
+@@ -3490,16 +3490,16 @@
  			error = ENODEV;
  			goto fail;
  		}
@@ -6675,7 +6567,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_COPYIN(io->array+i, ioe, sizeof(*ioe), error);
  			if (error) {
  #else
-@@ -3571,17 +3571,17 @@
+@@ -3563,17 +3563,17 @@
  			error = ENODEV;
  			goto fail;
  		}
@@ -6696,7 +6588,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_COPYIN(io->array+i, ioe, sizeof(*ioe), error);
  			if (error) {
  #else
-@@ -3601,7 +3601,7 @@
+@@ -3593,7 +3593,7 @@
  					error = EINVAL;
  					goto fail;
  				}
@@ -6705,7 +6597,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				if (!V_altqs_inactive_open || ioe->ticket !=
  				    V_ticket_altqs_inactive) {
  #else
-@@ -3648,7 +3648,7 @@
+@@ -3640,7 +3640,7 @@
  		}
  		/* now do the commit - no errors should happen here */
  		for (i = 0; i < io->size; i++) {
@@ -6714,7 +6606,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_COPYIN(io->array+i, ioe, sizeof(*ioe), error);
  			if (error) {
  #else
-@@ -3702,7 +3702,7 @@
+@@ -3694,7 +3694,7 @@
  		int			 space = psn->psn_len;
  
  		if (space == 0) {
@@ -6723,7 +6615,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			RB_FOREACH(n, pf_src_tree, &V_tree_src_tracking)
  #else
  			RB_FOREACH(n, pf_src_tree, &tree_src_tracking)
-@@ -3712,15 +3712,15 @@
+@@ -3704,15 +3704,15 @@
  			break;
  		}
  
@@ -6742,7 +6634,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		RB_FOREACH(n, pf_src_tree, &V_tree_src_tracking) {
  #else
  		RB_FOREACH(n, pf_src_tree, &tree_src_tracking) {
-@@ -3748,7 +3748,7 @@
+@@ -3740,7 +3740,7 @@
  				    n->conn_rate.count * diff /
  				    n->conn_rate.seconds;
  
@@ -6751,7 +6643,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			PF_COPYOUT(pstore, p, sizeof(*p), error);
  #else
  			error = copyout(pstore, p, sizeof(*p));
-@@ -3770,7 +3770,7 @@
+@@ -3762,7 +3762,7 @@
  		struct pf_src_node	*n;
  		struct pf_state		*state;
  
@@ -6760,7 +6652,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		RB_FOREACH(state, pf_state_tree_id, &V_tree_id) {
  #else
  		RB_FOREACH(state, pf_state_tree_id, &tree_id) {
-@@ -3778,7 +3778,7 @@
+@@ -3770,7 +3770,7 @@
  			state->src_node = NULL;
  			state->nat_src_node = NULL;
  		}
@@ -6769,7 +6661,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		RB_FOREACH(n, pf_src_tree, &V_tree_src_tracking) {
  #else
  		RB_FOREACH(n, pf_src_tree, &tree_src_tracking) {
-@@ -3787,7 +3787,7 @@
+@@ -3779,7 +3779,7 @@
  			n->states = 0;
  		}
  		pf_purge_expired_src_nodes(1);
@@ -6778,7 +6670,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.src_nodes = 0;
  #else
  		pf_status.src_nodes = 0;
-@@ -3802,7 +3802,7 @@
+@@ -3794,7 +3794,7 @@
  		    (struct pfioc_src_node_kill *)addr;
  		u_int			killed = 0;
  
@@ -6787,7 +6679,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		RB_FOREACH(sn, pf_src_tree, &V_tree_src_tracking) {
  #else
  		RB_FOREACH(sn, pf_src_tree, &tree_src_tracking) {
-@@ -3818,7 +3818,7 @@
+@@ -3810,7 +3810,7 @@
  				/* Handle state to src_node linkage */
  				if (sn->states != 0) {
  					RB_FOREACH(s, pf_state_tree_id,
@@ -6796,7 +6688,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  					    &V_tree_id) {
  #else
  					    &tree_id) {
-@@ -3845,7 +3845,7 @@
+@@ -3837,7 +3837,7 @@
  	case DIOCSETHOSTID: {
  		u_int32_t	*hostid = (u_int32_t *)addr;
  
@@ -6805,7 +6697,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (*hostid == 0)
  			V_pf_status.hostid = arc4random();
  		else
-@@ -3894,7 +3894,7 @@
+@@ -3886,7 +3886,7 @@
  		break;
  	}
  fail:
@@ -6814,7 +6706,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	PF_UNLOCK();
  
  	if (flags & FWRITE)
-@@ -3914,7 +3914,7 @@
+@@ -3906,7 +3906,7 @@
  	return (error);
  }
  
@@ -6823,7 +6715,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  void
  pfsync_state_export(struct pfsync_state *sp, struct pf_state *st)
  {
-@@ -3984,7 +3984,7 @@
+@@ -3976,7 +3976,7 @@
  {
  	struct pf_state	*state;
   
@@ -6832,7 +6724,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	RB_FOREACH(state, pf_state_tree_id, &V_tree_id) {
  #else
  	RB_FOREACH(state, pf_state_tree_id, &tree_id) {
-@@ -4025,7 +4025,7 @@
+@@ -4017,7 +4017,7 @@
  	struct pf_src_node	*n;
  	struct pf_state		*state;
  
@@ -6841,7 +6733,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	RB_FOREACH(state, pf_state_tree_id, &V_tree_id) {
  #else
  	RB_FOREACH(state, pf_state_tree_id, &tree_id) {
-@@ -4033,7 +4033,7 @@
+@@ -4025,7 +4025,7 @@
  		state->src_node = NULL;
  		state->nat_src_node = NULL;
  	}
@@ -6915,7 +6807,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #define DPFPRINTF(n, x)	if (V_pf_status.debug >= (n)) printf x
  #else
  #define DPFPRINTF(n, x)	if (pf_status.debug >= (n)) printf x
-@@ -278,7 +278,7 @@
+@@ -279,7 +279,7 @@
  		    !pf_match_port(dst->port_op, dst->port[0],
  		    dst->port[1], dport))
  			r = r->skip[PF_SKIP_DST_PORT].ptr;
@@ -6924,7 +6816,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		else if (r->match_tag && !pf_match_tag(m, r, &tag, pd->pf_mtag))
  #else
  		else if (r->match_tag && !pf_match_tag(m, r, &tag))
-@@ -303,7 +303,7 @@
+@@ -304,7 +304,7 @@
  			pf_step_out_of_anchor(&asd, &ruleset, rs_num, &r,
  			    NULL, NULL);
  	}
@@ -6933,7 +6825,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (pf_tag_packet(m, tag, rtableid, pd->pf_mtag))
  #else
  	if (pf_tag_packet(m, tag, rtableid))
-@@ -369,7 +369,7 @@
+@@ -370,7 +370,7 @@
  				high = tmp;
  			}
  			/* low < high */
@@ -6942,7 +6834,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			cut = htonl(arc4random()) % (1 + high - low) + low;
  #else
  			cut = arc4random_uniform(1 + high - low) + low;
-@@ -378,7 +378,7 @@
+@@ -379,7 +379,7 @@
  			for (tmp = cut; tmp <= high; ++(tmp)) {
  				key.port[0] = htons(tmp);
  				if (pf_find_state_all(&key, PF_IN, NULL) ==
@@ -6951,7 +6843,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				    NULL) {
  #else
  				    NULL && !in_baddynamic(tmp, proto)) {
-@@ -390,7 +390,7 @@
+@@ -391,7 +391,7 @@
  			for (tmp = cut - 1; tmp >= low; --(tmp)) {
  				key.port[0] = htons(tmp);
  				if (pf_find_state_all(&key, PF_IN, NULL) ==
@@ -6960,7 +6852,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  				    NULL) {
  #else
  				    NULL && !in_baddynamic(tmp, proto)) {
-@@ -437,7 +437,7 @@
+@@ -438,7 +438,7 @@
  			k.rule.ptr = r;
  		else
  			k.rule.ptr = NULL;
@@ -6969,7 +6861,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pf_status.scounters[SCNT_SRC_NODE_SEARCH]++;
  		*sn = RB_FIND(pf_src_tree, &V_tree_src_tracking, &k);
  #else
-@@ -446,7 +446,7 @@
+@@ -447,7 +447,7 @@
  #endif
  		if (*sn != NULL && !PF_AZERO(&(*sn)->raddr, af)) {
  			PF_ACPY(naddr, &(*sn)->raddr, af);
@@ -6978,7 +6870,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			if (V_pf_status.debug >= PF_DEBUG_MISC) {
  #else
  			if (pf_status.debug >= PF_DEBUG_MISC) {
-@@ -597,7 +597,7 @@
+@@ -598,7 +598,7 @@
  	if (*sn != NULL)
  		PF_ACPY(&(*sn)->raddr, naddr, af);
  
@@ -6987,7 +6879,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (V_pf_status.debug >= PF_DEBUG_MISC &&
  #else
  	if (pf_status.debug >= PF_DEBUG_MISC &&
-@@ -775,7 +775,7 @@
+@@ -776,7 +776,7 @@
  		 * Pretend there was no match.
  		 */
  		if (!bcmp(*skp, *nkp, sizeof(struct pf_state_key_cmp))) {
@@ -7497,7 +7389,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  #else
 @@ -1169,7 +1169,7 @@
  		    (struct pf_addr *)&h->ip_dst.s_addr, AF_INET,
- 		    r->dst.neg, NULL))
+ 		    r->dst.neg, NULL, M_GETFIB(m)))
  			r = r->skip[PF_SKIP_DST_ADDR].ptr;
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
@@ -8004,7 +7896,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  VNET_DEFINE(uma_zone_t,			pfr_ktable_pl);
  VNET_DEFINE(uma_zone_t,			pfr_kentry_pl);
  VNET_DEFINE(uma_zone_t,			pfr_kcounters_pl);
-@@ -255,7 +255,7 @@
+@@ -254,7 +254,7 @@
  void
  pfr_initialize(void)
  {
@@ -8013,7 +7905,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	pool_init(&pfr_ktable_pl, sizeof(struct pfr_ktable), 0, 0, 0,
  	    "pfrktable", NULL);
  	pool_init(&pfr_kentry_pl, sizeof(struct pfr_kentry), 0, 0, 0,
-@@ -661,13 +661,13 @@
+@@ -660,13 +660,13 @@
  	w.pfrw_addr = addr;
  	w.pfrw_free = kt->pfrkt_cnt;
  	w.pfrw_flags = flags;
@@ -8029,7 +7921,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		rv = kt->pfrkt_ip6->rnh_walktree(kt->pfrkt_ip6, pfr_walktree,
  		    &w);
  #else
-@@ -714,13 +714,13 @@
+@@ -713,13 +713,13 @@
  	w.pfrw_flags = flags;
  	if (flags & PFR_FLAG_ATOMIC)
  		s = splsoftnet();
@@ -8045,7 +7937,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		rv = kt->pfrkt_ip6->rnh_walktree(kt->pfrkt_ip6, pfr_walktree, 
  		    &w);
  #else
-@@ -841,7 +841,7 @@
+@@ -840,7 +840,7 @@
  	w.pfrw_op = sweep ? PFRW_SWEEP : PFRW_ENQUEUE;
  	w.pfrw_workq = workq;
  	if (kt->pfrkt_ip4 != NULL)
@@ -8054,7 +7946,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (kt->pfrkt_ip4->rnh_walktree(kt->pfrkt_ip4, pfr_walktree, 
  		    &w))
  #else
-@@ -849,7 +849,7 @@
+@@ -848,7 +848,7 @@
  #endif
  			printf("pfr_enqueue_addrs: IPv4 walktree failed.\n");
  	if (kt->pfrkt_ip6 != NULL)
@@ -8063,7 +7955,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (kt->pfrkt_ip6->rnh_walktree(kt->pfrkt_ip6, pfr_walktree, 
  		    &w))
  #else
-@@ -867,13 +867,13 @@
+@@ -866,13 +866,13 @@
  
  	bzero(&w, sizeof(w));
  	w.pfrw_op = PFRW_MARK;
@@ -8079,7 +7971,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (kt->pfrkt_ip6->rnh_walktree(kt->pfrkt_ip6, pfr_walktree, &w))
  #else
  	if (rn_walktree(kt->pfrkt_ip6, pfr_walktree, &w))
-@@ -886,7 +886,7 @@
+@@ -885,7 +885,7 @@
  pfr_lookup_addr(struct pfr_ktable *kt, struct pfr_addr *ad, int exact)
  {
  	union sockaddr_union	 sa, mask;
@@ -8088,7 +7980,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct radix_node_head	*head = NULL;
  #else
  	struct radix_node_head	*head;
-@@ -905,7 +905,7 @@
+@@ -904,7 +904,7 @@
  	if (ADDR_NETWORK(ad)) {
  		pfr_prepare_network(&mask, ad->pfra_af, ad->pfra_net);
  		s = splsoftnet(); /* rn_lookup makes use of globals */
@@ -8097,23 +7989,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_LOCK_ASSERT();
  #endif
  		ke = (struct pfr_kentry *)rn_lookup(&sa, &mask, head);
-@@ -928,13 +928,13 @@
+@@ -926,7 +926,7 @@
+ {
  	struct pfr_kentry	*ke;
  
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 	ke =  pool_get(&V_pfr_kentry_pl, PR_NOWAIT | PR_ZERO);
+ #else
  	if (intr)
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		ke = pool_get(&V_pfr_kentry_pl, PR_NOWAIT | PR_ZERO);
- #else
- 		ke = pool_get(&pfr_kentry_pl, PR_NOWAIT | PR_ZERO);
- #endif
- 	else
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		ke = pool_get(&V_pfr_kentry_pl, PR_WAITOK|PR_ZERO);
- #else
- 		ke = pool_get(&pfr_kentry_pl, PR_WAITOK|PR_ZERO|PR_LIMITFAIL);
-@@ -967,7 +967,7 @@
+@@ -962,7 +962,7 @@
  pfr_destroy_kentry(struct pfr_kentry *ke)
  {
  	if (ke->pfrke_counters)
@@ -8122,7 +8007,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		pool_put(&V_pfr_kcounters_pl, ke->pfrke_counters);
  	pool_put(&V_pfr_kentry_pl, ke);
  #else
-@@ -1055,7 +1055,7 @@
+@@ -1050,7 +1050,7 @@
  		if (negchange)
  			p->pfrke_not = !p->pfrke_not;
  		if (p->pfrke_counters) {
@@ -8131,7 +8016,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pool_put(&V_pfr_kcounters_pl, p->pfrke_counters);
  #else
  			pool_put(&pfr_kcounters_pl, p->pfrke_counters);
-@@ -1112,7 +1112,7 @@
+@@ -1107,7 +1107,7 @@
  {
  	union sockaddr_union	 mask;
  	struct radix_node	*rn;
@@ -8140,7 +8025,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct radix_node_head	*head = NULL;
  #else
  	struct radix_node_head	*head;
-@@ -1126,18 +1126,18 @@
+@@ -1121,18 +1121,18 @@
  		head = kt->pfrkt_ip6;
  
  	s = splsoftnet();
@@ -8162,7 +8047,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		rn = rn_addroute(&ke->pfrke_sa, NULL, head, ke->pfrke_node);
  #else
  		rn = rn_addroute(&ke->pfrke_sa, NULL, head, ke->pfrke_node, 0);
-@@ -1152,7 +1152,7 @@
+@@ -1147,7 +1147,7 @@
  {
  	union sockaddr_union	 mask;
  	struct radix_node	*rn;
@@ -8171,7 +8056,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct radix_node_head	*head = NULL;
  #else
  	struct radix_node_head	*head;
-@@ -1165,18 +1165,18 @@
+@@ -1160,18 +1160,18 @@
  		head = kt->pfrkt_ip6;
  
  	s = splsoftnet();
@@ -8193,7 +8078,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		rn = rn_delete(&ke->pfrke_sa, NULL, head);
  #else
  		rn = rn_delete(&ke->pfrke_sa, NULL, head, NULL);
-@@ -1271,7 +1271,7 @@
+@@ -1266,7 +1266,7 @@
  		if (ke->pfrke_af == AF_INET) {
  			if (w->pfrw_dyn->pfid_acnt4++ > 0)
  				break;
@@ -8202,7 +8087,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pfr_prepare_network(&V_pfr_mask, AF_INET, ke->pfrke_net);
  #else
  			pfr_prepare_network(&pfr_mask, AF_INET, ke->pfrke_net);
-@@ -1279,7 +1279,7 @@
+@@ -1274,7 +1274,7 @@
  			w->pfrw_dyn->pfid_addr4 = *SUNION2PF(
  			    &ke->pfrke_sa, AF_INET);
  			w->pfrw_dyn->pfid_mask4 = *SUNION2PF(
@@ -8211,7 +8096,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			    &V_pfr_mask, AF_INET);
  #else
  			    &pfr_mask, AF_INET);
-@@ -1287,7 +1287,7 @@
+@@ -1282,7 +1282,7 @@
  		} else if (ke->pfrke_af == AF_INET6){
  			if (w->pfrw_dyn->pfid_acnt6++ > 0)
  				break;
@@ -8220,7 +8105,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			pfr_prepare_network(&V_pfr_mask, AF_INET6, ke->pfrke_net);
  #else
  			pfr_prepare_network(&pfr_mask, AF_INET6, ke->pfrke_net);
-@@ -1295,7 +1295,7 @@
+@@ -1290,7 +1290,7 @@
  			w->pfrw_dyn->pfid_addr6 = *SUNION2PF(
  			    &ke->pfrke_sa, AF_INET6);
  			w->pfrw_dyn->pfid_mask6 = *SUNION2PF(
@@ -8229,23 +8114,16 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			    &V_pfr_mask, AF_INET6);
  #else
  			    &pfr_mask, AF_INET6);
-@@ -2082,13 +2082,13 @@
+@@ -2076,7 +2076,7 @@
+ 	struct pfr_ktable	*kt;
  	struct pf_ruleset	*rs;
  
+-#ifdef __FreeBSD__
++#ifdef __FreeBSD_kernel__
+ 	kt = pool_get(&V_pfr_ktable_pl, PR_NOWAIT|PR_ZERO);
+ #else
  	if (intr)
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		kt = pool_get(&V_pfr_ktable_pl, PR_NOWAIT|PR_ZERO);
- #else
- 		kt = pool_get(&pfr_ktable_pl, PR_NOWAIT|PR_ZERO|PR_LIMITFAIL);
- #endif
- 	else
--#ifdef __FreeBSD__
-+#ifdef __FreeBSD_kernel__
- 		kt = pool_get(&V_pfr_ktable_pl, PR_WAITOK|PR_ZERO);
- #else
- 		kt = pool_get(&pfr_ktable_pl, PR_WAITOK|PR_ZERO|PR_LIMITFAIL);
-@@ -2140,7 +2140,7 @@
+@@ -2131,7 +2131,7 @@
  		pfr_clean_node_mask(kt, &addrq);
  		pfr_destroy_kentries(&addrq);
  	}
@@ -8254,7 +8132,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (kt->pfrkt_ip4 != NULL) {
  		RADIX_NODE_HEAD_DESTROY(kt->pfrkt_ip4);
  		free((caddr_t)kt->pfrkt_ip4, M_RTABLE);
-@@ -2161,7 +2161,7 @@
+@@ -2152,7 +2152,7 @@
  		kt->pfrkt_rs->tables--;
  		pf_remove_if_empty_ruleset(kt->pfrkt_rs);
  	}
@@ -8263,7 +8141,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	pool_put(&V_pfr_ktable_pl, kt);
  #else
  	pool_put(&pfr_ktable_pl, kt);
-@@ -2200,7 +2200,7 @@
+@@ -2191,7 +2191,7 @@
  	switch (af) {
  #ifdef INET
  	case AF_INET:
@@ -8272,7 +8150,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pfr_sin.sin_addr.s_addr = a->addr32[0];
  		ke = (struct pfr_kentry *)rn_match(&V_pfr_sin, kt->pfrkt_ip4);
  #else
-@@ -2213,7 +2213,7 @@
+@@ -2204,7 +2204,7 @@
  #endif /* INET */
  #ifdef INET6
  	case AF_INET6:
@@ -8281,7 +8159,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		bcopy(a, &V_pfr_sin6.sin6_addr, sizeof(V_pfr_sin6.sin6_addr));
  		ke = (struct pfr_kentry *)rn_match(&V_pfr_sin6, kt->pfrkt_ip6);
  #else
-@@ -2247,7 +2247,7 @@
+@@ -2238,7 +2238,7 @@
  	switch (af) {
  #ifdef INET
  	case AF_INET:
@@ -8290,7 +8168,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		V_pfr_sin.sin_addr.s_addr = a->addr32[0];
  		ke = (struct pfr_kentry *)rn_match(&V_pfr_sin, kt->pfrkt_ip4);
  #else
-@@ -2260,7 +2260,7 @@
+@@ -2251,7 +2251,7 @@
  #endif /* INET */
  #ifdef INET6
  	case AF_INET6:
@@ -8299,7 +8177,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		bcopy(a, &V_pfr_sin6.sin6_addr, sizeof(V_pfr_sin6.sin6_addr));
  		ke = (struct pfr_kentry *)rn_match(&V_pfr_sin6, kt->pfrkt_ip6);
  #else
-@@ -2284,7 +2284,7 @@
+@@ -2275,7 +2275,7 @@
  	if (ke != NULL && op_pass != PFR_OP_XPASS &&
  	    (kt->pfrkt_flags & PFR_TFLAG_COUNTERS)) {
  		if (ke->pfrke_counters == NULL)
@@ -8308,7 +8186,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  			ke->pfrke_counters = pool_get(&V_pfr_kcounters_pl,
  #else
  			ke->pfrke_counters = pool_get(&pfr_kcounters_pl,
-@@ -2347,7 +2347,7 @@
+@@ -2338,7 +2338,7 @@
  pfr_pool_get(struct pfr_ktable *kt, int *pidx, struct pf_addr *counter,
      struct pf_addr **raddr, struct pf_addr **rmask, sa_family_t af)
  {
@@ -8317,7 +8195,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	struct pfr_kentry	*ke, *ke2 = NULL;
  	struct pf_addr		*addr = NULL;
  #else
-@@ -2357,7 +2357,7 @@
+@@ -2348,7 +2348,7 @@
  	union sockaddr_union	 mask;
  	int			 idx = -1, use_counter = 0;
  
@@ -8326,7 +8204,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	if (af == AF_INET)
  		addr = (struct pf_addr *)&V_pfr_sin.sin_addr;
  	else if (af == AF_INET6)
-@@ -2386,13 +2386,13 @@
+@@ -2377,13 +2377,13 @@
  		kt->pfrkt_nomatch++;
  		return (1);
  	}
@@ -8342,7 +8220,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  	*rmask = SUNION2PF(&V_pfr_mask, af);
  #else
  	*rmask = SUNION2PF(&pfr_mask, af);
-@@ -2421,7 +2421,7 @@
+@@ -2412,7 +2412,7 @@
  	}
  	for (;;) {
  		/* we don't want to use a nested block */
@@ -8351,7 +8229,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		if (af == AF_INET)
  			ke2 = (struct pfr_kentry *)rn_match(&V_pfr_sin,
  			    kt->pfrkt_ip4);
-@@ -2447,7 +2447,7 @@
+@@ -2438,7 +2438,7 @@
  
  		/* we need to increase the counter past the nested block */
  		pfr_prepare_network(&mask, AF_INET, ke2->pfrke_net);
@@ -8360,7 +8238,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		PF_POOLMASK(addr, addr, SUNION2PF(&mask, af), &V_pfr_ffaddr, af);
  #else
  		PF_POOLMASK(addr, addr, SUNION2PF(&mask, af), &pfr_ffaddr, af);
-@@ -2475,7 +2475,7 @@
+@@ -2466,7 +2466,7 @@
  	switch (af) {
  #ifdef INET
  	case AF_INET:
@@ -8369,7 +8247,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		kt->pfrkt_ip4->rnh_walktree(kt->pfrkt_ip4, pfr_walktree, &w);
  #else
  		rn_walktree(kt->pfrkt_ip4, pfr_walktree, &w);
-@@ -2484,7 +2484,7 @@
+@@ -2475,7 +2475,7 @@
  #endif /* INET */
  #ifdef INET6
  	case AF_INET6:
@@ -8378,7 +8256,7 @@ find . -type f -name \*.c -or -name \*.y | grep -v "/\.svn/" | \
  		kt->pfrkt_ip6->rnh_walktree(kt->pfrkt_ip6, pfr_walktree, &w);
  #else
  		rn_walktree(kt->pfrkt_ip6, pfr_walktree, &w);
-@@ -2510,13 +2510,13 @@
+@@ -2501,13 +2501,13 @@
  	dyn->pfid_acnt4 = 0;
  	dyn->pfid_acnt6 = 0;
  	if (!dyn->pfid_af || dyn->pfid_af == AF_INET)

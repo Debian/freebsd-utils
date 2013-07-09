@@ -1,8 +1,6 @@
-Index: freebsd-utils-9.0+ds1/usr.sbin/rpc.lockd/lockd.c
-===================================================================
---- freebsd-utils-9.0+ds1.orig/usr.sbin/rpc.lockd/lockd.c	2013-03-17 22:48:52.157285000 +0000
-+++ freebsd-utils-9.0+ds1/usr.sbin/rpc.lockd/lockd.c	2013-03-18 01:24:08.588303578 +0000
-@@ -906,6 +906,7 @@
+--- a/usr.sbin/rpc.lockd/lockd.c
++++ b/usr.sbin/rpc.lockd/lockd.c
+@@ -905,6 +905,7 @@
  						sin->sin_family = AF_INET;
  						sin->sin_port = htons(0);
  						sin->sin_addr.s_addr = htonl(INADDR_ANY);
@@ -10,7 +8,7 @@ Index: freebsd-utils-9.0+ds1/usr.sbin/rpc.lockd/lockd.c
  						res->ai_addr = (struct sockaddr*) sin;
  						res->ai_addrlen = (socklen_t)
  						    sizeof(res->ai_addr);
-@@ -917,6 +918,7 @@
+@@ -916,6 +917,7 @@
  						sin6->sin6_family = AF_INET6;
  						sin6->sin6_port = htons(0);
  						sin6->sin6_addr = in6addr_any;

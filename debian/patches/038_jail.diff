@@ -1,39 +1,55 @@
---- a/usr.sbin/jail/jail.c
-+++ b/usr.sbin/jail/jail.c
-@@ -42,7 +42,6 @@
+--- a/usr.sbin/jail/command.c
++++ b/usr.sbin/jail/command.c
+@@ -39,7 +39,6 @@
  #include <errno.h>
- #include <grp.h>
- #include <jail.h>
+ #include <fcntl.h>
+ #include <kvm.h>
 -#include <login_cap.h>
- #include <netdb.h>
  #include <paths.h>
  #include <pwd.h>
-@@ -99,9 +98,6 @@
- 		else							\
- 			errx(1, "%s: no such user", username);		\
- 	}								\
--	lcap = login_getpwclass(pwd);					\
--	if (lcap == NULL)						\
--		err(1, "getpwclass: %s", username);			\
- 	ngroups = ngroups_max;						\
- 	if (getgrouplist(username, pwd->pw_gid, groups, &ngroups) != 0)	\
- 		err(1, "getgrouplist: %s", username);			\
-@@ -110,7 +106,6 @@
- int
- main(int argc, char **argv)
- {
--	login_cap_t *lcap = NULL;
- 	struct passwd *pwd = NULL;
- 	gid_t *groups;
- 	size_t sysvallen;
-@@ -350,10 +345,6 @@
- 			err(1, "setgroups");
- 		if (setgid(pwd->pw_gid) != 0)
- 			err(1, "setgid");
--		if (setusercontext(lcap, pwd, pwd->pw_uid,
--		    LOGIN_SETALL & ~LOGIN_SETGROUP & ~LOGIN_SETLOGIN) != 0)
--			err(1, "setusercontext");
+ #include <signal.h>
+@@ -48,6 +47,16 @@
+ #include <string.h>
+ #include <unistd.h>
+ 
++#include <sys/syscall.h>
++
++typedef void login_cap_t;
++
++static inline int
++setfib(int fib)
++{
++  return syscall (SYS_setfib, fib);
++}
++
+ #include "jailp.h"
+ 
+ #define DEFAULT_STOP_TIMEOUT	10
+@@ -589,14 +598,6 @@
+ 			if (term != NULL)
+ 				setenv("TERM", term, 1);
+ 		}
+-		if (setusercontext(lcap, pwd, pwd->pw_uid, username
+-		    ? LOGIN_SETALL & ~LOGIN_SETGROUP & ~LOGIN_SETLOGIN
+-		    : LOGIN_SETPATH | LOGIN_SETENV) < 0) {
+-			jail_warnx(j, "setusercontext %s: %s", pwd->pw_name,
+-			    strerror(errno));
+-			exit(1);
+-		}
 -		login_close(lcap);
+ 		setenv("USER", pwd->pw_name, 1);
+ 		setenv("HOME", pwd->pw_dir, 1);
+ 		setenv("SHELL",
+@@ -769,12 +770,6 @@
+ 			jail_warnx(j, "unknown uid %d", getuid());
+ 		return -1;
  	}
- 	if (lflag) {
- 		if (*pwd->pw_shell)
+-	*lcapp = login_getpwclass(pwd);
+-	if (*lcapp == NULL) {
+-		jail_warnx(j, "getpwclass %s: %s", pwd->pw_name,
+-		    strerror(errno));
+-		return -1;
+-	}
+ 	/* Set the groups while the group file is still available */
+ 	if (initgroups(pwd->pw_name, pwd->pw_gid) < 0) {
+ 		jail_warnx(j, "initgroups %s: %s", pwd->pw_name,

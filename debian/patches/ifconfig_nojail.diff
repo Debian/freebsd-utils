@@ -70,7 +70,7 @@ Merged in SVN (rev 231642).
  
  static void
  setifnetmask(const char *addr, int dummy __unused, int s,
-@@ -1158,8 +1164,10 @@
+@@ -1159,8 +1165,10 @@
  	DEF_CMD_ARG2("tunnel",			settunnel),
  	DEF_CMD("-tunnel", 0,			deletetunnel),
  	DEF_CMD("deletetunnel", 0,		deletetunnel),

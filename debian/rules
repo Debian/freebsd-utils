@@ -75,6 +75,8 @@ get-orig-source:
 		 usr.sbin/jail bin/chflags \
 		 sbin/devd etc/devd.conf etc/devd sys/dev/usb/usbdevs \
 		 usr.sbin/acpi/acpiconf \
+		usr.sbin/acpi/Makefile.inc \
+		sys/contrib/dev/acpica/include \
 		 sbin/kldconfig sbin/kldload sbin/kldstat sbin/kldunload \
 		 usr.bin/ktrdump usr.bin/vmstat sbin/devfs sbin/fdisk \
 		 sbin/ifconfig etc/regdomain.xml \

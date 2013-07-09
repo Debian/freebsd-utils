@@ -19,26 +19,15 @@
  		const char **pre;
  		struct kld_file_stat ks;
  		int fileid;
---- a/usr.bin/netstat/mroute6.c
-+++ b/usr.bin/netstat/mroute6.c
-@@ -89,6 +89,7 @@
- #include <stdio.h>
- #include <stdlib.h>
- 
-+#include <netinet/icmp6.h>
- #define	KERNEL 1
- #include <netinet6/ip6_mroute.h>
- #undef KERNEL
 --- a/usr.bin/netstat/netstat.h
 +++ b/usr.bin/netstat/netstat.h
-@@ -31,6 +31,19 @@
-  */
+@@ -32,6 +32,19 @@
  
  #include <sys/cdefs.h>
-+#include <netinet/ether.h>
-+#include <netinet/in.h>
-+#include <string.h>
-+#include <time.h>
+ 
++
++
++
 +
 +
 +/* Only used internally, so can be outside the range of valid IP protocols. */
@@ -48,12 +37,13 @@
 +extern void link_addr(const char *addr, struct sockaddr_dl *sdl);
 +extern char *link_ntoa(const struct sockaddr_dl *sdl);
 +
- 
++
  extern int	Aflag;	/* show addresses of protocol control block */
  extern int	aflag;	/* show all sockets (including servers) */
+ extern int	bflag;	/* show i/f total bytes in/out */
 --- a/usr.bin/netstat/Makefile
 +++ b/usr.bin/netstat/Makefile
-@@ -26,6 +26,7 @@
+@@ -30,6 +30,7 @@
  BINMODE=2555
  DPADD=	${LIBKVM} ${LIBMEMSTAT} ${LIBUTIL}
  LDADD=	-lkvm -lmemstat -lutil

@@ -1,10 +1,11 @@
-freebsd-utils (9.0+ds1-12) UNRELEASED; urgency=low
+freebsd-utils (9.1-1) UNRELEASED; urgency=low
 
+  * New upstream release.
   * Remove transitional dependency (freebsd-net-tools -> pf)
   * Misc improvements in PPP port. Among others, it should no longer be
     necessary to load modules manually.
 
- -- Robert Millan <rmh@debian.org>  Thu, 20 Jun 2013 01:50:09 +0200
+ -- Robert Millan <rmh@debian.org>  Tue, 09 Jul 2013 19:17:02 +0200
 
 freebsd-utils (9.0+ds1-11) unstable; urgency=low
 

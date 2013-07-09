@@ -1,11 +1,10 @@
 --- a/usr.sbin/rpc.lockd/Makefile
 +++ b/usr.sbin/rpc.lockd/Makefile
-@@ -5,7 +5,7 @@
- MAN=	rpc.lockd.8
+@@ -6,6 +6,7 @@
  MLINKS=	rpc.lockd.8 lockd.8
  SRCS=	kern.c nlm_prot_svc.c lockd.c lock_proc.c lockd_lock.c
--SRCS+=	nlm_prot_xdr.c sm_inter_xdr.c
-+SRCS+=	nlm_prot_xdr.c sm_inter_xdr.c nlm_syscall.c
+ SRCS+= nlm_prot_xdr.c sm_inter_xdr.c
++SRCS+= nlm_syscall.c
  
  CFLAGS+= -I. -I${.CURDIR}/../../include/rpcsvc
  WARNS?= 3

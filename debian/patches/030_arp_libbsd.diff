@@ -8,7 +8,7 @@
 
 --- a/usr.sbin/arp/arp.c
 +++ b/usr.sbin/arp/arp.c
-@@ -114,6 +114,43 @@
+@@ -113,6 +113,43 @@
  
  #define SETFUNC(f)	{ if (func) usage(); func = (f); }
  

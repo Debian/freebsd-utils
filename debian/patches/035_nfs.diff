@@ -1,6 +1,6 @@
 --- a/sbin/mount_nfs/mount_nfs.c
 +++ b/sbin/mount_nfs/mount_nfs.c
-@@ -661,12 +661,18 @@
+@@ -668,12 +668,18 @@
  static int
  sec_name_to_num(char *sec)
  {
@@ -19,7 +19,7 @@
  	if (!strcmp(sec, "sys"))
  		return (AUTH_SYS);
  	return (-1);
-@@ -676,12 +682,18 @@
+@@ -683,12 +689,18 @@
  sec_num_to_name(int flavor)
  {
  	switch (flavor) {
@@ -38,7 +38,7 @@
  	case AUTH_SYS:
  		return ("sys");
  	}
-@@ -826,9 +838,11 @@
+@@ -833,9 +845,11 @@
  	freeaddrinfo(ai_nfs);
  
  	build_iovec(iov, iovlen, "hostname", nam, (size_t)-1);
@@ -114,7 +114,7 @@
  MAN=	rpc.lockd.8
  MLINKS=	rpc.lockd.8 lockd.8
  SRCS=	kern.c nlm_prot_svc.c lockd.c lock_proc.c lockd_lock.c
-+SRCS+=	nlm_prot_xdr.c sm_inter_xdr.c
++SRCS+= nlm_prot_xdr.c sm_inter_xdr.c
  
 -CFLAGS+= -I. -I${DESTDIR}/usr/include/rpcsvc
 +CFLAGS+= -I. -I${.CURDIR}/../../include/rpcsvc
@@ -122,14 +122,14 @@
  
  DPADD=	${LIBRPCSVC} ${LIBUTIL}
 -LDADD=	-lrpcsvc -lutil
-+LDADD=	-ltirpc -lbsd
++LDADD= -ltirpc -lbsd
  
  CLEANFILES= nlm_prot_svc.c nlm_prot.h test
 +CLEANFILES+= nlm_prot_xdr.c
  
 -RPCSRC= ${DESTDIR}/usr/include/rpcsvc/nlm_prot.x
 +RPCSRC= ${.CURDIR}/../../include/rpcsvc/nlm_prot.x
- RPCGEN= rpcgen -L -C
+ RPCGEN= RPCGEN_CPP=${CPP:Q} rpcgen -L -C
  
 +.PATH: ../rpc.statd
 +
@@ -165,13 +165,12 @@
  
 --- a/usr.sbin/rpc.lockd/kern.c
 +++ b/usr.sbin/rpc.lockd/kern.c
-@@ -51,8 +51,9 @@
- #include <syslog.h>
+@@ -52,7 +52,8 @@
  #include <unistd.h>
  #include <netdb.h>
-+#include <signal.h>
  
 -#include "nlm_prot.h"
++
 +#include <nlm_prot.h>
  #include <nfs/nfsproto.h>
  #include <nfs/nfs_lock.h>
@@ -209,25 +208,20 @@
  RPC protocol specification used by local applications to register monitoring requests.
 --- a/usr.sbin/rpc.statd/Makefile
 +++ b/usr.sbin/rpc.statd/Makefile
-@@ -3,21 +3,26 @@
- PROG=	rpc.statd
- MAN=	rpc.statd.8
- SRCS=	file.c sm_inter_svc.c sm_inter.h statd.c procs.c
-+SRCS+=	sm_inter_xdr.c
- 
- CFLAGS+= -I.
+@@ -8,16 +8,21 @@
  WARNS?= 2
  
  DPADD=	${LIBRPCSVC}
 -LDADD=	-lrpcsvc
-+LDADD=	-ltirpc -lbsd
++LDADD= -ltirpc -lbsd
  
  CLEANFILES= sm_inter_svc.c sm_inter.h
++SRCS+= sm_inter_xdr.c
 +CLEANFILES+= sm_inter_xdr.c
  
 -RPCSRC= ${DESTDIR}/usr/include/rpcsvc/sm_inter.x
 +RPCSRC= ${.CURDIR}/../../include/rpcsvc/sm_inter.x
- RPCGEN= rpcgen -L -C
+ RPCGEN= RPCGEN_CPP=${CPP:Q} rpcgen -L -C
  
  sm_inter_svc.c: ${RPCSRC}
  	${RPCGEN} -m -o ${.TARGET} ${RPCSRC}
