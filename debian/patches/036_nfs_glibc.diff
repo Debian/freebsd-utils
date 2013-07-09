@@ -11,7 +11,8 @@
  WARNS?= 3
 --- /dev/null
 +++ b/usr.sbin/rpc.lockd/nlm_syscall.c
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,12 @@
++#include <unistd.h>
 +#include <sys/syscall.h>
 +
 +#ifndef SYS_nlm_syscall
