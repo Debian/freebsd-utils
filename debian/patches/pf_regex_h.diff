@@ -1,7 +1,8 @@
 
 Generated with:
 
-find b -type f ! -name \*.c ! -name \*.y| while read i ; do \
+find . -type f ! -name \*.c ! -name \*.y | grep -v "/\.svn/" | \
+	while read i ; do \
 	sed -i $i \
 		-e 's/defined\( \|\t\)*(\( \|\t\)*__FreeBSD__\( \|\t\)*)/defined(__FreeBSD__) || defined(__FreeBSD_kernel__)/g' \
 		-e 's/#\( \|\t\)*ifdef\( \|\t\)*__FreeBSD__/#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__)/g' \
