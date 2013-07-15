@@ -4,6 +4,8 @@ freebsd-utils (9.1-1) UNRELEASED; urgency=low
   * Remove transitional dependency (freebsd-net-tools -> pf)
   * Misc improvements in PPP port. Among others, it should no longer be
     necessary to load modules manually.
+  * Split mount -n option into its own patch, since it's now in upstream
+    HEAD.
 
  -- Robert Millan <rmh@debian.org>  Tue, 09 Jul 2013 19:17:02 +0200
 

@@ -1,20 +1,19 @@
 --- a/sbin/mount/mount.c
 +++ b/sbin/mount/mount.c
-@@ -252,8 +252,12 @@
+@@ -252,8 +252,11 @@
  	options = NULL;
  	vfslist = NULL;
  	vfstype = "ufs";
--	while ((ch = getopt(argc, argv, "adF:flo:prt:uvw")) != -1)
-+	while ((ch = getopt(argc, argv, "adF:flo:prt:uvwnO:")) != -1)
+-	while ((ch = getopt(argc, argv, "adF:flno:prt:uvw")) != -1)
++	while ((ch = getopt(argc, argv, "adF:flno:prt:uvwO:")) != -1)
  		switch (ch) {
-+		case 'n':
 +		case 'O':
 +			/* Compatibility glue. */
 +			break;
  		case 'a':
  			all = 1;
  			break;
-@@ -761,6 +765,11 @@
+@@ -764,6 +767,11 @@
  			} else if (strncmp(p, groupquotaeq,
  			    sizeof(groupquotaeq) - 1) == 0) {
  				continue;
