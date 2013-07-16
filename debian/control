@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  flex | flex-old,
  freebsd-buildutils (>= 9.0-8~),
  freebsd-glue (>= 0.0.6~),
- kfreebsd-kernel-headers (>= 0.70),
+ kfreebsd-kernel-headers (>= 9.1),
  libc0.1-dev (>= 2.13-26),
  libbsd-dev (>= 0.3.0), pkg-config,
 # zlib1g-dev: savecore
