@@ -1,4 +1,4 @@
-freebsd-utils (9.1-1) UNRELEASED; urgency=low
+freebsd-utils (9.1-1) experimental; urgency=low
 
   * New upstream release.
   * Remove transitional dependency (freebsd-net-tools -> pf)
@@ -7,7 +7,7 @@ freebsd-utils (9.1-1) UNRELEASED; urgency=low
   * Split mount -n option into its own patch, since it's now in upstream
     HEAD.
 
- -- Robert Millan <rmh@debian.org>  Tue, 09 Jul 2013 19:17:02 +0200
+ -- Robert Millan <rmh@debian.org>  Tue, 16 Jul 2013 12:35:06 +0200
 
 freebsd-utils (9.0+ds1-11) unstable; urgency=low
 
