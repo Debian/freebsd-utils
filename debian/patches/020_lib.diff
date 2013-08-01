@@ -212,7 +212,7 @@
 + * SUCH DAMAGE.
 + */
 +
-+//#include <netinet/ether.h>
++#include <netinet/ether.h>
 +void link_addr(const char *addr, struct sockaddr_dl *sdl);
 +char *link_ntoa(const struct sockaddr_dl *sdl);
 --- /dev/null
