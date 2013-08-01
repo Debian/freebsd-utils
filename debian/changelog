@@ -12,6 +12,7 @@ freebsd-utils (9.1-3) UNRELEASED; urgency=low
     - Require freebsd-glue >= 0.0.10 (for ether_ntoa).
     - Remove -I. from CFLAGS to mimic upstream behaviour (prevents
       <netgraph.h> from being overriden by local version).
+  * Remove __va_list kludge (no longer needed).
 
  -- Robert Millan <rmh@debian.org>  Thu, 01 Aug 2013 21:40:06 +0200
 
