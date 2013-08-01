@@ -1,7 +1,12 @@
 freebsd-utils (9.1-3) UNRELEASED; urgency=low
 
+  [ Guillem Jover ] 
   * Switch to canonical Vcs URLs.
 
+  [ Petr Salinger ]
+  * add #include <netinet/ether.h> into lib/linkaddr.h. 
+    Closes: #718490.
+  
  -- Guillem Jover <guillem@debian.org>  Mon, 29 Jul 2013 14:16:34 +0200
 
 freebsd-utils (9.1-2) unstable; urgency=low
