@@ -5,10 +5,11 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-CFLAGS = -Wall -g -pipe -fPIC -I. -D_GNU_SOURCE -D__va_list=__builtin_va_list \
+CFLAGS = -Wall -g -pipe -fPIC -D_GNU_SOURCE -D__va_list=__builtin_va_list \
 	-isystem /usr/include/tirpc \
-	-D__FreeBSD_version=__FreeBSD_kernel_version
-#	-Werror=implicit-function-declaration
+	-D__FreeBSD_version=__FreeBSD_kernel_version \
+	-Werror=implicit-function-declaration \
+	$(NULL)
 CXXFLAGS = $(CFLAGS)
 
 ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
