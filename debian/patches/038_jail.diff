@@ -53,3 +53,14 @@
  	/* Set the groups while the group file is still available */
  	if (initgroups(pwd->pw_name, pwd->pw_gid) < 0) {
  		jail_warnx(j, "initgroups %s: %s", pwd->pw_name,
+--- a/usr.sbin/jail/Makefile
++++ b/usr.sbin/jail/Makefile
+@@ -7,7 +7,7 @@
+ SRCS=	jail.c command.c config.c state.c jailp.h jaillex.l jailparse.y y.tab.h
+ 
+ DPADD=	${LIBJAIL} ${LIBKVM} ${LIBUTIL} ${LIBL}
+-LDADD=	-ljail -lkvm -lutil -ll
++LDADD=	-ljail -lkvm -lutil -ll -lfreebsd-glue
+ 
+ YFLAGS+=-v
+ CFLAGS+=-I. -I${.CURDIR}

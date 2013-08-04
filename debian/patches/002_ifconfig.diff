@@ -14,7 +14,7 @@
  SRCS+=	ifieee80211.c regdomain.c # SIOC[GS]IEEE80211 support
  DPADD+=	${LIBBSDXML} ${LIBSBUF}
 -LDADD+=	-lbsdxml -lsbuf
-+LDADD+=	-lexpat -lsbuf
++LDADD+=	-lexpat -lsbuf -lfreebsd-glue
  
  SRCS+=	ifcarp.c		# SIOC[GS]VH support
  SRCS+=	ifgroup.c		# ...

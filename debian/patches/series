@@ -40,7 +40,6 @@ ppp_macros.diff
 030_arp_libbsd.diff
 031_savecore.diff
 035_nfs.diff
-036_nfs_glibc.diff
 038_jail.diff
 039_geom.diff
 041_delete_key.diff
@@ -48,3 +47,5 @@ ppp_macros.diff
 devd_link_c++_statically.diff
 stablerestart-fhs-compliance.diff
 rpc.lockd-startup-fix.diff
+
+# Patches that are likely to be Debian-specific

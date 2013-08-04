@@ -56,7 +56,7 @@
  
  PROG=	mount_nfs
  SRCS=	mount_nfs.c getmntopts.c mounttab.c
-+LDADD=	-ltirpc
++LDADD=	-ltirpc -lfreebsd-glue
  MAN=	mount_nfs.8
  MLINKS=	mount_nfs.8 mount_oldnfs.8
  
@@ -74,7 +74,7 @@
  
  DPADD=	${LIBUTIL}
 -LDADD=	-lutil
-+LDADD=	-ltirpc -lbsd
++LDADD=	-ltirpc -lbsd -lfreebsd-glue
  
  .include <bsd.prog.mk>
 --- a/usr.sbin/mountd/mountd.c
@@ -122,7 +122,7 @@
  
  DPADD=	${LIBRPCSVC} ${LIBUTIL}
 -LDADD=	-lrpcsvc -lutil
-+LDADD= -ltirpc -lbsd
++LDADD= -ltirpc -lbsd -lfreebsd-glue
  
  CLEANFILES= nlm_prot_svc.c nlm_prot.h test
 +CLEANFILES+= nlm_prot_xdr.c

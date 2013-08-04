@@ -1,3 +1,9 @@
+freebsd-utils (9.1-5) UNRELEASED; urgency=low
+
+  * Misc adjustments for freebsd-glue 0.1.0.
+
+ -- Robert Millan <rmh@debian.org>  Sun, 04 Aug 2013 17:30:14 +0200
+
 freebsd-utils (9.1-4) unstable; urgency=high
 
   * Bump urgency due to #718490.

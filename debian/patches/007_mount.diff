@@ -61,7 +61,7 @@
  
  DPADD=	${LIBUTIL}
 -LDADD=	-lutil
-+LDADD=	-lutil -lbsd
++LDADD=	-lutil -lbsd -lfreebsd-glue
  
  .include <bsd.prog.mk>
 --- a/sbin/mount/mount.8

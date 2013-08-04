@@ -9,6 +9,7 @@ CFLAGS = -Wall -g -pipe -fPIC -D_GNU_SOURCE \
 	-isystem /usr/include/tirpc \
 	-D__FreeBSD_version=__FreeBSD_kernel_version \
 	-Werror=implicit-function-declaration \
+	-isystem /usr/include/freebsd -I$(CURDIR)/debian/local/include -I$(CURDIR)/include -lbsd \
 	$(NULL)
 CXXFLAGS = $(CFLAGS)
 
@@ -38,8 +39,7 @@ TARNAME = $(SOURCE)_$(tar_version).orig.tar.gz
 
 PATH := /usr/lib/freebsd:$(PATH)
 DESTDIR = $(CURDIR)/debian/tmp
-PMAKE = COPTS="$(CFLAGS)" CFLAGS="$(CFLAGS) \
-        -isystem /usr/include/freebsd -I$(CURDIR)/debian/local/include -I$(CURDIR)/include -lbsd" \
+PMAKE = COPTS="$(CFLAGS)" CFLAGS="$(CFLAGS)" LDADD="-lfreebsd-glue" \
         NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
         DESTDIR=$(DESTDIR) make
 
