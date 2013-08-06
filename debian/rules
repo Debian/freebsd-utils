@@ -110,11 +110,6 @@ get-orig-source:
 	tar --numeric-owner --owner 0 --group 0 -czf ../$(TARNAME) $(ORIGDIR)
 	rm -rf $(ORIGDIR)
 
-lib: lib-stamp
-lib-stamp:
-	$(MAKE) -C lib
-	touch $@
-
 build-arch: freebsd-utils gbde kbdcontrol vidcontrol kldutils freebsd-net-tools freebsd-nfs-utils freebsd-ppp powerd
 
 freebsd-utils: freebsd-utils-stamp
@@ -180,7 +175,7 @@ kldutils-stamp:
 	touch $@
 
 freebsd-net-tools: freebsd-net-tools-stamp
-freebsd-net-tools-stamp: lib-stamp
+freebsd-net-tools-stamp:
 	$(PMAKE) -C sbin/ifconfig -DWITHOUT_JAIL
 	$(PMAKE) -C sbin/pfctl
 	$(PMAKE) -C sbin/route
@@ -196,7 +191,7 @@ freebsd-ppp-stamp:
 	touch $@
 
 freebsd-nfs-utils: freebsd-nfs-utils-stamp
-freebsd-nfs-utils-stamp: lib-stamp
+freebsd-nfs-utils-stamp:
 #	$(PMAKE) -C usr.bin/showmount
 	$(PMAKE) -C sbin/mount_nfs
 	$(PMAKE) -C sbin/nfsiod

@@ -1,8 +1,3 @@
----
- sbin/route/Makefile |    1 +
- sbin/route/route.c  |    7 +++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
-
 --- a/sbin/route/route.c
 +++ b/sbin/route/route.c
 @@ -64,10 +64,13 @@
@@ -15,7 +10,7 @@
  #include <unistd.h>
  #include <ifaddrs.h>
 +#include <time.h>
-+#include "../../lib/linkaddr.h"
++
  
  struct keytab {
  	const char	*kt_cp;
@@ -28,13 +23,3 @@
  		switch(ch) {
  		case 'n':
  			nflag = 1;
---- a/sbin/route/Makefile
-+++ b/sbin/route/Makefile
-@@ -7,6 +7,7 @@
- MAN=	route.8
- SRCS=	route.c keywords.h
- WARNS?=	3
-+LDADD= ../../lib/linkaddr.o
- CLEANFILES+=keywords.h _keywords.tmp
- 
- CFLAGS+= -DNS
