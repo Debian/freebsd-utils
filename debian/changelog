@@ -3,6 +3,8 @@ freebsd-utils (9.1-5) UNRELEASED; urgency=low
   * Misc adjustments for freebsd-glue 0.1.0.
   * Reduce the patchset even further by using trimdomain, link_addr and
     link_ntoa from freebsd-glue.
+  * Improve output formatting in nfsiod init script. Thanks Mats Erik
+    Andersson. (Closes: #721446)
 
  -- Robert Millan <rmh@debian.org>  Sun, 04 Aug 2013 17:30:14 +0200
 
