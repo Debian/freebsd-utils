@@ -17,27 +17,27 @@ something sane instead...
  #include <sys/stat.h>
  #include <sys/param.h>
  #include <sys/sysctl.h>
-@@ -71,6 +72,8 @@
- 	int ch, doall;
+@@ -72,6 +73,8 @@
  	int sflag = 0, lflag = 0, hflag = 0, qflag = 0;
+ 	const char *etc_fstab;
  
 +	setprogname (argv[0]);
 +
  	if ((ptr = strrchr(argv[0], '/')) == NULL)
  		ptr = argv[0];
  	if (strstr(ptr, "swapon"))
-@@ -80,7 +83,7 @@
- 	orig_prog = which_prog;
+@@ -82,7 +85,7 @@
  	
  	doall = 0;
--	while ((ch = getopt(argc, argv, "AadghklmqsU")) != -1) {
-+	while ((ch = getopt(argc, argv, "AadghklmqsUve")) != -1) {
+ 	etc_fstab = NULL;
+-	while ((ch = getopt(argc, argv, "AadghklmqsUF:")) != -1) {
++	while ((ch = getopt(argc, argv, "AadghklmqsUF:ve")) != -1) {
  		switch(ch) {
  		case 'A':
  			if (which_prog == SWAPCTL) {
-@@ -132,6 +135,9 @@
- 				usage();
- 			}
+@@ -137,6 +140,9 @@
+ 		case 'F':
+ 			etc_fstab = optarg;
  			break;
 +		case 'v':
 +		case 'e':
@@ -45,7 +45,7 @@ something sane instead...
  		case '?':
  		default:
  			usage();
-@@ -271,7 +277,8 @@
+@@ -278,7 +284,8 @@
  	    hlen = 10;
  	    break;
  	default:
@@ -57,11 +57,11 @@ something sane instead...
  	}
 --- a/sbin/swapon/Makefile
 +++ b/sbin/swapon/Makefile
-@@ -10,6 +10,6 @@
+@@ -9,6 +9,6 @@
+ MLINKS+=swapon.8 swapctl.8
  
- WARNS?=	3
  DPADD=	${LIBUTIL}
 -LDADD=	-lutil
-+LDADD=	-lbsd -lutil
++LDADD=	-lbsd -lfreebsd-glue -lutil
  
  .include <bsd.prog.mk>

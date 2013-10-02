@@ -13,9 +13,9 @@
  pid_t	children[MAXNFSDCNT];	/* PIDs of children */
 --- a/usr.sbin/nfsd/nfsv4.4
 +++ b/usr.sbin/nfsd/nfsv4.4
-@@ -288,10 +288,10 @@
- .Xr rc.conf 5
- variables.
+@@ -311,10 +311,10 @@
+ If all other nfsd threads are blocked waiting for lock(s) held by this nfsd
+ thread, then there isn't an nfsd thread to service the Close RPC.
  .Sh FILES
 -.Bl -tag -width /var/db/nfs-stablerestart.bak -compact
 -.It Pa /var/db/nfs-stablerestart

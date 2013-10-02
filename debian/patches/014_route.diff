@@ -1,20 +1,6 @@
 --- a/sbin/route/route.c
 +++ b/sbin/route/route.c
-@@ -64,10 +64,13 @@
- #include <paths.h>
- #include <stdio.h>
- #include <stdlib.h>
-+#include <stdint.h>
- #include <string.h>
- #include <sysexits.h>
- #include <unistd.h>
- #include <ifaddrs.h>
-+#include <time.h>
-+
- 
- struct keytab {
- 	const char	*kt_cp;
-@@ -148,7 +151,7 @@
+@@ -167,7 +167,7 @@
  	if (argc < 2)
  		usage(NULL);
  
@@ -23,3 +9,15 @@
  		switch(ch) {
  		case 'n':
  			nflag = 1;
+@@ -243,6 +243,11 @@
+ 
+ 	if (fib < 0)
+ 		return (0);
++
++#ifndef SO_SETFIB
++#define SO_SETFIB 0x1014
++#endif
++
+ 	return (setsockopt(s, SOL_SOCKET, SO_SETFIB, (void *)&fib,
+ 	    sizeof(fib)));
+ }

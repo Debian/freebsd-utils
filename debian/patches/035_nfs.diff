@@ -79,7 +79,7 @@
  .include <bsd.prog.mk>
 --- a/usr.sbin/mountd/mountd.c
 +++ b/usr.sbin/mountd/mountd.c
-@@ -2066,12 +2066,18 @@
+@@ -2118,12 +2118,18 @@
  
  		if (!strcmp(seclist, "sys"))
  			flavor = AUTH_SYS;

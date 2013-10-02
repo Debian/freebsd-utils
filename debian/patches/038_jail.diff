@@ -12,20 +12,20 @@
  #include <string.h>
  #include <unistd.h>
  
-+#include <sys/syscall.h>
++
 +
 +typedef void login_cap_t;
 +
-+static inline int
-+setfib(int fib)
-+{
-+  return syscall (SYS_setfib, fib);
-+}
++
++
++
++
++
 +
  #include "jailp.h"
  
  #define DEFAULT_STOP_TIMEOUT	10
-@@ -589,14 +598,6 @@
+@@ -591,14 +600,6 @@
  			if (term != NULL)
  				setenv("TERM", term, 1);
  		}
@@ -40,7 +40,7 @@
  		setenv("USER", pwd->pw_name, 1);
  		setenv("HOME", pwd->pw_dir, 1);
  		setenv("SHELL",
-@@ -769,12 +770,6 @@
+@@ -775,12 +776,6 @@
  			jail_warnx(j, "unknown uid %d", getuid());
  		return -1;
  	}

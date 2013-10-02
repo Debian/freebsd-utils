@@ -1,7 +1,7 @@
 --- a/contrib/pf/authpf/authpf.c
 +++ b/contrib/pf/authpf/authpf.c
 @@ -37,7 +37,7 @@
- #ifdef __FreeBSD_kernel__
+ #if 1
  #include <inttypes.h>
  #endif
 -#include <login_cap.h>

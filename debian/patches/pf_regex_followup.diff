@@ -12,7 +12,7 @@
  	else
  		shell = pw->pw_shell;
  
--#ifndef __FreeBSD_kernel__
+-#if 0
 +#ifndef __FreeBSD__
  	login_close(lc);
  #endif
@@ -21,7 +21,7 @@
  	    strcmp(shell, PATH_AUTHPF_SHELL_NOIP)) {
  		syslog(LOG_ERR, "wrong shell for user %s, uid %u",
  		    pw->pw_name, pw->pw_uid);
--#ifdef __FreeBSD_kernel__
+-#if 1
 +#ifdef __FreeBSD__
  	login_close(lc);
  #else
@@ -30,7 +30,7 @@
  		goto die;
  	}
  
--#ifdef __FreeBSD_kernel__
+-#if 1
 +#ifdef __FreeBSD__
  	login_close(lc);
  #else
@@ -45,15 +45,6 @@
  #include <sys/queue.h>
  #include <sys/types.h>
  #include <sys/time.h>
-@@ -585,7 +586,7 @@
- 
- 		/* We don't care about truncation. */
- 		vsnprintf(buf, sizeof buf, message, ap);
--#ifdef __FreeBSD_kernel__
-+#ifdef __FreeBSD__
- 		strvis(visbuf, buf, VIS_CSTYLE | VIS_NL);
- #else
- 		strnvis(visbuf, buf, sizeof visbuf, VIS_CSTYLE | VIS_NL);
 --- a/contrib/pf/libevent/kqueue.c
 +++ b/contrib/pf/libevent/kqueue.c
 @@ -30,6 +30,7 @@
@@ -83,7 +74,7 @@
 +#include <sys/param.h>
  #include <sys/types.h>
  #include <sys/socket.h>
- #ifdef __FreeBSD_kernel__
+ #if 1
 --- a/contrib/pf/pfctl/pfctl.c
 +++ b/contrib/pf/pfctl/pfctl.c
 @@ -34,6 +34,7 @@

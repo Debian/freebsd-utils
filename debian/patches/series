@@ -6,7 +6,6 @@ mount_n.diff
 
 # Patches that are in good shape for merging upstream
 pf_regex_c.diff
-pf_regex_h.diff
 pf_regex_followup.diff
 mount_cli_compat.diff
 ppp_macros.diff

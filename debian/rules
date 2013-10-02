@@ -7,7 +7,6 @@
 
 CFLAGS = -Wall -g -pipe -fPIC -D_GNU_SOURCE \
 	-isystem /usr/include/tirpc \
-	-D__FreeBSD_version=__FreeBSD_kernel_version \
 	-Werror=implicit-function-declaration \
 	-isystem /usr/include/freebsd -I$(CURDIR)/debian/local/include -I$(CURDIR)/include -lbsd \
 	$(NULL)

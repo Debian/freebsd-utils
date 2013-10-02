@@ -4,8 +4,8 @@
 
 --- a/sbin/mount_nullfs/mount_nullfs.c
 +++ b/sbin/mount_nullfs/mount_nullfs.c
-@@ -63,7 +63,7 @@
- };
+@@ -58,7 +58,7 @@
+ #include "mntopts.h"
  
  int	subdir(const char *, const char *);
 -static void	usage(void) __dead2;

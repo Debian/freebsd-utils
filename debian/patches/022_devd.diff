@@ -47,7 +47,7 @@
  	pid-file "/var/run/devd.pid";
  
  	# Setup some shorthand for regex that we use later in the file.
-@@ -27,54 +23,6 @@
+@@ -27,144 +23,6 @@
  # Note that the attach/detach with the highest value wins, so that one can
  # override these general rules.
  
@@ -62,6 +62,7 @@
 -#
 -notify 0 {
 -	match "system"		"IFNET";
+-	match "subsystem"	"!usbus[0-9]+";
 -	match "type"		"ATTACH";
 -	action "/etc/pccard_ether $subsystem start";
 -};
@@ -99,13 +100,18 @@
 -	action "/etc/rc.d/dhclient quietstart $subsystem";
 -};
 -
- # An entry like this might be in a different file, but is included here
- # as an example of how to override things.  Normally 'ed50' would match
- # the above attach/detach stuff, but the value of 100 makes it
-@@ -87,74 +35,6 @@
- 	device-name "ed50";
- };
- 
+-# An entry like this might be in a different file, but is included here
+-# as an example of how to override things.  Normally 'ed50' would match
+-# the above attach/detach stuff, but the value of 100 makes it
+-# hard wired to 1.2.3.4.
+-attach 100 {
+-	device-name "ed50";
+-	action "ifconfig $device-name inet 1.2.3.4 netmask 0xffff0000";
+-};
+-detach 100 {
+-	device-name "ed50";
+-};
+-
 -# When a USB Bluetooth dongle appears, activate it
 -attach 100 {
 -	device-name "ubt[0-9]+";
@@ -133,14 +139,22 @@
 -	action "/etc/rc.d/syscons setkeyboard /dev/kbd0";
 -};
 -
--attach 100 {
--	device-name "ums[0-9]+";
--	action "/etc/rc.d/moused quietstart $device-name";
+-notify 100 {
+-	match "system" "DEVFS";
+-	match "subsystem" "CDEV";
+-	match "type" "CREATE";
+-	match "cdev" "ums[0-9]+";
+-
+-	action "/etc/rc.d/moused quietstart $cdev";
 -};
 -
--detach 100 {
--        device-name "ums[0-9]+";
--        action "/etc/rc.d/moused stop $device-name";
+-notify 100 {
+-	match "system" "DEVFS";
+-	match "subsystem" "CDEV";
+-	match "type" "DESTROY";
+-	match "cdev" "ums[0-9]+";
+-
+-	action "/etc/rc.d/moused stop $cdev";
 -};
 -
 -# Firmware download into the ActiveWire board. After the firmware download is
@@ -174,10 +188,11 @@
 -	action "/usr/local/bin/coldsync -md -p /dev/$cdev -t usb";
 -};
 -
- #
+-#
  # Rescan scsi device-names on attach, but not detach.  However, it is
  # disabled by default due to reports of problems.
-@@ -202,13 +82,6 @@
+ #
+@@ -211,13 +69,6 @@
  		vendor $vendor bus $bus";
  };
  
@@ -191,7 +206,7 @@
  # Notify all users before beginning emergency shutdown when we get
  # a _CRT or _HOT thermal event and we're going to power down the system
  # very soon.
-@@ -250,19 +123,6 @@
+@@ -259,19 +110,6 @@
  	action "logger -p kern.warn 'ZFS: checksum mismatch, zpool=$pool path=$vdev_path offset=$zio_offset size=$zio_size'";
  };
  
