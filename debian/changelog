@@ -1,6 +1,10 @@
 freebsd-utils (9.2-2) UNRELEASED; urgency=low
 
+  [ Robert Millan ]
   * Simplify 031_savecore.diff by using zopen() from freebsd-glue.
+
+  [ Guillem Jover ]
+  * Remove myself from Uploaders.
 
  -- Robert Millan <rmh@debian.org>  Tue, 08 Oct 2013 00:32:52 +0200
 
