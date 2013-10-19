@@ -27,12 +27,12 @@ freebsd-utils (9.1-4) unstable; urgency=high
 
 freebsd-utils (9.1-3) unstable; urgency=low
 
-  [ Guillem Jover ] 
+  [ Guillem Jover ]
   * Switch to canonical Vcs URLs.
 
   [ Petr Salinger ]
-  * add #include <netinet/ether.h> into lib/linkaddr.h. 
-  
+  * Add #include <netinet/ether.h> into lib/linkaddr.h.
+
   [ Robert Millan ]
   * Re-enable -Werror=implicit-function-declaration.
     - Require kfreebsd-kernel-headers 9.1-3 (for kldunloadf).
@@ -653,7 +653,7 @@ freebsd-utils (7.1-5) unstable; urgency=low
 freebsd-utils (7.1-4) unstable; urgency=low
 
   * Rename module-init-tools to kldutils and net-tools to freebsd-net-tools,
-    as this is messing up the expectations of several services of equially
+    as this is messing up the expectations of several services of equally
     named binary coming from the same source package.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 13 Apr 2009 17:29:58 +0200
