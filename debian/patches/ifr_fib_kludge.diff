@@ -1,0 +1,26 @@
+--- a/sbin/ifconfig/iffib.c
++++ b/sbin/ifconfig/iffib.c
+@@ -43,6 +43,14 @@
+ 
+ #include "ifconfig.h"
+ 
++/* Since there's no ifr_fib field yet, we abuse another member of the
++   union which has the same size (but not the same signedness). */
++#ifdef ifr_fib
++#error "Please remove this kludge! Build-Depend on suitable libc0.1-dev instead"
++#else
++#define ifr_fib		ifr_media
++#endif
++
+ static void
+ fib_status(int s)
+ {
+@@ -58,7 +66,7 @@
+ 	if (ifr.ifr_fib == 0)
+ 		return;
+ 
+-	printf("\tfib: %u\n", ifr.ifr_fib);
++	printf("\tfib: %u\n", (unsigned) ifr.ifr_fib);
+ }
+ 
+ static void

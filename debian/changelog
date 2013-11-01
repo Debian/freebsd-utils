@@ -2,6 +2,8 @@ freebsd-utils (9.2-2) UNRELEASED; urgency=low
 
   [ Robert Millan ]
   * Simplify 031_savecore.diff by using zopen() from freebsd-glue.
+  * Enable ifmac.c, iffib.c and ifpfsync.c in ifconfig.
+    (Closes: #728374)
 
   [ Guillem Jover ]
   * Remove myself from Uploaders.
