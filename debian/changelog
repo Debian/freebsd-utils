@@ -4,11 +4,13 @@ freebsd-utils (9.2-2) UNRELEASED; urgency=low
   * Simplify 031_savecore.diff by using zopen() from freebsd-glue.
   * Enable ifmac.c, iffib.c and ifpfsync.c in ifconfig.
     (Closes: #728374)
+  * Remove cons25 transition kludge (was only needed for squeeze->wheezy
+    upgrades).
 
   [ Guillem Jover ]
   * Remove myself from Uploaders.
 
- -- Robert Millan <rmh@debian.org>  Tue, 08 Oct 2013 00:32:52 +0200
+ -- Robert Millan <rmh@debian.org>  Wed, 20 Nov 2013 14:44:00 +0100
 
 freebsd-utils (9.2-1) unstable; urgency=low
 

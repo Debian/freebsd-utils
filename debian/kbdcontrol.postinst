@@ -11,11 +11,6 @@ case "$1" in
     configure)
       # Obsoleted by /etc/init.d/keyboard-setup
       rm -f /etc/kbdcontrol.conf
-
-      # TEKEN_XTERM transition
-      if test -e /etc/inittab ; then
-        sed -i /etc/inittab -e "s/cons25$/xterm/"
-      fi
     ;;
     abort-upgrade|abort-remove|abort-deconfigure)
     ;;
