@@ -10,6 +10,8 @@ path audio*	user root	group audio	mode 0600
 path dsp*	user root	group audio	mode 0660
 path mixer*	user root	group audio	mode 0660
 
+path dri/card*	user root	group video	mode 0660
+
 # cdrom nodes
 path *cd*	user root	group cdrom	mode 0660
 
