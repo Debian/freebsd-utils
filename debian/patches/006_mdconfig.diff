@@ -44,13 +44,3 @@
  
  	fd = open(_PATH_DEV MDCTL_NAME, O_RDWR, 0);
  	if (fd < 0)
---- a/sbin/mdconfig/Makefile
-+++ b/sbin/mdconfig/Makefile
-@@ -4,6 +4,6 @@
- MAN=		mdconfig.8
- 
- DPADD=	${LIBUTIL} ${LIBGEOM} ${LIBBSDXML} ${LIBSBUF} 
--LDADD=	-lutil -lgeom -lbsdxml -lsbuf
-+LDADD=	-lutil -lgeom -lbsd
- 
- .include <bsd.prog.mk>

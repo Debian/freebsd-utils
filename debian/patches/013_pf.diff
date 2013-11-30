@@ -53,17 +53,7 @@
  
  	/*
  	 * Paranoia, but this data _does_ come from outside authpf, and
-@@ -343,7 +326,9 @@
- 	while (1) {
- 		printf("\r\nHello %s. ", luser);
- 		printf("You are authenticated from host \"%s\"\r\n", ipsrc);
-+#if 0
- 		setproctitle("%s@%s", luser, ipsrc);
-+#endif
- 		print_message(PATH_MESSAGE);
- 		while (1) {
- 			sleep(10);
-@@ -521,9 +506,6 @@
+@@ -521,9 +504,6 @@
  			}
  
  			if (buf[0] == '@') {
@@ -167,25 +157,3 @@
  #include "pfctl_parser.h"
  #include "pfctl.h"
  
---- a/sbin/pfctl/Makefile
-+++ b/sbin/pfctl/Makefile
-@@ -22,7 +22,7 @@
- 
- YFLAGS=
- 
--LDADD+=	-lm -lmd
-+LDADD+=	-lm -lbsd
- DPADD+=	${LIBM} ${LIBMD}
- 
- .include <bsd.prog.mk>
---- a/usr.sbin/authpf/Makefile
-+++ b/usr.sbin/authpf/Makefile
-@@ -16,7 +16,7 @@
- # XXX ALTQ:
- CFLAGS+= -DENABLE_ALTQ
- 
--LDADD+= -lm -lmd -lutil
-+LDADD+= -lm -lbsd -lutil
- DPADD+= ${LIBM} ${LIBMD} ${LIBUTIL}
- 
- WARNS?=	3

@@ -71,51 +71,6 @@
  		else {
  			if (cp)
  				*cp = savedc;
---- a/usr.sbin/nfsd/Makefile
-+++ b/usr.sbin/nfsd/Makefile
-@@ -3,5 +3,7 @@
- 
- PROG=	nfsd
- MAN=	nfsd.8 nfsv4.4 stablerestart.5
-+CFLAGS+= -I${.CURDIR}/../../sys
-+LDADD=   -ltirpc -lbsd
- 
- .include <bsd.prog.mk>
---- a/usr.sbin/rpc.lockd/Makefile
-+++ b/usr.sbin/rpc.lockd/Makefile
-@@ -5,23 +5,27 @@
- MAN=	rpc.lockd.8
- MLINKS=	rpc.lockd.8 lockd.8
- SRCS=	kern.c nlm_prot_svc.c lockd.c lock_proc.c lockd_lock.c
-+SRCS+= nlm_prot_xdr.c sm_inter_xdr.c
- 
--CFLAGS+= -I. -I${DESTDIR}/usr/include/rpcsvc
-+CFLAGS+= -I. -I${.CURDIR}/../../include/rpcsvc
- WARNS?= 3
- 
- DPADD=	${LIBRPCSVC} ${LIBUTIL}
--LDADD=	-lrpcsvc -lutil
-+LDADD= -ltirpc -lbsd -lfreebsd-glue
- 
- CLEANFILES= nlm_prot_svc.c nlm_prot.h test
-+CLEANFILES+= nlm_prot_xdr.c
- 
--RPCSRC= ${DESTDIR}/usr/include/rpcsvc/nlm_prot.x
-+RPCSRC= ${.CURDIR}/../../include/rpcsvc/nlm_prot.x
- RPCGEN= RPCGEN_CPP=${CPP:Q} rpcgen -L -C
- 
-+.PATH: ../rpc.statd
-+
- nlm_prot_svc.c: ${RPCSRC}
- 	${RPCGEN} -m -o ${.TARGET} ${RPCSRC}
- 
--nlm_prot.h: ${RPCSRC}
--	${RPCGEN} -h -o ${.TARGET} ${RPCSRC}
-+nlm_prot_xdr.c: ${RPCSRC}
-+	${RPCGEN} -c -o ${.TARGET} ${RPCSRC}
- 
- test: ${.CURDIR}/test.c
- 	cc -o test ${.CURDIR}/test.c -lrpcsvc
 --- a/usr.sbin/rpc.lockd/lockd.c
 +++ b/usr.sbin/rpc.lockd/lockd.c
 @@ -997,7 +997,7 @@

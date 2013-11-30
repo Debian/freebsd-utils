@@ -1,27 +1,5 @@
---- a/sbin/mount/mntopts.h
-+++ b/sbin/mount/mntopts.h
-@@ -37,6 +37,10 @@
- 	int m_altloc;		/* 1 => set bit in altflags */
- };
- 
-+#ifndef MNT_NFS4ACLS
-+#define  MNT_NFS4ACLS    0x00000010
-+#endif
-+
- /* User-visible MNT_ flags. */
- #define MOPT_ASYNC		{ "async",	0, MNT_ASYNC, 0 }
- #define MOPT_NOATIME		{ "atime",	1, MNT_NOATIME, 0 }
 --- a/sbin/mount/mount.c
 +++ b/sbin/mount/mount.c
-@@ -264,7 +264,7 @@
- 			debug = 1;
- 			break;
- 		case 'F':
--			setfstab(optarg);
-+			// setfstab(optarg);
- 			break;
- 		case 'f':
- 			init_flags |= MNT_FORCE;
 @@ -662,11 +662,13 @@
  			(void)printf(", reads: sync %ju async %ju",
  			    (uintmax_t)sfp->f_syncreads,
@@ -36,52 +14,3 @@
  	}
  	(void)printf(")\n");
  }
-@@ -869,7 +871,7 @@
- {
- 
- 	(void)fprintf(stderr, "%s\n%s\n%s\n",
--"usage: mount [-adflpruvw] [-F fstab] [-o options] [-t ufs | external_type]",
-+"usage: mount [-adflpruvw] [-o options] [-t ufs | external_type]",
- "       mount [-dfpruvw] special | node",
- "       mount [-dfpruvw] [-o options] [-t ufs | external_type] special node");
- 	exit(1);
-@@ -894,7 +896,7 @@
- 
- 	if (strncmp(ent->f_mntfromname, "<below>", 7) == 0 ||
- 	    strncmp(ent->f_mntfromname, "<above>", 7) == 0) {
--		strcpy(ent->f_mntfromname, (strnstr(ent->f_mntfromname, ":", 8)
-+		strcpy(ent->f_mntfromname, (memchr(ent->f_mntfromname, ':', 8)
- 		    +1));
- 	}
- 
---- a/sbin/mount/Makefile
-+++ b/sbin/mount/Makefile
-@@ -7,6 +7,6 @@
- # We do NOT install the getmntopts.3 man page.
- 
- DPADD=	${LIBUTIL}
--LDADD=	-lutil
-+LDADD=	-lutil -lbsd -lfreebsd-glue
- 
- .include <bsd.prog.mk>
---- a/sbin/mount/mount.8
-+++ b/sbin/mount/mount.8
-@@ -37,7 +37,6 @@
- .Sh SYNOPSIS
- .Nm
- .Op Fl adflpruvw
--.Op Fl F Ar fstab
- .Op Fl o Ar options
- .Op Fl t Cm ufs | Ar external_type
- .Nm
-@@ -96,10 +95,6 @@
- determine what the
- .Nm
- command is trying to do.
--.It Fl F Ar fstab
--Specify the
--.Pa fstab
--file to use.
- .It Fl f
- Forces the revocation of write access when trying to downgrade
- a file system mount status from read-write to read-only.

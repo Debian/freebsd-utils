@@ -8,10 +8,10 @@ Uploaders: Aurelien Jarno <aurel32@debian.org>,
 Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  flex | flex-old,
  freebsd-buildutils (>= 9.0-8~),
- freebsd-glue (>= 0.1.15~),
+ freebsd-glue (>= 0.2.2~),
  kfreebsd-kernel-headers (>= 9.2~5),
  libc0.1-dev (>= 2.13-26),
- libbsd-dev (>= 0.3.0), pkg-config,
+ libbsd-dev (>= 0.3.0),
 # zlib1g-dev: savecore
  zlib1g-dev,
 # libkvm-dev: dmesg

@@ -1,9 +1,3 @@
----
- sbin/devd/Makefile |    2 +-
- sbin/devd/devd.cc  |    2 ++
- sbin/devd/parse.y  |    2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
-
 --- a/sbin/devd/parse.y
 +++ b/sbin/devd/parse.y
 @@ -29,9 +29,9 @@
@@ -17,17 +11,6 @@
  
  %}
  
---- a/sbin/devd/Makefile
-+++ b/sbin/devd/Makefile
-@@ -9,7 +9,7 @@
- NO_SHARED?=YES
- 
- DPADD=	${LIBL} ${LIBUTIL}
--LDADD=	-ll -lutil
-+LDADD=	-ll -lutil -lbsd
- 
- YFLAGS+=-v
- CFLAGS+=-I. -I${.CURDIR}
 --- a/etc/devd.conf
 +++ b/etc/devd.conf
 @@ -1,8 +1,5 @@

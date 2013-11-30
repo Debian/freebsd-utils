@@ -1,3 +1,103 @@
+--- a/usr.sbin/ppp/Makefile
++++ b/usr.sbin/ppp/Makefile
+@@ -38,10 +38,10 @@
+ BINMODE=4550
+ BINOWN=	root
+ .endif
+-BINGRP=	network
++BINGRP=	dialout
+ M4FLAGS=
+ 
+-LDADD= -lcrypt -lmd -lutil -lz
++LDADD= -lcrypt -lz
+ DPADD=	${LIBCRYPT} ${LIBMD} ${LIBUTIL} ${LIBZ}
+ 
+ .SUFFIXES: .8 .8.m4
+@@ -79,6 +79,7 @@
+ 
+ .if defined(PPP_NO_SUID)
+ CFLAGS+=-DNOSUID
++LDADD+= -llockdev
+ .else
+ SRCS+=	id.c
+ .endif
+--- a/usr.sbin/nfsd/Makefile
++++ b/usr.sbin/nfsd/Makefile
+@@ -3,5 +3,7 @@
+ 
+ PROG=	nfsd
+ MAN=	nfsd.8 nfsv4.4 stablerestart.5
++CFLAGS+= -I${.CURDIR}/../../sys
++LDADD=   -ltirpc
+ 
+ .include <bsd.prog.mk>
+--- a/usr.sbin/rpc.lockd/Makefile
++++ b/usr.sbin/rpc.lockd/Makefile
+@@ -5,23 +5,27 @@
+ MAN=	rpc.lockd.8
+ MLINKS=	rpc.lockd.8 lockd.8
+ SRCS=	kern.c nlm_prot_svc.c lockd.c lock_proc.c lockd_lock.c
++SRCS+= nlm_prot_xdr.c sm_inter_xdr.c
+ 
+-CFLAGS+= -I. -I${DESTDIR}/usr/include/rpcsvc
++CFLAGS+= -I. -I${.CURDIR}/../../include/rpcsvc
+ WARNS?= 3
+ 
+ DPADD=	${LIBRPCSVC} ${LIBUTIL}
+-LDADD=	-lrpcsvc -lutil
++LDADD= -ltirpc -lfreebsd-glue
+ 
+ CLEANFILES= nlm_prot_svc.c nlm_prot.h test
++CLEANFILES+= nlm_prot_xdr.c
+ 
+-RPCSRC= ${DESTDIR}/usr/include/rpcsvc/nlm_prot.x
++RPCSRC= ${.CURDIR}/../../include/rpcsvc/nlm_prot.x
+ RPCGEN= RPCGEN_CPP=${CPP:Q} rpcgen -L -C
+ 
++.PATH: ../rpc.statd
++
+ nlm_prot_svc.c: ${RPCSRC}
+ 	${RPCGEN} -m -o ${.TARGET} ${RPCSRC}
+ 
+-nlm_prot.h: ${RPCSRC}
+-	${RPCGEN} -h -o ${.TARGET} ${RPCSRC}
++nlm_prot_xdr.c: ${RPCSRC}
++	${RPCGEN} -c -o ${.TARGET} ${RPCSRC}
+ 
+ test: ${.CURDIR}/test.c
+ 	cc -o test ${.CURDIR}/test.c -lrpcsvc
+--- a/sbin/swapon/Makefile
++++ b/sbin/swapon/Makefile
+@@ -9,6 +9,6 @@
+ MLINKS+=swapon.8 swapctl.8
+ 
+ DPADD=	${LIBUTIL}
+-LDADD=	-lutil
++LDADD=	-lutil-freebsd -lfreebsd-glue
+ 
+ .include <bsd.prog.mk>
+--- a/sbin/pfctl/Makefile
++++ b/sbin/pfctl/Makefile
+@@ -22,7 +22,7 @@
+ 
+ YFLAGS=
+ 
+-LDADD+=	-lm -lmd
++LDADD+=	-lm -lbsd
+ DPADD+=	${LIBM} ${LIBMD}
+ 
+ .include <bsd.prog.mk>
+--- a/usr.sbin/authpf/Makefile
++++ b/usr.sbin/authpf/Makefile
+@@ -16,7 +16,7 @@
+ # XXX ALTQ:
+ CFLAGS+= -DENABLE_ALTQ
+ 
+-LDADD+= -lm -lmd -lutil
++LDADD+= -lm -lutil-freebsd
+ DPADD+= ${LIBM} ${LIBMD} ${LIBUTIL}
+ 
+ WARNS?=	3
 --- a/sbin/savecore/Makefile
 +++ b/sbin/savecore/Makefile
 @@ -2,7 +2,7 @@
@@ -37,17 +137,6 @@
 +LDADD=	-lcrypto
  
  WARNS?=	3
- 
---- a/sbin/geom/Makefile
-+++ b/sbin/geom/Makefile
-@@ -15,7 +15,7 @@
- CFLAGS+=-I${.CURDIR} -I${.CURDIR}/core -DSTATIC_GEOM_CLASSES
- 
- DPADD=	${LIBGEOM} ${LIBSBUF} ${LIBBSDXML} ${LIBUTIL}
--LDADD=	-lgeom -lsbuf -lbsdxml -lutil
-+LDADD=	-lgeom -lsbuf -lexpat -lutil
- 
- .include <bsd.prog.mk>
  
 --- a/sbin/geom/class/Makefile
 +++ b/sbin/geom/class/Makefile
@@ -92,15 +181,6 @@
  .include <bsd.lib.mk>
 --- a/sbin/geom/core/Makefile
 +++ b/sbin/geom/core/Makefile
-@@ -4,7 +4,7 @@
- 
- PROG=	geom
- MAN=	geom.8
--SRCS=	geom.c subr.c
-+SRCS=	geom.c subr.c expand_number.c
- 
- NO_SHARED=NO
- 
 @@ -12,6 +12,6 @@
  CFLAGS+= -I${.CURDIR}/../../../sys -I${.CURDIR} -I${.CURDIR}/..
  
@@ -199,3 +279,70 @@
  CFLAGS+= -DNS
  
  .if ${MK_INET6_SUPPORT} != "no"
+--- a/sbin/mount/Makefile
++++ b/sbin/mount/Makefile
+@@ -7,6 +7,8 @@
+ # We do NOT install the getmntopts.3 man page.
+ 
+ DPADD=	${LIBUTIL}
+-LDADD=	-lutil
++LDADD=	-lutil-freebsd
++
++LDADD+=	-lfreebsd-glue
+ 
+ .include <bsd.prog.mk>
+--- a/usr.sbin/jail/Makefile
++++ b/usr.sbin/jail/Makefile
+@@ -7,7 +7,9 @@
+ SRCS=	jail.c command.c config.c state.c jailp.h jaillex.l jailparse.y y.tab.h
+ 
+ DPADD=	${LIBJAIL} ${LIBKVM} ${LIBUTIL} ${LIBL}
+-LDADD=	-ljail -lkvm -lutil -ll
++LDADD=	-ljail -lkvm -lutil-freebsd -ll
++
++LDADD+=	-lfreebsd-glue
+ 
+ YFLAGS+=-v
+ CFLAGS+=-I. -I${.CURDIR}
+--- a/sbin/camcontrol/Makefile
++++ b/sbin/camcontrol/Makefile
+@@ -12,7 +12,7 @@
+ WARNS?= 3
+ .endif
+ DPADD=	${LIBCAM} ${LIBSBUF} ${LIBUTIL}
+-LDADD=	-lcam -lsbuf -lutil
++LDADD=	-lcam -lsbuf -lutil-freebsd
+ MAN=	camcontrol.8
+ 
+ .include <bsd.prog.mk>
+--- a/sbin/mdconfig/Makefile
++++ b/sbin/mdconfig/Makefile
+@@ -4,6 +4,6 @@
+ MAN=		mdconfig.8
+ 
+ DPADD=	${LIBUTIL} ${LIBGEOM} ${LIBBSDXML} ${LIBSBUF} 
+-LDADD=	-lutil -lgeom -lbsdxml -lsbuf
++LDADD=	-lgeom
+ 
+ .include <bsd.prog.mk>
+--- a/sbin/devd/Makefile
++++ b/sbin/devd/Makefile
+@@ -9,7 +9,7 @@
+ NO_SHARED?=YES
+ 
+ DPADD=	${LIBL} ${LIBUTIL}
+-LDADD=	-ll -lutil
++LDADD=	-ll
+ 
+ LIBSTDC++ != \
+ 	g++ -print-file-name=crt1.o ; \
+--- a/usr.sbin/powerd/Makefile
++++ b/usr.sbin/powerd/Makefile
+@@ -4,6 +4,6 @@
+ MAN=	powerd.8
+ 
+ DPADD=	${LIBUTIL}
+-LDADD=	-lutil
++#LDADD=	-lutil
+ 
+ .include <bsd.prog.mk>

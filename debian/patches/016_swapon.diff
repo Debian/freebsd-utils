@@ -55,13 +55,3 @@ something sane instead...
  	    snprintf(buf, sizeof(buf), "%ld-blocks", blocksize);
  	    break;
  	}
---- a/sbin/swapon/Makefile
-+++ b/sbin/swapon/Makefile
-@@ -9,6 +9,6 @@
- MLINKS+=swapon.8 swapctl.8
- 
- DPADD=	${LIBUTIL}
--LDADD=	-lutil
-+LDADD=	-lbsd -lfreebsd-glue -lutil
- 
- .include <bsd.prog.mk>

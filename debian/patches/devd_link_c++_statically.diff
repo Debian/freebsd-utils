@@ -2,7 +2,7 @@
 +++ b/sbin/devd/Makefile
 @@ -11,6 +11,18 @@
  DPADD=	${LIBL} ${LIBUTIL}
- LDADD=	-ll -lutil -lbsd
+ LDADD=	-ll -lutil
  
 +LIBSTDC++ != \
 +	g++ -print-file-name=crt1.o ; \

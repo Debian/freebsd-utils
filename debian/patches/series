@@ -30,7 +30,6 @@ ppp_macros.diff
 021_netstat.diff
 022_devd.diff
 024_devfs.diff
-025_camcontrol.diff
 026_kdump.diff
 028_vidcontrol.diff
 035_nfs.diff
