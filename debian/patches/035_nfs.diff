@@ -50,33 +50,6 @@
  	return (1);
  }
  
---- a/sbin/mount_nfs/Makefile
-+++ b/sbin/mount_nfs/Makefile
-@@ -4,6 +4,7 @@
- 
- PROG=	mount_nfs
- SRCS=	mount_nfs.c getmntopts.c mounttab.c
-+LDADD=	-ltirpc -lfreebsd-glue
- MAN=	mount_nfs.8
- MLINKS=	mount_nfs.8 mount_oldnfs.8
- 
---- a/usr.sbin/mountd/Makefile
-+++ b/usr.sbin/mountd/Makefile
-@@ -6,12 +6,12 @@
- MAN=	exports.5 netgroup.5 mountd.8
- 
- MOUNT=  ${.CURDIR}/../../sbin/mount
--CFLAGS+= -I${MOUNT}
-+CFLAGS+= -I${MOUNT} -I${.CURDIR}/../../sys
- WARNS?= 2
- 
- .PATH: ${MOUNT}
- 
- DPADD=	${LIBUTIL}
--LDADD=	-lutil
-+LDADD=	-ltirpc -lbsd -lfreebsd-glue
- 
- .include <bsd.prog.mk>
 --- a/usr.sbin/mountd/mountd.c
 +++ b/usr.sbin/mountd/mountd.c
 @@ -2118,12 +2118,18 @@

@@ -1,0 +1,201 @@
+--- a/sbin/savecore/Makefile
++++ b/sbin/savecore/Makefile
+@@ -2,7 +2,7 @@
+ 
+ PROG=	savecore
+ DPADD=	${LIBZ}
+-LDADD=	-lz
++LDADD=	-lz -lz-freebsd -lfreebsd-glue -lbsd
+ MAN=	savecore.8
+ 
+ .include <bsd.prog.mk>
+--- a/sbin/geom/class/raid/Makefile
++++ b/sbin/geom/class/raid/Makefile
+@@ -5,6 +5,6 @@
+ GEOM_CLASS=	raid
+ 
+ DPADD=	${LIBMD}
+-LDADD=	-lmd
++#LDADD=	-lmd
+ 
+ .include <bsd.lib.mk>
+--- a/sbin/geom/Makefile.inc
++++ b/sbin/geom/Makefile.inc
+@@ -1,5 +1,3 @@
+ # $FreeBSD$
+ 
+ GEOM_CLASS_DIR?=/lib/geom
+-
+-.include "../Makefile.inc"
+--- a/sbin/geom/class/eli/Makefile
++++ b/sbin/geom/class/eli/Makefile
+@@ -9,7 +9,7 @@
+ SRCS+=	sha2.c
+ 
+ DPADD=	${LIBMD} ${LIBCRYPTO}
+-LDADD=	-lmd -lcrypto
++LDADD=	-lcrypto
+ 
+ WARNS?=	3
+ 
+--- a/sbin/geom/Makefile
++++ b/sbin/geom/Makefile
+@@ -15,7 +15,7 @@
+ CFLAGS+=-I${.CURDIR} -I${.CURDIR}/core -DSTATIC_GEOM_CLASSES
+ 
+ DPADD=	${LIBGEOM} ${LIBSBUF} ${LIBBSDXML} ${LIBUTIL}
+-LDADD=	-lgeom -lsbuf -lbsdxml -lutil
++LDADD=	-lgeom -lsbuf -lexpat -lutil
+ 
+ .include <bsd.prog.mk>
+ 
+--- a/sbin/geom/class/Makefile
++++ b/sbin/geom/class/Makefile
+@@ -7,18 +7,14 @@
+ .if ${MK_OPENSSL} != "no"
+ SUBDIR+=eli
+ .endif
+-SUBDIR+=journal
+ SUBDIR+=label
+ SUBDIR+=mirror
+ SUBDIR+=mountver
+-SUBDIR+=multipath
+ SUBDIR+=nop
+-SUBDIR+=part
+ SUBDIR+=raid
+ SUBDIR+=raid3
+ SUBDIR+=sched
+ SUBDIR+=shsec
+ SUBDIR+=stripe
+-SUBDIR+=virstor
+ 
+ .include <bsd.subdir.mk>
+--- a/sbin/geom/class/mirror/Makefile
++++ b/sbin/geom/class/mirror/Makefile
+@@ -5,6 +5,6 @@
+ GEOM_CLASS=	mirror
+ 
+ DPADD=	${LIBMD}
+-LDADD=	-lmd
++#LDADD=	-lmd
+ 
+ .include <bsd.lib.mk>
+--- a/sbin/geom/class/raid3/Makefile
++++ b/sbin/geom/class/raid3/Makefile
+@@ -5,6 +5,6 @@
+ GEOM_CLASS=	raid3
+ 
+ DPADD=	${LIBMD}
+-LDADD=	-lmd
++#LDADD=	-lmd
+ 
+ .include <bsd.lib.mk>
+--- a/sbin/geom/core/Makefile
++++ b/sbin/geom/core/Makefile
+@@ -4,7 +4,7 @@
+ 
+ PROG=	geom
+ MAN=	geom.8
+-SRCS=	geom.c subr.c
++SRCS=	geom.c subr.c expand_number.c
+ 
+ NO_SHARED=NO
+ 
+@@ -12,6 +12,6 @@
+ CFLAGS+= -I${.CURDIR}/../../../sys -I${.CURDIR} -I${.CURDIR}/..
+ 
+ DPADD=	${LIBGEOM} ${LIBSBUF} ${LIBBSDXML} ${LIBUTIL}
+-LDADD=	-lgeom -lsbuf -lbsdxml -lutil
++LDADD=	-lgeom -ldl -lbsd
+ 
+ .include <bsd.prog.mk>
+--- a/usr.sbin/pppctl/Makefile
++++ b/usr.sbin/pppctl/Makefile
+@@ -6,6 +6,6 @@
+ WARNS?=	2
+ 
+ DPADD=	${LIBPTHREAD} ${LIBEDIT} ${LIBTERMCAP}
+-LDADD=	-lpthread -ledit -ltermcap
++LDADD=	-lpthread -ledit -lbsd
+ 
+ .include <bsd.prog.mk>
+--- a/sbin/mount_nfs/Makefile
++++ b/sbin/mount_nfs/Makefile
+@@ -4,6 +4,7 @@
+ 
+ PROG=	mount_nfs
+ SRCS=	mount_nfs.c getmntopts.c mounttab.c
++LDADD=	-ltirpc -lfreebsd-glue
+ MAN=	mount_nfs.8
+ MLINKS=	mount_nfs.8 mount_oldnfs.8
+ 
+--- a/usr.sbin/mountd/Makefile
++++ b/usr.sbin/mountd/Makefile
+@@ -6,12 +6,12 @@
+ MAN=	exports.5 netgroup.5 mountd.8
+ 
+ MOUNT=  ${.CURDIR}/../../sbin/mount
+-CFLAGS+= -I${MOUNT}
++CFLAGS+= -I${MOUNT} -I${.CURDIR}/../../sys
+ WARNS?= 2
+ 
+ .PATH: ${MOUNT}
+ 
+ DPADD=	${LIBUTIL}
+-LDADD=	-lutil
++LDADD=	-ltirpc -lbsd
+ 
+ .include <bsd.prog.mk>
+--- a/usr.sbin/arp/Makefile
++++ b/usr.sbin/arp/Makefile
+@@ -3,6 +3,7 @@
+ 
+ PROG=	arp
+ MAN=	arp.4 arp.8
++LDADD+= -lrt -lfreebsd-glue
+ 
+ WARNS?=	3
+ 
+--- a/usr.bin/netstat/Makefile
++++ b/usr.bin/netstat/Makefile
+@@ -29,7 +29,8 @@
+ BINGRP=	kmem
+ BINMODE=2555
+ DPADD=	${LIBKVM} ${LIBMEMSTAT} ${LIBUTIL}
+-LDADD=	-lkvm -lmemstat -lutil
++LDADD=	-lkvm -lmemstat -lutil-freebsd
++LDADD+= -lrt -lfreebsd-glue
+ 
+ .if ${MK_NETGRAPH_SUPPORT} != "no"
+ SRCS+=	netgraph.c
+--- a/sbin/atacontrol/Makefile
++++ b/sbin/atacontrol/Makefile
+@@ -3,4 +3,6 @@
+ PROG=	atacontrol
+ MAN=	atacontrol.8
+ 
++LDADD+=	-lfreebsd-glue
++
+ .include <bsd.prog.mk>
+--- a/sbin/umount/Makefile
++++ b/sbin/umount/Makefile
+@@ -6,6 +6,8 @@
+ SRCS=	umount.c vfslist.c mounttab.c
+ MAN=	umount.8
+ 
++LDADD+=	-lfreebsd-glue
++
+ MOUNT=	${.CURDIR}/../mount
+ UMNTALL= ${.CURDIR}/../../usr.sbin/rpc.umntall
+ CFLAGS+= -I${MOUNT} -I${UMNTALL}
+--- a/sbin/route/Makefile
++++ b/sbin/route/Makefile
+@@ -9,6 +9,8 @@
+ WARNS?=	3
+ CLEANFILES+=keywords.h _keywords.tmp
+ 
++LDADD+=	-lfreebsd-glue
++
+ CFLAGS+= -DNS
+ 
+ .if ${MK_INET6_SUPPORT} != "no"

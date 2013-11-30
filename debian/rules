@@ -38,7 +38,7 @@ TARNAME = $(SOURCE)_$(tar_version).orig.tar.gz
 
 PATH := /usr/lib/freebsd:$(PATH)
 DESTDIR = $(CURDIR)/debian/tmp
-PMAKE = COPTS="$(CFLAGS)" CFLAGS="$(CFLAGS)" LDADD="-lfreebsd-glue" \
+PMAKE = COPTS="$(CFLAGS)" CFLAGS="$(CFLAGS)" \
         NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
         DESTDIR=$(DESTDIR) make
 

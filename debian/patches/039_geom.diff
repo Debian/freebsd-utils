@@ -1,22 +1,3 @@
---- a/sbin/geom/Makefile.inc
-+++ b/sbin/geom/Makefile.inc
-@@ -1,5 +1,3 @@
- # $FreeBSD$
- 
- GEOM_CLASS_DIR?=/lib/geom
--
--.include "../Makefile.inc"
---- a/sbin/geom/class/eli/Makefile
-+++ b/sbin/geom/class/eli/Makefile
-@@ -9,7 +9,7 @@
- SRCS+=	sha2.c
- 
- DPADD=	${LIBMD} ${LIBCRYPTO}
--LDADD=	-lmd -lcrypto
-+LDADD=	-lcrypto
- 
- WARNS?=	3
- 
 --- a/sbin/geom/misc/subr.c
 +++ b/sbin/geom/misc/subr.c
 @@ -177,7 +177,7 @@
@@ -28,77 +9,6 @@
  		return (ERANGE);
  	number *= mult * unit;
  	if (number % sectorsize)
---- a/sbin/geom/Makefile
-+++ b/sbin/geom/Makefile
-@@ -15,7 +15,7 @@
- CFLAGS+=-I${.CURDIR} -I${.CURDIR}/core -DSTATIC_GEOM_CLASSES
- 
- DPADD=	${LIBGEOM} ${LIBSBUF} ${LIBBSDXML} ${LIBUTIL}
--LDADD=	-lgeom -lsbuf -lbsdxml -lutil
-+LDADD=	-lgeom -lsbuf -lexpat -lutil
- 
- .include <bsd.prog.mk>
- 
---- a/sbin/geom/class/Makefile
-+++ b/sbin/geom/class/Makefile
-@@ -7,18 +7,14 @@
- .if ${MK_OPENSSL} != "no"
- SUBDIR+=eli
- .endif
--SUBDIR+=journal
- SUBDIR+=label
- SUBDIR+=mirror
- SUBDIR+=mountver
--SUBDIR+=multipath
- SUBDIR+=nop
--SUBDIR+=part
- SUBDIR+=raid
- SUBDIR+=raid3
- SUBDIR+=sched
- SUBDIR+=shsec
- SUBDIR+=stripe
--SUBDIR+=virstor
- 
- .include <bsd.subdir.mk>
---- a/sbin/geom/class/mirror/Makefile
-+++ b/sbin/geom/class/mirror/Makefile
-@@ -5,6 +5,6 @@
- GEOM_CLASS=	mirror
- 
- DPADD=	${LIBMD}
--LDADD=	-lmd
-+#LDADD=	-lmd
- 
- .include <bsd.lib.mk>
---- a/sbin/geom/class/raid3/Makefile
-+++ b/sbin/geom/class/raid3/Makefile
-@@ -5,6 +5,6 @@
- GEOM_CLASS=	raid3
- 
- DPADD=	${LIBMD}
--LDADD=	-lmd
-+#LDADD=	-lmd
- 
- .include <bsd.lib.mk>
---- a/sbin/geom/core/Makefile
-+++ b/sbin/geom/core/Makefile
-@@ -4,7 +4,7 @@
- 
- PROG=	geom
- MAN=	geom.8
--SRCS=	geom.c subr.c
-+SRCS=	geom.c subr.c expand_number.c
- 
- NO_SHARED=NO
- 
-@@ -12,6 +12,6 @@
- CFLAGS+= -I${.CURDIR}/../../../sys -I${.CURDIR} -I${.CURDIR}/..
- 
- DPADD=	${LIBGEOM} ${LIBSBUF} ${LIBBSDXML} ${LIBUTIL}
--LDADD=	-lgeom -lsbuf -lbsdxml -lutil
-+LDADD=	-lgeom -ldl
- 
- .include <bsd.prog.mk>
 --- /dev/null
 +++ b/sbin/geom/core/expand_number.c
 @@ -0,0 +1,101 @@
@@ -217,13 +127,3 @@
  #endif
  
  
---- a/sbin/geom/class/raid/Makefile
-+++ b/sbin/geom/class/raid/Makefile
-@@ -5,6 +5,6 @@
- GEOM_CLASS=	raid
- 
- DPADD=	${LIBMD}
--LDADD=	-lmd
-+#LDADD=	-lmd
- 
- .include <bsd.lib.mk>

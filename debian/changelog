@@ -7,6 +7,7 @@ freebsd-utils (9.2-2) UNRELEASED; urgency=low
   * Remove cons25 transition kludge (was only needed for squeeze->wheezy
     upgrades).
   * Fix permissions for /dev/dri/card* devices.
+  * Remove a few gratuitous library dependencies.
 
   [ Guillem Jover ]
   * Remove myself from Uploaders.

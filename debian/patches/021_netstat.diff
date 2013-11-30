@@ -33,13 +33,3 @@
  extern int	Aflag;	/* show addresses of protocol control block */
  extern int	aflag;	/* show all sockets (including servers) */
  extern int	bflag;	/* show i/f total bytes in/out */
---- a/usr.bin/netstat/Makefile
-+++ b/usr.bin/netstat/Makefile
-@@ -30,6 +30,7 @@
- BINMODE=2555
- DPADD=	${LIBKVM} ${LIBMEMSTAT} ${LIBUTIL}
- LDADD=	-lkvm -lmemstat -lutil
-+LDADD+= -lrt -lbsd -lfreebsd-glue
- 
- .if ${MK_NETGRAPH_SUPPORT} != "no"
- SRCS+=	netgraph.c
