@@ -197,18 +197,6 @@ Description: modular disk I/O request transformation framework
  .
  This package provides FreeBSD GEOM and associated utilities.
 
-Package: freebsd-geom
-Section: admin
-Priority: standard
-Architecture: kfreebsd-any
-Depends: ${shlibs:Depends}, ${misc:Depends}, geom
-Description: modular disk I/O request transformation framework (meta-package)
- The GEOM framework provides an infrastructure in which ``classes'' can
- perform transformations on disk I/O requests on their path from the upper
- kernel to the device drivers and back.
- .
- This package provides FreeBSD GEOM and associated utilities.
-
 Package: freebsd-ppp
 Section: net
 Priority: optional

@@ -1,3 +1,9 @@
+freebsd-utils (9.2-3) UNRELEASED; urgency=low
+
+  * Drop freebsd-geom transitional package.
+
+ -- Robert Millan <rmh@debian.org>  Sun, 01 Dec 2013 20:31:39 +0100
+
 freebsd-utils (9.2-2) unstable; urgency=low
 
   [ Robert Millan ]
