@@ -33,7 +33,6 @@ ppp_macros.diff
 026_kdump.diff
 028_vidcontrol.diff
 035_nfs.diff
-038_jail.diff
 039_geom.diff
 041_delete_key.diff
 043_ppp.diff

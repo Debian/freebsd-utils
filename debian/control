@@ -42,6 +42,8 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  libssl-dev,
 # liblockdev1-dev: ppp
  liblockdev1-dev,
+# jail
+ libutil-freebsd-dev,
 Build-Conflicts:
 # /usr/include/bits symlink breaks usr.bin/kdump/{mkioctls,mksubr}
  libc0.1-dev-i386,

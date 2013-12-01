@@ -9,11 +9,13 @@ freebsd-utils (9.2-2) UNRELEASED; urgency=low
   * Fix permissions for /dev/dri/card* devices.
   * Remove a few gratuitous library dependencies.
   * Misc patchset cleanup.
+  * Remove kludge in jail(8). Use libutil-freebsd-dev to satisfy
+    login_cap.h dependency instead.
 
   [ Guillem Jover ]
   * Remove myself from Uploaders.
 
- -- Robert Millan <rmh@debian.org>  Sat, 30 Nov 2013 13:27:03 +0100
+ -- Robert Millan <rmh@debian.org>  Sun, 01 Dec 2013 13:00:36 +0100
 
 freebsd-utils (9.2-1) unstable; urgency=low
 
