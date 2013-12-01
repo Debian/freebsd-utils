@@ -35,7 +35,6 @@ ppp_macros.diff
 035_nfs.diff
 039_geom.diff
 041_delete_key.diff
-043_ppp.diff
 devd_link_c++_statically.diff
 stablerestart-fhs-compliance.diff
 rpc.lockd-startup-fix.diff

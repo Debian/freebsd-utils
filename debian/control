@@ -40,9 +40,7 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  libjail-dev,
 # libssl-dev: geom
  libssl-dev,
-# liblockdev1-dev: ppp
- liblockdev1-dev,
-# jail
+# jail, ppp
  libutil-freebsd-dev,
 Build-Conflicts:
 # /usr/include/bits symlink breaks usr.bin/kdump/{mkioctls,mksubr}

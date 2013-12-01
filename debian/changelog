@@ -13,6 +13,8 @@ freebsd-utils (9.2-2) UNRELEASED; urgency=low
     login_cap.h dependency instead.
   * Require freebsd-glue >= 0.2.4 to ensure trimdomain from libutil is
     used (rather than the static version in freebsd-glue << 0.2.4).
+  * Remove kludge in ppp(8) to use liblockdev. Use libutil directly like
+    upstream does.  (Closes: 728019)
 
   [ Guillem Jover ]
   * Remove myself from Uploaders.

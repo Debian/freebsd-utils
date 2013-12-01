@@ -9,18 +9,10 @@
  M4FLAGS=
  
 -LDADD= -lcrypt -lmd -lutil -lz
-+LDADD= -lcrypt -lz
++LDADD= -lcrypt      -lutil-freebsd -lz
  DPADD=	${LIBCRYPT} ${LIBMD} ${LIBUTIL} ${LIBZ}
  
  .SUFFIXES: .8 .8.m4
-@@ -79,6 +79,7 @@
- 
- .if defined(PPP_NO_SUID)
- CFLAGS+=-DNOSUID
-+LDADD+= -llockdev
- .else
- SRCS+=	id.c
- .endif
 --- a/usr.sbin/nfsd/Makefile
 +++ b/usr.sbin/nfsd/Makefile
 @@ -3,5 +3,7 @@
