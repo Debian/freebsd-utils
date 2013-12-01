@@ -11,6 +11,8 @@ freebsd-utils (9.2-2) UNRELEASED; urgency=low
   * Misc patchset cleanup.
   * Remove kludge in jail(8). Use libutil-freebsd-dev to satisfy
     login_cap.h dependency instead.
+  * Require freebsd-glue >= 0.2.4 to ensure trimdomain from libutil is
+    used (rather than the static version in freebsd-glue << 0.2.4).
 
   [ Guillem Jover ]
   * Remove myself from Uploaders.
