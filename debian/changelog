@@ -1,6 +1,7 @@
 freebsd-utils (9.2-3) UNRELEASED; urgency=low
 
   * Drop freebsd-geom transitional package.
+  * Fetch source code securely (https) in get-orig-source.
 
  -- Robert Millan <rmh@debian.org>  Sun, 01 Dec 2013 20:31:39 +0100
 
