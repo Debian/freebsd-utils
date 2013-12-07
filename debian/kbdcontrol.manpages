@@ -1,2 +1,2 @@
-usr.sbin/kbdcontrol/*.1
-usr.sbin/kbdcontrol/*.5
+src/usr.sbin/kbdcontrol/*.1
+src/usr.sbin/kbdcontrol/*.5

@@ -1,5 +1,5 @@
---- a/usr.sbin/nfsd/nfsd.c
-+++ b/usr.sbin/nfsd/nfsd.c
+--- a/src/usr.sbin/nfsd/nfsd.c
++++ b/src/usr.sbin/nfsd/nfsd.c
 @@ -80,8 +80,8 @@
  int	debug = 0;
  #endif
@@ -11,8 +11,8 @@
  #define	MAXNFSDCNT	256
  #define	DEFNFSDCNT	 4
  pid_t	children[MAXNFSDCNT];	/* PIDs of children */
---- a/usr.sbin/nfsd/nfsv4.4
-+++ b/usr.sbin/nfsd/nfsv4.4
+--- a/src/usr.sbin/nfsd/nfsv4.4
++++ b/src/usr.sbin/nfsd/nfsv4.4
 @@ -311,10 +311,10 @@
  If all other nfsd threads are blocked waiting for lock(s) held by this nfsd
  thread, then there isn't an nfsd thread to service the Close RPC.
@@ -27,8 +27,8 @@
  backup copy of the file
  .El
  .Sh SEE ALSO
---- a/usr.sbin/nfsd/stablerestart.5
-+++ b/usr.sbin/nfsd/stablerestart.5
+--- a/src/usr.sbin/nfsd/stablerestart.5
++++ b/src/usr.sbin/nfsd/stablerestart.5
 @@ -75,10 +75,10 @@
  has returned. This might require hardware level caching to be disabled for
  a local disk drive that holds the file, or similar.

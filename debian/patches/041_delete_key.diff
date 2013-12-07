@@ -1,5 +1,5 @@
---- a/share/syscons/keymaps/us.iso.kbd
-+++ b/share/syscons/keymaps/us.iso.kbd
+--- a/src/share/syscons/keymaps/us.iso.kbd
++++ b/src/share/syscons/keymaps/us.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -18,8 +18,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/ua.koi8-u.kbd
-+++ b/share/syscons/keymaps/ua.koi8-u.kbd
+--- a/src/share/syscons/keymaps/ua.koi8-u.kbd
++++ b/src/share/syscons/keymaps/ua.koi8-u.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    '%'    nop    nop     O
    012   '-'    '_'    ns     ns     '-'    '_'    ns     ns      O
@@ -47,8 +47,8 @@
    104   slock  slock  slock  slock  slock  slock  slock  slock   O
    105   meta   fkey62 fkey62 fkey62 fkey62 fkey62 fkey62 fkey62  O
    106   meta   fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63  O
---- a/share/syscons/keymaps/by.cp1131.kbd
-+++ b/share/syscons/keymaps/by.cp1131.kbd
+--- a/src/share/syscons/keymaps/by.cp1131.kbd
++++ b/src/share/syscons/keymaps/by.cp1131.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -67,8 +67,8 @@
    084   alock    alock    alock    alock    alock    alock    alock    alock     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/kk.pt154.kst.kbd
-+++ b/share/syscons/keymaps/kk.pt154.kst.kbd
+--- a/src/share/syscons/keymaps/kk.pt154.kst.kbd
++++ b/src/share/syscons/keymaps/kk.pt154.kst.kbd
 @@ -19,7 +19,7 @@
    011   '0'    ')'    nop    nop    176    169    nop    nop     O
    012   '-'    '_'    us     us     173    223    159    159     O
@@ -87,8 +87,8 @@
    084   alock  alock  alock  alock  alock  alock  alock  alock   O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/ua.iso5.kbd
-+++ b/share/syscons/keymaps/ua.iso5.kbd
+--- a/src/share/syscons/keymaps/ua.iso5.kbd
++++ b/src/share/syscons/keymaps/ua.iso5.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    '%'    nop    nop     O
    012   '-'    '_'    ns     ns     '-'    '_'    ns     ns      O
@@ -116,8 +116,8 @@
    104   slock  saver  slock  saver  susp   nop    susp   nop     O
    105   meta   fkey62 fkey62 fkey62 fkey62 fkey62 fkey62 fkey62  O
    106   meta   fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63  O
---- a/share/syscons/keymaps/danish.iso.acc.kbd
-+++ b/share/syscons/keymaps/danish.iso.acc.kbd
+--- a/src/share/syscons/keymaps/danish.iso.acc.kbd
++++ b/src/share/syscons/keymaps/danish.iso.acc.kbd
 @@ -42,7 +42,7 @@
    011   '0'    '='    nop    nop    '}'    '='    nop    nop     O
    012   '+'    '?'    nop    nop    '+'    191    nop    nop     O
@@ -136,8 +136,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     '\'    '>'    fs     fs      O
---- a/share/syscons/keymaps/by.cp1251.kbd
-+++ b/share/syscons/keymaps/by.cp1251.kbd
+--- a/src/share/syscons/keymaps/by.cp1251.kbd
++++ b/src/share/syscons/keymaps/by.cp1251.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -156,8 +156,8 @@
    084   alock    alock    alock    alock    alock    alock    alock    alock     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/dutch.iso.acc.kbd
-+++ b/share/syscons/keymaps/dutch.iso.acc.kbd
+--- a/src/share/syscons/keymaps/dutch.iso.acc.kbd
++++ b/src/share/syscons/keymaps/dutch.iso.acc.kbd
 @@ -24,7 +24,7 @@
    011   '0'    '''    nop    nop    191    ')'    nop    nop     O
    012   '/'    '?'    us     us     '\'    '?'    us     us      O
@@ -176,8 +176,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   ']'    '['    nop    nop    124    124    nop    nop     O
---- a/share/syscons/keymaps/latinamerican.iso.acc.kbd
-+++ b/share/syscons/keymaps/latinamerican.iso.acc.kbd
+--- a/src/share/syscons/keymaps/latinamerican.iso.acc.kbd
++++ b/src/share/syscons/keymaps/latinamerican.iso.acc.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    nop    nop    '\'    '\'    nop    nop     O
@@ -196,8 +196,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     '\'    '>'    fs     fs      O
---- a/share/syscons/keymaps/kk.pt154.io.kbd
-+++ b/share/syscons/keymaps/kk.pt154.io.kbd
+--- a/src/share/syscons/keymaps/kk.pt154.io.kbd
++++ b/src/share/syscons/keymaps/kk.pt154.io.kbd
 @@ -19,7 +19,7 @@
    011   '0'    ')'    nop    nop    176    169    nop    nop     O
    012   '-'    '_'    us     us     173    223    159    159     O
@@ -216,8 +216,8 @@
    084   alock  alock  alock  alock  alock  alock  alock  alock   O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/spanish.iso15.acc.kbd
-+++ b/share/syscons/keymaps/spanish.iso15.acc.kbd
+--- a/src/share/syscons/keymaps/spanish.iso15.acc.kbd
++++ b/src/share/syscons/keymaps/spanish.iso15.acc.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    nop    nop    '''    '?'    nop    nop     O
@@ -236,8 +236,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '<'    '>'    nop    nop     O
---- a/share/syscons/keymaps/icelandic.iso.acc.kbd
-+++ b/share/syscons/keymaps/icelandic.iso.acc.kbd
+--- a/src/share/syscons/keymaps/icelandic.iso.acc.kbd
++++ b/src/share/syscons/keymaps/icelandic.iso.acc.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    nop    nop    nop     O
    012   246    214    nop    nop    '\'    nop    fs     nop     C
@@ -256,8 +256,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    nop    nop    nop     O
---- a/share/syscons/keymaps/us.pc-ctrl.kbd
-+++ b/share/syscons/keymaps/us.pc-ctrl.kbd
+--- a/src/share/syscons/keymaps/us.pc-ctrl.kbd
++++ b/src/share/syscons/keymaps/us.pc-ctrl.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -276,8 +276,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/br275.iso.kbd
-+++ b/share/syscons/keymaps/br275.iso.kbd
+--- a/src/share/syscons/keymaps/br275.iso.kbd
++++ b/src/share/syscons/keymaps/br275.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -296,8 +296,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
---- a/share/syscons/keymaps/swissfrench.cp850.kbd
-+++ b/share/syscons/keymaps/swissfrench.cp850.kbd
+--- a/src/share/syscons/keymaps/swissfrench.cp850.kbd
++++ b/src/share/syscons/keymaps/swissfrench.cp850.kbd
 @@ -21,7 +21,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    fs     fs     '''    '''    fs     fs      O
@@ -316,8 +316,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '\'    '\'    nop    nop     O
---- a/share/syscons/keymaps/eee_nordic.kbd
-+++ b/share/syscons/keymaps/eee_nordic.kbd
+--- a/src/share/syscons/keymaps/eee_nordic.kbd
++++ b/src/share/syscons/keymaps/eee_nordic.kbd
 @@ -19,7 +19,7 @@
    012   '+'    '?'    nop    nop    '\'    nop    fs     nop     O
  # For left of backspace key, gives with Alt=' and Alt+Shift+Key=|
@@ -336,8 +336,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    nop    nop    nop     O
---- a/share/syscons/keymaps/estonian.cp850.kbd
-+++ b/share/syscons/keymaps/estonian.cp850.kbd
+--- a/src/share/syscons/keymaps/estonian.cp850.kbd
++++ b/src/share/syscons/keymaps/estonian.cp850.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '}'    nop    nop     O
    012   '+'    '?'    fs     fs     '\'    '\'    fs     fs      O
@@ -356,8 +356,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    '|'    nop    nop     O
---- a/share/syscons/keymaps/ru.koi8-r.kbd
-+++ b/share/syscons/keymaps/ru.koi8-r.kbd
+--- a/src/share/syscons/keymaps/ru.koi8-r.kbd
++++ b/src/share/syscons/keymaps/ru.koi8-r.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    176    169    nop    nop     O
    012   '-'    '_'    us     us     173    223    159    159     O
@@ -376,8 +376,8 @@
    084   alock  alock  alock  alock  alock  alock  alock  alock   O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/spanish.iso.kbd
-+++ b/share/syscons/keymaps/spanish.iso.kbd
+--- a/src/share/syscons/keymaps/spanish.iso.kbd
++++ b/src/share/syscons/keymaps/spanish.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    nop    nop    '''    '?'    nop    nop     O
@@ -396,8 +396,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '<'    '>'    nop    nop     O
---- a/share/syscons/keymaps/fr.iso.kbd
-+++ b/share/syscons/keymaps/fr.iso.kbd
+--- a/src/share/syscons/keymaps/fr.iso.kbd
++++ b/src/share/syscons/keymaps/fr.iso.kbd
 @@ -17,7 +17,7 @@
    011   224    '0'    nop    nop    '@'    nop    nop    nop     C
    012   ')'    176    nop    nop    ']'    nop    nop    nop     C
@@ -416,8 +416,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     171    187    fs     fs      O
---- a/share/syscons/keymaps/swissgerman.cp850.kbd
-+++ b/share/syscons/keymaps/swissgerman.cp850.kbd
+--- a/src/share/syscons/keymaps/swissgerman.cp850.kbd
++++ b/src/share/syscons/keymaps/swissgerman.cp850.kbd
 @@ -21,7 +21,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    fs     fs     '''    '''    fs     fs      O
@@ -436,8 +436,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '\'    '\'    nop    nop     O
---- a/share/syscons/keymaps/pt.iso.acc.kbd
-+++ b/share/syscons/keymaps/pt.iso.acc.kbd
+--- a/src/share/syscons/keymaps/pt.iso.acc.kbd
++++ b/src/share/syscons/keymaps/pt.iso.acc.kbd
 @@ -19,7 +19,7 @@
    011   '0'    '='    nop    nop    '}'    ')'    nop    nop     O
    012   '''    '?'    ns     ns     '-'    '_'    ns     ns      O
@@ -456,8 +456,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/swedish.cp850.kbd
-+++ b/share/syscons/keymaps/swedish.cp850.kbd
+--- a/src/share/syscons/keymaps/swedish.cp850.kbd
++++ b/src/share/syscons/keymaps/swedish.cp850.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '}'    nop    nop     O
    012   '+'    '?'    fs     fs     '\'    '\'    fs     fs      O
@@ -476,8 +476,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    '|'    nop    nop     O
---- a/share/syscons/keymaps/uk.dvorak.kbd
-+++ b/share/syscons/keymaps/uk.dvorak.kbd
+--- a/src/share/syscons/keymaps/uk.dvorak.kbd
++++ b/src/share/syscons/keymaps/uk.dvorak.kbd
 @@ -22,7 +22,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '['    '{'    esc    esc    '['    '{'    esc    esc     O
@@ -496,8 +496,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
---- a/share/syscons/keymaps/gr.us101.acc.kbd
-+++ b/share/syscons/keymaps/gr.us101.acc.kbd
+--- a/src/share/syscons/keymaps/gr.us101.acc.kbd
++++ b/src/share/syscons/keymaps/gr.us101.acc.kbd
 @@ -20,7 +20,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    ns     ns     '-'    '_'    ns     ns      O
@@ -516,8 +516,8 @@
    084   ns     ns     ns     ns     ns     ns     ns     ns      O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    nop    nop    '\'    '|'    nop    nop     O
---- a/share/syscons/keymaps/german.cp850.kbd
-+++ b/share/syscons/keymaps/german.cp850.kbd
+--- a/src/share/syscons/keymaps/german.cp850.kbd
++++ b/src/share/syscons/keymaps/german.cp850.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '}'    nop    nop     O
    012   225    '?'    fs     fs     '\'    '\'    fs     fs      O
@@ -536,8 +536,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    '|'    nop    nop     O
---- a/share/syscons/keymaps/bg.bds.ctrlcaps.kbd
-+++ b/share/syscons/keymaps/bg.bds.ctrlcaps.kbd
+--- a/src/share/syscons/keymaps/bg.bds.ctrlcaps.kbd
++++ b/src/share/syscons/keymaps/bg.bds.ctrlcaps.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -556,8 +556,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/estonian.iso.kbd
-+++ b/share/syscons/keymaps/estonian.iso.kbd
+--- a/src/share/syscons/keymaps/estonian.iso.kbd
++++ b/src/share/syscons/keymaps/estonian.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    nop    nop    nop     O
    012   '+'    '?'    nop    nop    '\'    nop    fs     nop     O
@@ -576,8 +576,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    nop    nop    nop     O
---- a/share/syscons/keymaps/us.unix.kbd
-+++ b/share/syscons/keymaps/us.unix.kbd
+--- a/src/share/syscons/keymaps/us.unix.kbd
++++ b/src/share/syscons/keymaps/us.unix.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -605,8 +605,8 @@
    104   slock  saver  slock  saver  susp   nop    susp   nop     O
    105   fkey62 fkey62 fkey62 fkey62 fkey62 fkey62 fkey62 fkey62  O
    106   fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63  O
---- a/share/syscons/keymaps/bg.phonetic.ctrlcaps.kbd
-+++ b/share/syscons/keymaps/bg.phonetic.ctrlcaps.kbd
+--- a/src/share/syscons/keymaps/bg.phonetic.ctrlcaps.kbd
++++ b/src/share/syscons/keymaps/bg.phonetic.ctrlcaps.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -625,8 +625,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/hy.armscii-8.kbd
-+++ b/share/syscons/keymaps/hy.armscii-8.kbd
+--- a/src/share/syscons/keymaps/hy.armscii-8.kbd
++++ b/src/share/syscons/keymaps/hy.armscii-8.kbd
 @@ -22,7 +22,7 @@
    011   '0'	')'	nop	nop	0xD7	0xD6	nop	nop	O
    012   '-'	'_'	us	us	0xA8	0xAC	us	us	O
@@ -645,8 +645,8 @@
    084   nop	nop	nop	nop	nop	nop	nop	nop	O
    085   nop	nop	nop	nop	nop	nop	nop	nop	O
    086   nop	nop	nop	nop	nop	nop	nop	nop	O
---- a/share/syscons/keymaps/us.dvorak.kbd
-+++ b/share/syscons/keymaps/us.dvorak.kbd
+--- a/src/share/syscons/keymaps/us.dvorak.kbd
++++ b/src/share/syscons/keymaps/us.dvorak.kbd
 @@ -26,7 +26,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '['    '{'    esc    esc    '['    '{'    esc    esc     O
@@ -665,8 +665,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/uk.cp850.kbd
-+++ b/share/syscons/keymaps/uk.cp850.kbd
+--- a/src/share/syscons/keymaps/uk.cp850.kbd
++++ b/src/share/syscons/keymaps/uk.cp850.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -685,8 +685,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
---- a/share/syscons/keymaps/norwegian.dvorak.kbd
-+++ b/share/syscons/keymaps/norwegian.dvorak.kbd
+--- a/src/share/syscons/keymaps/norwegian.dvorak.kbd
++++ b/src/share/syscons/keymaps/norwegian.dvorak.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '='    nop    nop     O
    012   '+'    '?'    esc    esc    '['    '?'    nop    nop     O
@@ -705,8 +705,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   248    216    nop    nop    '|'    '\'    nop    nop     C
---- a/share/syscons/keymaps/uk.cp850-ctrl.kbd
-+++ b/share/syscons/keymaps/uk.cp850-ctrl.kbd
+--- a/src/share/syscons/keymaps/uk.cp850-ctrl.kbd
++++ b/src/share/syscons/keymaps/uk.cp850-ctrl.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -725,8 +725,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
---- a/share/syscons/keymaps/estonian.iso15.kbd
-+++ b/share/syscons/keymaps/estonian.iso15.kbd
+--- a/src/share/syscons/keymaps/estonian.iso15.kbd
++++ b/src/share/syscons/keymaps/estonian.iso15.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    nop    nop    nop     O
    012   '+'    '?'    nop    nop    '\'    nop    fs     nop     O
@@ -745,8 +745,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    nop    nop    nop     O
---- a/share/syscons/keymaps/jp.pc98.iso.kbd
-+++ b/share/syscons/keymaps/jp.pc98.iso.kbd
+--- a/src/share/syscons/keymaps/jp.pc98.iso.kbd
++++ b/src/share/syscons/keymaps/jp.pc98.iso.kbd
 @@ -17,7 +17,7 @@
    011   '-'    '_'    us     us     '-'    '='    '-'    '-'     O
    012   '='    '+'    '+'    '+'    '^'    '`'    rs     rs      O
@@ -756,8 +756,8 @@
    015   ht     btab   ht     btab   ht     btab   ht     btab    O
    016   'q'    'Q'    dc1    dc1    'q'    'Q'    dc1    dc1     C
    017   'w'    'W'    etb    etb    'w'    'W'    etb    etb     C
---- a/share/syscons/keymaps/swissfrench.iso.kbd
-+++ b/share/syscons/keymaps/swissfrench.iso.kbd
+--- a/src/share/syscons/keymaps/swissfrench.iso.kbd
++++ b/src/share/syscons/keymaps/swissfrench.iso.kbd
 @@ -20,7 +20,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    fs     fs     180    180    fs     fs      O
@@ -776,8 +776,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '\'    '\'    nop    nop     O
---- a/share/syscons/keymaps/cz.iso2.kbd
-+++ b/share/syscons/keymaps/cz.iso2.kbd
+--- a/src/share/syscons/keymaps/cz.iso2.kbd
++++ b/src/share/syscons/keymaps/cz.iso2.kbd
 @@ -147,7 +147,7 @@
    011   '0'    ')'    nop    nop    ddot   ddot   nop    nop     O
    012   '-'    '_'    us     us     dacu   dacu   us     us      O
@@ -796,8 +796,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/german.iso.acc.kbd
-+++ b/share/syscons/keymaps/german.iso.acc.kbd
+--- a/src/share/syscons/keymaps/german.iso.acc.kbd
++++ b/src/share/syscons/keymaps/german.iso.acc.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '}'    nop    nop     O
    012   223    '?'    fs     fs     '\'    '\'    fs     fs      O
@@ -816,8 +816,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    166    nop    nop     O
---- a/share/syscons/keymaps/us.dvorakl.kbd
-+++ b/share/syscons/keymaps/us.dvorakl.kbd
+--- a/src/share/syscons/keymaps/us.dvorakl.kbd
++++ b/src/share/syscons/keymaps/us.dvorakl.kbd
 @@ -19,7 +19,7 @@
    011   '3'    '#'    nop    nop    '3'    '#'    nop    nop     O
    012   '2'    '@'    nul    nul    '2'    '@'    nul    nul     O
@@ -836,8 +836,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/cs.latin2.qwertz.kbd
-+++ b/share/syscons/keymaps/cs.latin2.qwertz.kbd
+--- a/src/share/syscons/keymaps/cs.latin2.qwertz.kbd
++++ b/src/share/syscons/keymaps/cs.latin2.qwertz.kbd
 @@ -45,7 +45,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -856,8 +856,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/ru.koi8-r.win.kbd
-+++ b/share/syscons/keymaps/ru.koi8-r.win.kbd
+--- a/src/share/syscons/keymaps/ru.koi8-r.win.kbd
++++ b/src/share/syscons/keymaps/ru.koi8-r.win.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    176    169    nop    nop     O
    012   '-'    '_'    us     us     173    223    159    159     O
@@ -876,8 +876,8 @@
    084   alock  alock  alock  alock  alock  alock  alock  alock   O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/swissgerman.iso.kbd
-+++ b/share/syscons/keymaps/swissgerman.iso.kbd
+--- a/src/share/syscons/keymaps/swissgerman.iso.kbd
++++ b/src/share/syscons/keymaps/swissgerman.iso.kbd
 @@ -20,7 +20,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    fs     fs     180    180    fs     fs      O
@@ -896,8 +896,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '\'    '\'    nop    nop     O
---- a/share/syscons/keymaps/ru.cp866.kbd
-+++ b/share/syscons/keymaps/ru.cp866.kbd
+--- a/src/share/syscons/keymaps/ru.cp866.kbd
++++ b/src/share/syscons/keymaps/ru.cp866.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    176    169    nop    nop     O
    012   '-'    '_'    us     us     173    223    159    159     O
@@ -925,8 +925,8 @@
    104   slock  saver  slock  saver  susp   nop    susp   nop     O
    105   fkey62 fkey62 fkey62 fkey62 fkey62 fkey62 fkey62 fkey62  O
    106   fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63  O
---- a/share/syscons/keymaps/fr.dvorak.kbd
-+++ b/share/syscons/keymaps/fr.dvorak.kbd
+--- a/src/share/syscons/keymaps/fr.dvorak.kbd
++++ b/src/share/syscons/keymaps/fr.dvorak.kbd
 @@ -25,7 +25,7 @@
    011	'"'    '0'    nop    '@'    '"'    '0'    nop    nop     C
    012	'['    '|'    nop    ']'    '['    '|'    nop    nop     O
@@ -945,8 +945,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086	'+'    '*'    nop    ' '    '+'    '*'    nop    nop     O
---- a/share/syscons/keymaps/lt.iso4.kbd
-+++ b/share/syscons/keymaps/lt.iso4.kbd
+--- a/src/share/syscons/keymaps/lt.iso4.kbd
++++ b/src/share/syscons/keymaps/lt.iso4.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    ns     ns     '-'    '_'    ns     ns      O
@@ -965,8 +965,8 @@
    084   ns     ns     ns     ns     ns     ns     ns     ns      O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   ralt   ralt   ralt   ralt   ralt   ralt   ralt   ralt    O
---- a/share/syscons/keymaps/pl_PL.ISO8859-2.kbd
-+++ b/share/syscons/keymaps/pl_PL.ISO8859-2.kbd
+--- a/src/share/syscons/keymaps/pl_PL.ISO8859-2.kbd
++++ b/src/share/syscons/keymaps/pl_PL.ISO8859-2.kbd
 @@ -19,7 +19,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -985,8 +985,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/us.dvorakr.kbd
-+++ b/share/syscons/keymaps/us.dvorakr.kbd
+--- a/src/share/syscons/keymaps/us.dvorakr.kbd
++++ b/src/share/syscons/keymaps/us.dvorakr.kbd
 @@ -19,7 +19,7 @@
    011   '/'    '?'    nop    nop    '/'    '?'    nop    nop     O
    012   '['    '{'    esc    esc    '['    '{'    esc    esc     O
@@ -1005,8 +1005,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/swedish.iso.kbd
-+++ b/share/syscons/keymaps/swedish.iso.kbd
+--- a/src/share/syscons/keymaps/swedish.iso.kbd
++++ b/src/share/syscons/keymaps/swedish.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    nop    nop    nop     O
    012   '+'    '?'    nop    nop    '\'    nop    fs     nop     O
@@ -1025,8 +1025,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    nop    nop    nop     O
---- a/share/syscons/keymaps/br275.cp850.kbd
-+++ b/share/syscons/keymaps/br275.cp850.kbd
+--- a/src/share/syscons/keymaps/br275.cp850.kbd
++++ b/src/share/syscons/keymaps/br275.cp850.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -1045,8 +1045,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
---- a/share/syscons/keymaps/colemak.iso15.acc.kbd
-+++ b/share/syscons/keymaps/colemak.iso15.acc.kbd
+--- a/src/share/syscons/keymaps/colemak.iso15.acc.kbd
++++ b/src/share/syscons/keymaps/colemak.iso15.acc.kbd
 @@ -65,7 +65,7 @@
  
    000   nop    nop    nop    nop    nop    nop    nop    nop     O
@@ -1065,8 +1065,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    087   fkey11 fkey23 fkey35 fkey47 scr11  scr11  scr11  scr11   O
---- a/share/syscons/keymaps/us.dvorakx.kbd
-+++ b/share/syscons/keymaps/us.dvorakx.kbd
+--- a/src/share/syscons/keymaps/us.dvorakx.kbd
++++ b/src/share/syscons/keymaps/us.dvorakx.kbd
 @@ -24,7 +24,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '['    '{'    esc    esc    '['    '{'    esc    esc     O
@@ -1085,8 +1085,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/si.iso.kbd
-+++ b/share/syscons/keymaps/si.iso.kbd
+--- a/src/share/syscons/keymaps/si.iso.kbd
++++ b/src/share/syscons/keymaps/si.iso.kbd
 @@ -19,7 +19,7 @@
    011   '0'    '='    nop    nop    189    189    nop    nop     O
    012   '''    '?'    us     us     168    168    us     us      O
@@ -1105,8 +1105,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '<'    '>'    nop    nop     O
---- a/share/syscons/keymaps/be.iso.acc.kbd
-+++ b/share/syscons/keymaps/be.iso.acc.kbd
+--- a/src/share/syscons/keymaps/be.iso.acc.kbd
++++ b/src/share/syscons/keymaps/be.iso.acc.kbd
 @@ -17,7 +17,7 @@
    011   224    '0'    nop    nop    '}'    '}'    nop    nop     O
    012   ')'    176    nop    nop    ')'    176    nop    nop     O
@@ -1125,8 +1125,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     '\'    '\'    '\'    fs      O
---- a/share/syscons/keymaps/us.iso.acc.kbd
-+++ b/share/syscons/keymaps/us.iso.acc.kbd
+--- a/src/share/syscons/keymaps/us.iso.acc.kbd
++++ b/src/share/syscons/keymaps/us.iso.acc.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -1145,8 +1145,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/ua.koi8-u.shift.alt.kbd
-+++ b/share/syscons/keymaps/ua.koi8-u.shift.alt.kbd
+--- a/src/share/syscons/keymaps/ua.koi8-u.shift.alt.kbd
++++ b/src/share/syscons/keymaps/ua.koi8-u.shift.alt.kbd
 @@ -29,7 +29,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    ns     ns     166    182    159    159     O
@@ -1174,8 +1174,8 @@
    104   slock  saver  slock  saver  susp   nop    susp   nop     O
    105   meta   fkey62 fkey62 fkey62 fkey62 fkey62 fkey62 fkey62  O
    106   meta   fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63  O
---- a/share/syscons/keymaps/br275.iso.acc.kbd
-+++ b/share/syscons/keymaps/br275.iso.acc.kbd
+--- a/src/share/syscons/keymaps/br275.iso.acc.kbd
++++ b/src/share/syscons/keymaps/br275.iso.acc.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -1194,8 +1194,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
---- a/share/syscons/keymaps/norwegian.iso.kbd
-+++ b/share/syscons/keymaps/norwegian.iso.kbd
+--- a/src/share/syscons/keymaps/norwegian.iso.kbd
++++ b/src/share/syscons/keymaps/norwegian.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '='    nop    nop     O
    012   '+'    '?'    nop    nop    '+'    '?'    nop    nop     O
@@ -1214,8 +1214,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     171    187    fs     fs      O
---- a/share/syscons/keymaps/spanish.iso.acc.kbd
-+++ b/share/syscons/keymaps/spanish.iso.acc.kbd
+--- a/src/share/syscons/keymaps/spanish.iso.acc.kbd
++++ b/src/share/syscons/keymaps/spanish.iso.acc.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    nop    nop    '''    '?'    nop    nop     O
@@ -1234,8 +1234,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '<'    '>'    nop    nop     O
---- a/share/syscons/keymaps/hu.iso2.101keys.kbd
-+++ b/share/syscons/keymaps/hu.iso2.101keys.kbd
+--- a/src/share/syscons/keymaps/hu.iso2.101keys.kbd
++++ b/src/share/syscons/keymaps/hu.iso2.101keys.kbd
 @@ -48,7 +48,7 @@
    011   '0'    ')'    nop    nop    246    214    nop    nop     O
    012   '-'    '_'    ns     ns     252    220    ns     ns      C
@@ -1254,8 +1254,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   237    205    nop    nop    nop    nop    nop    nop     C
---- a/share/syscons/keymaps/hu.iso2.102keys.kbd
-+++ b/share/syscons/keymaps/hu.iso2.102keys.kbd
+--- a/src/share/syscons/keymaps/hu.iso2.102keys.kbd
++++ b/src/share/syscons/keymaps/hu.iso2.102keys.kbd
 @@ -21,7 +21,7 @@
    011   246    214    nop    nop    189    nop    nop    nop     C
    012   252    220    nop    nop    168    nop    nop    nop     C
@@ -1274,8 +1274,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   237    205    nop    nop    '<'    nop    nop    nop     C
---- a/share/syscons/keymaps/fr.iso.acc.kbd
-+++ b/share/syscons/keymaps/fr.iso.acc.kbd
+--- a/src/share/syscons/keymaps/fr.iso.acc.kbd
++++ b/src/share/syscons/keymaps/fr.iso.acc.kbd
 @@ -17,7 +17,7 @@
    011   224    '0'    nop    nop    '@'    nop    nop    nop     C
    012   ')'    176    nop    nop    ']'    nop    nop    nop     C
@@ -1294,8 +1294,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     171    187    fs     fs      O
---- a/share/syscons/keymaps/fr_CA.iso.acc.kbd
-+++ b/share/syscons/keymaps/fr_CA.iso.acc.kbd
+--- a/src/share/syscons/keymaps/fr_CA.iso.acc.kbd
++++ b/src/share/syscons/keymaps/fr_CA.iso.acc.kbd
 @@ -23,7 +23,7 @@
    011   '0'    ')'    nop    nop    188    ')'    nop    nop     O
    012   '-'    '_'    nop    nop    189    '_'    nop    nop     O
@@ -1314,8 +1314,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O 
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   171    187    nop    nop    176    187    nop    nop     O
---- a/share/syscons/keymaps/by.iso5.kbd
-+++ b/share/syscons/keymaps/by.iso5.kbd
+--- a/src/share/syscons/keymaps/by.iso5.kbd
++++ b/src/share/syscons/keymaps/by.iso5.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -1334,8 +1334,8 @@
    084   alock    alock    alock    alock    alock    alock    alock    alock     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/sk.iso2.kbd
-+++ b/share/syscons/keymaps/sk.iso2.kbd
+--- a/src/share/syscons/keymaps/sk.iso2.kbd
++++ b/src/share/syscons/keymaps/sk.iso2.kbd
 @@ -145,7 +145,7 @@
    011   '0'    ')'    nop    nop    ddot   ddot   nop    nop     O
    012   '-'    '_'    us     us     dacu   dacu   us     us      O
@@ -1354,8 +1354,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/pl_PL.dvorak.kbd
-+++ b/share/syscons/keymaps/pl_PL.dvorak.kbd
+--- a/src/share/syscons/keymaps/pl_PL.dvorak.kbd
++++ b/src/share/syscons/keymaps/pl_PL.dvorak.kbd
 @@ -20,7 +20,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '['    '{'    esc    esc    '['    '{'    esc    esc     O
@@ -1374,8 +1374,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/jp.pc98.kbd
-+++ b/share/syscons/keymaps/jp.pc98.kbd
+--- a/src/share/syscons/keymaps/jp.pc98.kbd
++++ b/src/share/syscons/keymaps/jp.pc98.kbd
 @@ -17,7 +17,7 @@
    011   '-'    '='    '-'    '-'    '-'    '_'    us     us      O
    012   '^'    '`'    rs     rs     '='    '+'    '+'    '+'     O
@@ -1385,8 +1385,8 @@
    015   ht     btab   ht     btab   ht     btab   ht     btab    O
    016   'q'    'Q'    dc1    dc1    'q'    'Q'    dc1    dc1     C
    017   'w'    'W'    etb    etb    'w'    'W'    etb    etb     C
---- a/share/syscons/keymaps/finnish.cp850.kbd
-+++ b/share/syscons/keymaps/finnish.cp850.kbd
+--- a/src/share/syscons/keymaps/finnish.cp850.kbd
++++ b/src/share/syscons/keymaps/finnish.cp850.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '}'    nop    nop     O
    012   '+'    '?'    fs     fs     '\'    '\'    fs     fs      O
@@ -1405,8 +1405,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    '|'    nop    nop     O
---- a/share/syscons/keymaps/gr.elot.acc.kbd
-+++ b/share/syscons/keymaps/gr.elot.acc.kbd
+--- a/src/share/syscons/keymaps/gr.elot.acc.kbd
++++ b/src/share/syscons/keymaps/gr.elot.acc.kbd
 @@ -20,7 +20,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    ns     ns     '-'    '_'    ns     ns      O
@@ -1425,8 +1425,8 @@
    084   ns     ns     ns     ns     ns     ns     ns     ns      O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    nop    nop    '\'    '|'    nop    nop     O
---- a/share/syscons/keymaps/danish.iso.kbd
-+++ b/share/syscons/keymaps/danish.iso.kbd
+--- a/src/share/syscons/keymaps/danish.iso.kbd
++++ b/src/share/syscons/keymaps/danish.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '='    nop    nop     O
    012   '+'    '?'    nop    nop    '+'    '?'    nop    nop     O
@@ -1445,8 +1445,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     '\'    '>'    fs     fs      O
---- a/share/syscons/keymaps/iw.iso8.kbd
-+++ b/share/syscons/keymaps/iw.iso8.kbd
+--- a/src/share/syscons/keymaps/iw.iso8.kbd
++++ b/src/share/syscons/keymaps/iw.iso8.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    ')'    nop    nop     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -1465,8 +1465,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/el.iso07.kbd
-+++ b/share/syscons/keymaps/el.iso07.kbd
+--- a/src/share/syscons/keymaps/el.iso07.kbd
++++ b/src/share/syscons/keymaps/el.iso07.kbd
 @@ -63,7 +63,7 @@
    011   '0'    ')'    187    187    '0'    ')'    187    187     O
    012   '-'    '_'    us     us     '-'    '_'    us     us      O
@@ -1485,8 +1485,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/hr.iso.kbd
-+++ b/share/syscons/keymaps/hr.iso.kbd
+--- a/src/share/syscons/keymaps/hr.iso.kbd
++++ b/src/share/syscons/keymaps/hr.iso.kbd
 @@ -19,7 +19,7 @@
    011   '0'    '='    nop    nop    189    189    nop    nop     O
    012   '''    '?'    us     us     168    168    us     us      O
@@ -1505,8 +1505,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '<'    '>'    nop    nop     O
---- a/share/syscons/keymaps/ru.iso5.kbd
-+++ b/share/syscons/keymaps/ru.iso5.kbd
+--- a/src/share/syscons/keymaps/ru.iso5.kbd
++++ b/src/share/syscons/keymaps/ru.iso5.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '0'    '%'    nop    nop     O
    012   '-'    '_'    ns     ns     '-'    '_'    ns     ns      O
@@ -1534,8 +1534,8 @@
    104   slock  saver  slock  saver  susp   nop    susp   nop     O
    105   meta   fkey62 fkey62 fkey62 fkey62 fkey62 fkey62 fkey62  O
    106   meta   fkey63 fkey63 fkey63 fkey63 fkey63 fkey63 fkey63  O
---- a/share/syscons/keymaps/icelandic.iso.kbd
-+++ b/share/syscons/keymaps/icelandic.iso.kbd
+--- a/src/share/syscons/keymaps/icelandic.iso.kbd
++++ b/src/share/syscons/keymaps/icelandic.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    nop    nop    nop     O
    012   246    214    nop    nop    '\'    nop    fs     nop     O
@@ -1554,8 +1554,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    nop    nop    nop     O
---- a/share/syscons/keymaps/jp.106x.kbd
-+++ b/share/syscons/keymaps/jp.106x.kbd
+--- a/src/share/syscons/keymaps/jp.106x.kbd
++++ b/src/share/syscons/keymaps/jp.106x.kbd
 @@ -19,7 +19,7 @@
    011   '0'    '~'    nop    nop    '0'    '~'    nop    nop     O
    012   '-'    '='    nop    nop    '-'    '='    nop    nop     O
@@ -1574,8 +1574,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/tr.iso9.q.kbd
-+++ b/share/syscons/keymaps/tr.iso9.q.kbd
+--- a/src/share/syscons/keymaps/tr.iso9.q.kbd
++++ b/src/share/syscons/keymaps/tr.iso9.q.kbd
 @@ -32,7 +32,7 @@
    011   '0'    '='    nop    nop    '}'    nop    nop    nop     O
    012   '*'    '?'    nop    nop    '\'    nop    fs     nop     O
@@ -1594,8 +1594,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    nop    nop    nop     O
---- a/share/syscons/keymaps/danish.cp865.kbd
-+++ b/share/syscons/keymaps/danish.cp865.kbd
+--- a/src/share/syscons/keymaps/danish.cp865.kbd
++++ b/src/share/syscons/keymaps/danish.cp865.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '='    nop    nop     O
    012   '+'    '?'    nop    nop    '+'    '?'    nop    nop     O
@@ -1614,8 +1614,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     '\'    '>'    fs     fs      O
---- a/share/syscons/keymaps/ru.koi8-r.shift.kbd
-+++ b/share/syscons/keymaps/ru.koi8-r.shift.kbd
+--- a/src/share/syscons/keymaps/ru.koi8-r.shift.kbd
++++ b/src/share/syscons/keymaps/ru.koi8-r.shift.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    176    169    nop    nop     O
    012   '-'    '_'    us     us     173    223    159    159     O
@@ -1634,8 +1634,8 @@
    084   alock  alock  alock  alock  alock  alock  alock  alock   O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/uk.iso-ctrl.kbd
-+++ b/share/syscons/keymaps/uk.iso-ctrl.kbd
+--- a/src/share/syscons/keymaps/uk.iso-ctrl.kbd
++++ b/src/share/syscons/keymaps/uk.iso-ctrl.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '{'    '{'    nop    nop     O
    012   '-'    '_'    us     us     '|'    '|'    us     us      O
@@ -1654,8 +1654,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
---- a/share/syscons/keymaps/pt.iso.kbd
-+++ b/share/syscons/keymaps/pt.iso.kbd
+--- a/src/share/syscons/keymaps/pt.iso.kbd
++++ b/src/share/syscons/keymaps/pt.iso.kbd
 @@ -19,7 +19,7 @@
    011   '0'    '='    nop    nop    '}'    ')'    nop    nop     O
    012   '''    '?'    ns     ns     '-'    '_'    ns     ns      O
@@ -1674,8 +1674,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/swissfrench.iso.acc.kbd
-+++ b/share/syscons/keymaps/swissfrench.iso.acc.kbd
+--- a/src/share/syscons/keymaps/swissfrench.iso.acc.kbd
++++ b/src/share/syscons/keymaps/swissfrench.iso.acc.kbd
 @@ -20,7 +20,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    fs     fs     dacu   dacu   fs     fs      O
@@ -1694,8 +1694,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '\'    '\'    nop    nop     O
---- a/share/syscons/keymaps/swissgerman.iso.acc.kbd
-+++ b/share/syscons/keymaps/swissgerman.iso.acc.kbd
+--- a/src/share/syscons/keymaps/swissgerman.iso.acc.kbd
++++ b/src/share/syscons/keymaps/swissgerman.iso.acc.kbd
 @@ -20,7 +20,7 @@
    011   '0'    '='    nop    nop    '0'    '='    nop    nop     O
    012   '''    '?'    fs     fs     dacu   dacu   fs     fs      O
@@ -1714,8 +1714,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '\'    '\'    nop    nop     O
---- a/share/syscons/keymaps/fr.dvorak.acc.kbd
-+++ b/share/syscons/keymaps/fr.dvorak.acc.kbd
+--- a/src/share/syscons/keymaps/fr.dvorak.acc.kbd
++++ b/src/share/syscons/keymaps/fr.dvorak.acc.kbd
 @@ -30,7 +30,7 @@
    011	'"'    '0'    nop    nop    nop    nop    nop    nop     C
    012	'['    '+'    nop    nop    nop    nop    nop    nop     C
@@ -1734,8 +1734,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086	'à'    'ç'    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/finnish.iso.kbd
-+++ b/share/syscons/keymaps/finnish.iso.kbd
+--- a/src/share/syscons/keymaps/finnish.iso.kbd
++++ b/src/share/syscons/keymaps/finnish.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    nop    nop    nop     O
    012   '+'    '?'    nop    nop    '\'    nop    fs     nop     O
@@ -1754,8 +1754,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    nop    nop    nop     O
---- a/share/syscons/keymaps/german.iso.kbd
-+++ b/share/syscons/keymaps/german.iso.kbd
+--- a/src/share/syscons/keymaps/german.iso.kbd
++++ b/src/share/syscons/keymaps/german.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '}'    '}'    nop    nop     O
    012   223    '?'    fs     fs     '\'    '\'    fs     fs      O
@@ -1774,8 +1774,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    '|'    166    nop    nop     O
---- a/share/syscons/keymaps/ce.iso2.kbd
-+++ b/share/syscons/keymaps/ce.iso2.kbd
+--- a/src/share/syscons/keymaps/ce.iso2.kbd
++++ b/src/share/syscons/keymaps/ce.iso2.kbd
 @@ -79,7 +79,7 @@
    011   '0'    ')'    nop    nop    ddot   ddot   nop    nop     O
    012   '-'    '_'    us     us     dacu   dacu   us     us      O
@@ -1794,8 +1794,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/it.iso.kbd
-+++ b/share/syscons/keymaps/it.iso.kbd
+--- a/src/share/syscons/keymaps/it.iso.kbd
++++ b/src/share/syscons/keymaps/it.iso.kbd
 @@ -51,7 +51,7 @@
    011   '0'    '='    nop    nop    '}'    176    nop    nop     O
    012   '''    '?'    96     dacu   96     191    us     dgra    O
@@ -1814,8 +1814,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    nop    nop    124    166    nop    nop     O
---- a/share/syscons/keymaps/fr.macbook.acc.kbd
-+++ b/share/syscons/keymaps/fr.macbook.acc.kbd
+--- a/src/share/syscons/keymaps/fr.macbook.acc.kbd
++++ b/src/share/syscons/keymaps/fr.macbook.acc.kbd
 @@ -17,7 +17,7 @@
    011   224    '0'    nop    nop    '@'    nop    nop    nop     C
    012   ')'    176    nop    nop    ']'    nop    nop    nop     C
@@ -1834,8 +1834,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     171    187    fs     fs      O
---- a/share/syscons/keymaps/latinamerican.kbd
-+++ b/share/syscons/keymaps/latinamerican.kbd
+--- a/src/share/syscons/keymaps/latinamerican.kbd
++++ b/src/share/syscons/keymaps/latinamerican.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '='    nop    nop    '9'    ')'    nop    nop     O
    012   '''    '?'    nop    nop    '\'    '\'    nop    nop     O
@@ -1854,8 +1854,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '<'    '>'    fs     fs     '\'    '>'    fs     fs      O
---- a/share/syscons/keymaps/uk.iso.kbd
-+++ b/share/syscons/keymaps/uk.iso.kbd
+--- a/src/share/syscons/keymaps/uk.iso.kbd
++++ b/src/share/syscons/keymaps/uk.iso.kbd
 @@ -17,7 +17,7 @@
    011   '0'    ')'    nop    nop    '{'    '{'    nop    nop     O
    012   '-'    '_'    us     us     '|'    '|'    us     us      O
@@ -1874,8 +1874,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   '\'    '|'    fs     fs     '\'    '|'    fs     fs      O
---- a/share/syscons/keymaps/jp.106.kbd
-+++ b/share/syscons/keymaps/jp.106.kbd
+--- a/src/share/syscons/keymaps/jp.106.kbd
++++ b/src/share/syscons/keymaps/jp.106.kbd
 @@ -17,7 +17,7 @@
    011   '0'    '~'    nop    nop    '0'    '~'    nop    nop     O
    012   '-'    '='    nop    nop    '-'    '='    nop    nop     O
@@ -1894,8 +1894,8 @@
    084   nop    nop    nop    nop    nop    nop    nop    nop     O
    085   nop    nop    nop    nop    nop    nop    nop    nop     O
    086   nop    nop    nop    nop    nop    nop    nop    nop     O
---- a/share/syscons/keymaps/be.iso.kbd
-+++ b/share/syscons/keymaps/be.iso.kbd
+--- a/src/share/syscons/keymaps/be.iso.kbd
++++ b/src/share/syscons/keymaps/be.iso.kbd
 @@ -17,7 +17,7 @@
    011   224    '0'    nop    nop    '}'    '}'    nop    nop     O
    012   ')'    176    nop    nop    ')'    176    nop    nop     O

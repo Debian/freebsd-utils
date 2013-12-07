@@ -1,4 +1,4 @@
-sbin/kldload/kldload.8
-sbin/kldstat/kldstat.8
-sbin/kldunload/kldunload.8
-sbin/kldconfig/kldconfig.8
+src/sbin/kldload/kldload.8
+src/sbin/kldstat/kldstat.8
+src/sbin/kldunload/kldunload.8
+src/sbin/kldconfig/kldconfig.8

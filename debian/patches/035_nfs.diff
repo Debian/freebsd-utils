@@ -1,5 +1,5 @@
---- a/sbin/mount_nfs/mount_nfs.c
-+++ b/sbin/mount_nfs/mount_nfs.c
+--- a/src/sbin/mount_nfs/mount_nfs.c
++++ b/src/sbin/mount_nfs/mount_nfs.c
 @@ -668,12 +668,18 @@
  static int
  sec_name_to_num(char *sec)
@@ -50,8 +50,8 @@
  	return (1);
  }
  
---- a/usr.sbin/mountd/mountd.c
-+++ b/usr.sbin/mountd/mountd.c
+--- a/src/usr.sbin/mountd/mountd.c
++++ b/src/usr.sbin/mountd/mountd.c
 @@ -2118,12 +2118,18 @@
  
  		if (!strcmp(seclist, "sys"))
@@ -71,8 +71,8 @@
  		else {
  			if (cp)
  				*cp = savedc;
---- a/usr.sbin/rpc.lockd/lockd.c
-+++ b/usr.sbin/rpc.lockd/lockd.c
+--- a/src/usr.sbin/rpc.lockd/lockd.c
++++ b/src/usr.sbin/rpc.lockd/lockd.c
 @@ -997,7 +997,7 @@
  		ret = callrpc("localhost", SM_PROG, SM_VERS, SM_UNMON_ALL,
  		    (xdrproc_t)xdr_my_id, &id, (xdrproc_t)xdr_sm_stat, &stat);
@@ -91,8 +91,8 @@
  		exit(1);
  	}
  
---- a/usr.sbin/rpc.lockd/kern.c
-+++ b/usr.sbin/rpc.lockd/kern.c
+--- a/src/usr.sbin/rpc.lockd/kern.c
++++ b/src/usr.sbin/rpc.lockd/kern.c
 @@ -52,7 +52,8 @@
  #include <unistd.h>
  #include <netdb.h>
@@ -103,8 +103,8 @@
  #include <nfs/nfsproto.h>
  #include <nfs/nfs_lock.h>
  
---- a/usr.sbin/rpc.statd/statd.c
-+++ b/usr.sbin/rpc.statd/statd.c
+--- a/src/usr.sbin/rpc.statd/statd.c
++++ b/src/usr.sbin/rpc.statd/statd.c
 @@ -58,6 +58,8 @@
  
  #define	GETPORT_MAXTRY	20	/* Max tries to get a port # */
@@ -123,8 +123,8 @@
  
    /* Note that it is NOT sensible to run this program from inetd - the 	*/
    /* protocol assumes that it will run immediately at boot time.	*/
---- a/usr.sbin/rpc.statd/rpc.statd.8
-+++ b/usr.sbin/rpc.statd/rpc.statd.8
+--- a/src/usr.sbin/rpc.statd/rpc.statd.8
++++ b/src/usr.sbin/rpc.statd/rpc.statd.8
 @@ -110,7 +110,7 @@
  after the network has been started.
  .Sh FILES
@@ -134,8 +134,8 @@
  non-volatile record of currently monitored hosts.
  .It Pa /usr/include/rpcsvc/sm_inter.x
  RPC protocol specification used by local applications to register monitoring requests.
---- a/usr.sbin/rpc.statd/Makefile
-+++ b/usr.sbin/rpc.statd/Makefile
+--- a/src/usr.sbin/rpc.statd/Makefile
++++ b/src/usr.sbin/rpc.statd/Makefile
 @@ -8,16 +8,21 @@
  WARNS?= 2
  

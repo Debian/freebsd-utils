@@ -1,5 +1,5 @@
---- a/usr.sbin/ppp/Makefile
-+++ b/usr.sbin/ppp/Makefile
+--- a/src/usr.sbin/ppp/Makefile
++++ b/src/usr.sbin/ppp/Makefile
 @@ -38,10 +38,10 @@
  BINMODE=4550
  BINOWN=	root
@@ -13,8 +13,8 @@
  DPADD=	${LIBCRYPT} ${LIBMD} ${LIBUTIL} ${LIBZ}
  
  .SUFFIXES: .8 .8.m4
---- a/usr.sbin/nfsd/Makefile
-+++ b/usr.sbin/nfsd/Makefile
+--- a/src/usr.sbin/nfsd/Makefile
++++ b/src/usr.sbin/nfsd/Makefile
 @@ -3,5 +3,7 @@
  
  PROG=	nfsd
@@ -23,8 +23,8 @@
 +LDADD=   -ltirpc
  
  .include <bsd.prog.mk>
---- a/usr.sbin/rpc.lockd/Makefile
-+++ b/usr.sbin/rpc.lockd/Makefile
+--- a/src/usr.sbin/rpc.lockd/Makefile
++++ b/src/usr.sbin/rpc.lockd/Makefile
 @@ -5,23 +5,27 @@
  MAN=	rpc.lockd.8
  MLINKS=	rpc.lockd.8 lockd.8
@@ -40,7 +40,7 @@
 +LDADD= -ltirpc -lfreebsd-glue
  
  CLEANFILES= nlm_prot_svc.c nlm_prot.h test
-+CLEANFILES+= nlm_prot_xdr.c
++CLEANFILES+= nlm_prot_xdr.c sm_inter_xdr.c
  
 -RPCSRC= ${DESTDIR}/usr/include/rpcsvc/nlm_prot.x
 +RPCSRC= ${.CURDIR}/../../include/rpcsvc/nlm_prot.x
@@ -58,8 +58,8 @@
  
  test: ${.CURDIR}/test.c
  	cc -o test ${.CURDIR}/test.c -lrpcsvc
---- a/sbin/swapon/Makefile
-+++ b/sbin/swapon/Makefile
+--- a/src/sbin/swapon/Makefile
++++ b/src/sbin/swapon/Makefile
 @@ -9,6 +9,6 @@
  MLINKS+=swapon.8 swapctl.8
  
@@ -68,8 +68,8 @@
 +LDADD=	-lutil-freebsd -lfreebsd-glue
  
  .include <bsd.prog.mk>
---- a/sbin/pfctl/Makefile
-+++ b/sbin/pfctl/Makefile
+--- a/src/sbin/pfctl/Makefile
++++ b/src/sbin/pfctl/Makefile
 @@ -22,7 +22,7 @@
  
  YFLAGS=
@@ -79,8 +79,17 @@
  DPADD+=	${LIBM} ${LIBMD}
  
  .include <bsd.prog.mk>
---- a/usr.sbin/authpf/Makefile
-+++ b/usr.sbin/authpf/Makefile
+--- a/src/usr.sbin/authpf/Makefile
++++ b/src/usr.sbin/authpf/Makefile
+@@ -6,7 +6,7 @@
+ PROG=	authpf
+ MAN=	authpf.8
+ BINOWN=	root
+-BINGRP= authpf
++#BINGRP= authpf
+ BINMODE= 6555
+ 
+ SRCS=   authpf.c
 @@ -16,7 +16,7 @@
  # XXX ALTQ:
  CFLAGS+= -DENABLE_ALTQ
@@ -90,8 +99,8 @@
  DPADD+= ${LIBM} ${LIBMD} ${LIBUTIL}
  
  WARNS?=	3
---- a/sbin/savecore/Makefile
-+++ b/sbin/savecore/Makefile
+--- a/src/sbin/savecore/Makefile
++++ b/src/sbin/savecore/Makefile
 @@ -2,7 +2,7 @@
  
  PROG=	savecore
@@ -101,8 +110,8 @@
  MAN=	savecore.8
  
  .include <bsd.prog.mk>
---- a/sbin/geom/class/raid/Makefile
-+++ b/sbin/geom/class/raid/Makefile
+--- a/src/sbin/geom/class/raid/Makefile
++++ b/src/sbin/geom/class/raid/Makefile
 @@ -5,6 +5,6 @@
  GEOM_CLASS=	raid
  
@@ -111,16 +120,8 @@
 +#LDADD=	-lmd
  
  .include <bsd.lib.mk>
---- a/sbin/geom/Makefile.inc
-+++ b/sbin/geom/Makefile.inc
-@@ -1,5 +1,3 @@
- # $FreeBSD$
- 
- GEOM_CLASS_DIR?=/lib/geom
--
--.include "../Makefile.inc"
---- a/sbin/geom/class/eli/Makefile
-+++ b/sbin/geom/class/eli/Makefile
+--- a/src/sbin/geom/class/eli/Makefile
++++ b/src/sbin/geom/class/eli/Makefile
 @@ -9,7 +9,7 @@
  SRCS+=	sha2.c
  
@@ -130,8 +131,8 @@
  
  WARNS?=	3
  
---- a/sbin/geom/class/Makefile
-+++ b/sbin/geom/class/Makefile
+--- a/src/sbin/geom/class/Makefile
++++ b/src/sbin/geom/class/Makefile
 @@ -7,18 +7,14 @@
  .if ${MK_OPENSSL} != "no"
  SUBDIR+=eli
@@ -151,8 +152,8 @@
 -SUBDIR+=virstor
  
  .include <bsd.subdir.mk>
---- a/sbin/geom/class/mirror/Makefile
-+++ b/sbin/geom/class/mirror/Makefile
+--- a/src/sbin/geom/class/mirror/Makefile
++++ b/src/sbin/geom/class/mirror/Makefile
 @@ -5,6 +5,6 @@
  GEOM_CLASS=	mirror
  
@@ -161,8 +162,8 @@
 +#LDADD=	-lmd
  
  .include <bsd.lib.mk>
---- a/sbin/geom/class/raid3/Makefile
-+++ b/sbin/geom/class/raid3/Makefile
+--- a/src/sbin/geom/class/raid3/Makefile
++++ b/src/sbin/geom/class/raid3/Makefile
 @@ -5,6 +5,6 @@
  GEOM_CLASS=	raid3
  
@@ -171,8 +172,8 @@
 +#LDADD=	-lmd
  
  .include <bsd.lib.mk>
---- a/sbin/geom/core/Makefile
-+++ b/sbin/geom/core/Makefile
+--- a/src/sbin/geom/core/Makefile
++++ b/src/sbin/geom/core/Makefile
 @@ -12,6 +12,6 @@
  CFLAGS+= -I${.CURDIR}/../../../sys -I${.CURDIR} -I${.CURDIR}/..
  
@@ -181,8 +182,8 @@
 +LDADD=	-lgeom -ldl -lbsd
  
  .include <bsd.prog.mk>
---- a/usr.sbin/pppctl/Makefile
-+++ b/usr.sbin/pppctl/Makefile
+--- a/src/usr.sbin/pppctl/Makefile
++++ b/src/usr.sbin/pppctl/Makefile
 @@ -6,6 +6,6 @@
  WARNS?=	2
  
@@ -191,8 +192,8 @@
 +LDADD=	-lpthread -ledit -lbsd
  
  .include <bsd.prog.mk>
---- a/sbin/mount_nfs/Makefile
-+++ b/sbin/mount_nfs/Makefile
+--- a/src/sbin/mount_nfs/Makefile
++++ b/src/sbin/mount_nfs/Makefile
 @@ -4,6 +4,7 @@
  
  PROG=	mount_nfs
@@ -201,8 +202,8 @@
  MAN=	mount_nfs.8
  MLINKS=	mount_nfs.8 mount_oldnfs.8
  
---- a/usr.sbin/mountd/Makefile
-+++ b/usr.sbin/mountd/Makefile
+--- a/src/usr.sbin/mountd/Makefile
++++ b/src/usr.sbin/mountd/Makefile
 @@ -6,12 +6,12 @@
  MAN=	exports.5 netgroup.5 mountd.8
  
@@ -218,8 +219,8 @@
 +LDADD=	-ltirpc -lbsd
  
  .include <bsd.prog.mk>
---- a/usr.sbin/arp/Makefile
-+++ b/usr.sbin/arp/Makefile
+--- a/src/usr.sbin/arp/Makefile
++++ b/src/usr.sbin/arp/Makefile
 @@ -3,6 +3,7 @@
  
  PROG=	arp
@@ -228,8 +229,8 @@
  
  WARNS?=	3
  
---- a/usr.bin/netstat/Makefile
-+++ b/usr.bin/netstat/Makefile
+--- a/src/usr.bin/netstat/Makefile
++++ b/src/usr.bin/netstat/Makefile
 @@ -29,7 +29,8 @@
  BINGRP=	kmem
  BINMODE=2555
@@ -240,8 +241,8 @@
  
  .if ${MK_NETGRAPH_SUPPORT} != "no"
  SRCS+=	netgraph.c
---- a/sbin/atacontrol/Makefile
-+++ b/sbin/atacontrol/Makefile
+--- a/src/sbin/atacontrol/Makefile
++++ b/src/sbin/atacontrol/Makefile
 @@ -3,4 +3,6 @@
  PROG=	atacontrol
  MAN=	atacontrol.8
@@ -249,8 +250,8 @@
 +LDADD+=	-lfreebsd-glue
 +
  .include <bsd.prog.mk>
---- a/sbin/umount/Makefile
-+++ b/sbin/umount/Makefile
+--- a/src/sbin/umount/Makefile
++++ b/src/sbin/umount/Makefile
 @@ -6,6 +6,8 @@
  SRCS=	umount.c vfslist.c mounttab.c
  MAN=	umount.8
@@ -260,8 +261,8 @@
  MOUNT=	${.CURDIR}/../mount
  UMNTALL= ${.CURDIR}/../../usr.sbin/rpc.umntall
  CFLAGS+= -I${MOUNT} -I${UMNTALL}
---- a/sbin/route/Makefile
-+++ b/sbin/route/Makefile
+--- a/src/sbin/route/Makefile
++++ b/src/sbin/route/Makefile
 @@ -9,6 +9,8 @@
  WARNS?=	3
  CLEANFILES+=keywords.h _keywords.tmp
@@ -271,8 +272,8 @@
  CFLAGS+= -DNS
  
  .if ${MK_INET6_SUPPORT} != "no"
---- a/sbin/mount/Makefile
-+++ b/sbin/mount/Makefile
+--- a/src/sbin/mount/Makefile
++++ b/src/sbin/mount/Makefile
 @@ -7,6 +7,8 @@
  # We do NOT install the getmntopts.3 man page.
  
@@ -283,8 +284,8 @@
 +LDADD+=	-lfreebsd-glue
  
  .include <bsd.prog.mk>
---- a/usr.sbin/jail/Makefile
-+++ b/usr.sbin/jail/Makefile
+--- a/src/usr.sbin/jail/Makefile
++++ b/src/usr.sbin/jail/Makefile
 @@ -7,7 +7,9 @@
  SRCS=	jail.c command.c config.c state.c jailp.h jaillex.l jailparse.y y.tab.h
  
@@ -296,8 +297,8 @@
  
  YFLAGS+=-v
  CFLAGS+=-I. -I${.CURDIR}
---- a/sbin/camcontrol/Makefile
-+++ b/sbin/camcontrol/Makefile
+--- a/src/sbin/camcontrol/Makefile
++++ b/src/sbin/camcontrol/Makefile
 @@ -12,7 +12,7 @@
  WARNS?= 3
  .endif
@@ -307,8 +308,8 @@
  MAN=	camcontrol.8
  
  .include <bsd.prog.mk>
---- a/sbin/mdconfig/Makefile
-+++ b/sbin/mdconfig/Makefile
+--- a/src/sbin/mdconfig/Makefile
++++ b/src/sbin/mdconfig/Makefile
 @@ -4,6 +4,6 @@
  MAN=		mdconfig.8
  
@@ -317,8 +318,8 @@
 +LDADD=	-lgeom
  
  .include <bsd.prog.mk>
---- a/sbin/devd/Makefile
-+++ b/sbin/devd/Makefile
+--- a/src/sbin/devd/Makefile
++++ b/src/sbin/devd/Makefile
 @@ -9,7 +9,7 @@
  NO_SHARED?=YES
  
@@ -328,8 +329,8 @@
  
  LIBSTDC++ != \
  	g++ -print-file-name=crt1.o ; \
---- a/usr.sbin/powerd/Makefile
-+++ b/usr.sbin/powerd/Makefile
+--- a/src/usr.sbin/powerd/Makefile
++++ b/src/usr.sbin/powerd/Makefile
 @@ -4,6 +4,6 @@
  MAN=	powerd.8
  
@@ -338,3 +339,110 @@
 +#LDADD=	-lutil
  
  .include <bsd.prog.mk>
+--- /dev/null
++++ b/src/bin/Makefile
+@@ -0,0 +1,5 @@
++SUBDIR = \
++	kenv \
++	${NULL}
++
++.include <bsd.subdir.mk>
+--- /dev/null
++++ b/src/sbin/Makefile
+@@ -0,0 +1,42 @@
++SUBDIR = \
++	devd \
++	ifconfig \
++	route \
++	mdconfig \
++	sysctl \
++	kldload \
++	kldstat \
++	kldunload \
++	${NULL}
++
++.if !defined(RESCUE)
++SUBDIR += \
++	atacontrol \
++	camcontrol \
++	ccdconfig \
++	devfs \
++	dmesg \
++	dumpon \
++	geom \
++	kldconfig \
++	mount \
++	mount_cd9660 \
++	mount_ext2fs \
++	mount_hpfs \
++	mount_msdosfs \
++	mount_nfs \
++	mount_ntfs \
++	mount_nullfs \
++	mount_reiserfs \
++	mount_std \
++	mount_udf \
++	mount_unionfs \
++	nfsiod \
++	pfctl \
++	savecore \
++	swapon \
++	umount \
++	${NULL}
++.endif
++
++.include <bsd.subdir.mk>
+--- /dev/null
++++ b/src/usr.bin/Makefile
+@@ -0,0 +1,9 @@
++SUBDIR = \
++	kdump \
++	ktrace \
++	ktrdump \
++	mkuzip \
++	netstat \
++	vmstat \
++
++.include <bsd.subdir.mk>
+--- /dev/null
++++ b/src/usr.sbin/Makefile
+@@ -0,0 +1,22 @@
++SUBDIR = \
++	kbdcontrol \
++
++.if !defined(RESCUE)
++SUBDIR += \
++	acpi \
++	arp \
++	authpf \
++	jail \
++	mountd \
++	nfsd \
++	powerd \
++	ppp \
++	pppctl \
++	rpc.statd \
++	rpc.lockd \
++	rpc.umntall \
++	vidcontrol \
++	${NULL}
++.endif
++
++.include <bsd.subdir.mk>
+--- /dev/null
++++ b/src/Makefile
+@@ -0,0 +1,14 @@
++SUBDIR = \
++	bin \
++	sbin \
++	etc/devd \
++	usr.sbin \
++	share/syscons/scrnmaps \
++
++.if !defined(RESCUE)
++SUBDIR += \
++	usr.bin \
++	${NULL}
++.endif
++
++.include <bsd.subdir.mk>

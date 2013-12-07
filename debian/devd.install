@@ -1,4 +1,4 @@
-sbin/devd/devd				/sbin
-etc/devd.conf				/etc
-etc/devd/*.conf				/etc/devd
+sbin/devd				/sbin
+src/etc/devd.conf			/etc
+src/etc/devd/*.conf			/etc/devd
 debian/local/devd/*.conf		/etc/devd

@@ -13,8 +13,8 @@ for d in b/contrib/pf b/sys/contrib/pf ; do \
 
 exit 0
 
---- a/contrib/pf/authpf/authpf.c
-+++ b/contrib/pf/authpf/authpf.c
+--- a/src/contrib/pf/authpf/authpf.c
++++ b/src/contrib/pf/authpf/authpf.c
 @@ -33,7 +33,7 @@
  
  #include <err.h>
@@ -69,8 +69,8 @@ exit 0
  static __dead2 void
  #else
  static __dead void
---- a/contrib/pf/ftp-proxy/ftp-proxy.c
-+++ b/contrib/pf/ftp-proxy/ftp-proxy.c
+--- a/src/contrib/pf/ftp-proxy/ftp-proxy.c
++++ b/src/contrib/pf/ftp-proxy/ftp-proxy.c
 @@ -585,7 +585,7 @@
  
  		/* We don't care about truncation. */
@@ -80,8 +80,8 @@ exit 0
  		strvis(visbuf, buf, VIS_CSTYLE | VIS_NL);
  #else
  		strnvis(visbuf, buf, sizeof visbuf, VIS_CSTYLE | VIS_NL);
---- a/contrib/pf/libevent/kqueue.c
-+++ b/contrib/pf/libevent/kqueue.c
+--- a/src/contrib/pf/libevent/kqueue.c
++++ b/src/contrib/pf/libevent/kqueue.c
 @@ -48,7 +48,7 @@
  #include <inttypes.h>
  #endif
@@ -91,8 +91,8 @@ exit 0
  #define INTPTR(x)	(intptr_t)x
  #else
  #define INTPTR(x)	x
---- a/contrib/pf/pfctl/parse.y
-+++ b/contrib/pf/pfctl/parse.y
+--- a/src/contrib/pf/pfctl/parse.y
++++ b/src/contrib/pf/pfctl/parse.y
 @@ -33,7 +33,7 @@
  #include <sys/types.h>
  #include <sys/socket.h>
@@ -156,8 +156,8 @@ exit 0
  	int fibs;
  	size_t l = sizeof(fibs);
  
---- a/contrib/pf/pfctl/pfctl_altq.c
-+++ b/contrib/pf/pfctl/pfctl_altq.c
+--- a/src/contrib/pf/pfctl/pfctl_altq.c
++++ b/src/contrib/pf/pfctl/pfctl_altq.c
 @@ -77,7 +77,7 @@
  			     double);
  static double		 sc_x2y(struct service_curve *, double);
@@ -212,8 +212,8 @@ exit 0
  		ifr.ifr_mtu = 1500;
  #else
  		err(1, "SIOCGIFMTU");
---- a/contrib/pf/pfctl/pfctl.c
-+++ b/contrib/pf/pfctl/pfctl.c
+--- a/src/contrib/pf/pfctl/pfctl.c
++++ b/src/contrib/pf/pfctl/pfctl.c
 @@ -39,7 +39,7 @@
  #include <sys/socket.h>
  #include <sys/stat.h>
@@ -250,8 +250,8 @@ exit 0
  		altqsupport = 0;
  #else
  		altqsupport = 1;
---- a/contrib/pf/pfctl/pfctl.h
-+++ b/contrib/pf/pfctl/pfctl.h
+--- a/src/contrib/pf/pfctl/pfctl.h
++++ b/src/contrib/pf/pfctl/pfctl.h
 @@ -86,7 +86,7 @@
  int	 pfctl_show_ifaces(const char *, int);
  FILE	*pfctl_fopen(const char *, const char *);
@@ -261,8 +261,8 @@ exit 0
  extern int altqsupport;
  extern int dummynetsupport;
  #define	HTONL(x)		(x) = htonl((__uint32_t)(x))
---- a/contrib/pf/pfctl/pfctl_optimize.c
-+++ b/contrib/pf/pfctl/pfctl_optimize.c
+--- a/src/contrib/pf/pfctl/pfctl_optimize.c
++++ b/src/contrib/pf/pfctl/pfctl_optimize.c
 @@ -862,7 +862,7 @@
  				break;
  			}
@@ -272,8 +272,8 @@ exit 0
  		if (por2 == NULL)
  #else
  		if (por2 == TAILQ_END(&block->sb_rules))
---- a/contrib/pf/pfctl/pfctl_parser.c
-+++ b/contrib/pf/pfctl/pfctl_parser.c
+--- a/src/contrib/pf/pfctl/pfctl_parser.c
++++ b/src/contrib/pf/pfctl/pfctl_parser.c
 @@ -580,7 +580,7 @@
  		    s->src_nodes, "");
  		for (i = 0; i < SCNT_MAX; i++) {
@@ -310,8 +310,8 @@ exit 0
  		printf(" divert-to %u", ntohs(r->divert.port));
  #else
  		if (PF_AZERO(&r->divert.addr, r->af)) {
---- a/contrib/pf/pfctl/pfctl_parser.h
-+++ b/contrib/pf/pfctl/pfctl_parser.h
+--- a/src/contrib/pf/pfctl/pfctl_parser.h
++++ b/src/contrib/pf/pfctl/pfctl_parser.h
 @@ -159,7 +159,7 @@
  	}			 data;
  };
@@ -321,8 +321,8 @@ exit 0
  /*
   * XXX
   * Absolutely this is not correct location to define this.
---- a/contrib/pf/pfctl/pfctl_qstats.c
-+++ b/contrib/pf/pfctl/pfctl_qstats.c
+--- a/src/contrib/pf/pfctl/pfctl_qstats.c
++++ b/src/contrib/pf/pfctl/pfctl_qstats.c
 @@ -89,7 +89,7 @@
  	struct pf_altq_node	*root = NULL, *node;
  	int			 nodes, dotitle = (opts & PF_OPT_SHOWALL);
@@ -368,8 +368,8 @@ exit 0
  	if (a->altq.local_flags & PFALTQ_FLAG_IF_REMOVED)
  		return;
  #endif
---- a/contrib/pf/pfctl/pf_print_state.c
-+++ b/contrib/pf/pfctl/pf_print_state.c
+--- a/src/contrib/pf/pfctl/pf_print_state.c
++++ b/src/contrib/pf/pfctl/pf_print_state.c
 @@ -35,7 +35,7 @@
  
  #include <sys/types.h>
@@ -397,8 +397,8 @@ exit 0
  		    (unsigned long long)betoh64(id), ntohl(s->creatorid));
  #else
  		    betoh64(id), ntohl(s->creatorid));
---- a/contrib/pf/pflogd/pflogd.c
-+++ b/contrib/pf/pflogd/pflogd.c
+--- a/src/contrib/pf/pflogd/pflogd.c
++++ b/src/contrib/pf/pflogd/pflogd.c
 @@ -51,7 +51,7 @@
  #include <errno.h>
  #include <stdarg.h>
@@ -480,8 +480,8 @@ exit 0
  	sh.ts.tv_sec = (bpf_int32)h->ts.tv_sec;
  	sh.ts.tv_usec = (bpf_int32)h->ts.tv_usec;
  	sh.caplen = h->caplen;
---- a/contrib/pf/pflogd/pidfile.c
-+++ b/contrib/pf/pflogd/pidfile.c
+--- a/src/contrib/pf/pflogd/pidfile.c
++++ b/src/contrib/pf/pflogd/pidfile.c
 @@ -48,7 +48,7 @@
  #include <stdio.h>
  #include <stdlib.h>
@@ -491,8 +491,8 @@ exit 0
  #include "pidfile.h"
  #else
  #include <util.h>
---- a/contrib/pf/pflogd/privsep.c
-+++ b/contrib/pf/pflogd/privsep.c
+--- a/src/contrib/pf/pflogd/privsep.c
++++ b/src/contrib/pf/pflogd/privsep.c
 @@ -73,7 +73,7 @@
  	int snaplen, ret, olderrno;
  	struct passwd *pw;
@@ -502,8 +502,8 @@ exit 0
  	for (i = 1; i < NSIG; i++)
  #else
  	for (i = 1; i < _NSIG; i++)
---- a/contrib/pf/tftp-proxy/filter.c
-+++ b/contrib/pf/tftp-proxy/filter.c
+--- a/src/contrib/pf/tftp-proxy/filter.c
++++ b/src/contrib/pf/tftp-proxy/filter.c
 @@ -298,7 +298,7 @@
  		pfr.rule.quick = 1;
  		pfr.rule.log = rule_log;
@@ -513,8 +513,8 @@ exit 0
  		pfr.rule.flags = (proto == IPPROTO_TCP ? TH_SYN : 0);
  		pfr.rule.flagset = (proto == IPPROTO_TCP ?
  		    (TH_SYN|TH_ACK|TH_FIN|TH_RST) : 0);
---- a/sys/contrib/pf/net/if_pflog.c
-+++ b/sys/contrib/pf/net/if_pflog.c
+--- a/src/sys/contrib/pf/net/if_pflog.c
++++ b/src/sys/contrib/pf/net/if_pflog.c
 @@ -33,7 +33,7 @@
   * PURPOSE.
   */
@@ -731,8 +731,8 @@ exit 0
  static int
  pflog_modevent(module_t mod, int type, void *data)
  {
---- a/sys/contrib/pf/net/if_pflog.h
-+++ b/sys/contrib/pf/net/if_pflog.h
+--- a/src/sys/contrib/pf/net/if_pflog.h
++++ b/src/sys/contrib/pf/net/if_pflog.h
 @@ -30,7 +30,7 @@
  #define	PFLOGIFS_MAX	16
  
@@ -751,8 +751,8 @@ exit 0
  struct pf_rule;
  struct pf_ruleset;
  struct pfi_kif;
---- a/sys/contrib/pf/net/if_pflow.h
-+++ b/sys/contrib/pf/net/if_pflow.h
+--- a/src/sys/contrib/pf/net/if_pflow.h
++++ b/src/sys/contrib/pf/net/if_pflow.h
 @@ -66,7 +66,7 @@
  	unsigned int		 sc_maxcount;
  	u_int64_t		 sc_gcounter;
@@ -762,8 +762,8 @@ exit 0
  	struct callout		 sc_tmo;
  #else
  	struct timeout		 sc_tmo;
---- a/sys/contrib/pf/net/if_pfsync.c
-+++ b/sys/contrib/pf/net/if_pfsync.c
+--- a/src/sys/contrib/pf/net/if_pfsync.c
++++ b/src/sys/contrib/pf/net/if_pfsync.c
 @@ -52,7 +52,7 @@
   * 1.170 - SIOCSIFMTU checks
   */
@@ -2346,8 +2346,8 @@ exit 0
  static int
  pfsync_multicast_setup(struct pfsync_softc *sc)
  {
---- a/sys/contrib/pf/net/if_pfsync.h
-+++ b/sys/contrib/pf/net/if_pfsync.h
+--- a/src/sys/contrib/pf/net/if_pfsync.h
++++ b/src/sys/contrib/pf/net/if_pfsync.h
 @@ -268,7 +268,7 @@
  	int		 pfsyncr_authlevel;
  };
@@ -2375,8 +2375,8 @@ exit 0
  void			pfsync_state_export(struct pfsync_state *,
  			    struct pf_state *);
  #endif
---- a/sys/contrib/pf/net/pf.c
-+++ b/sys/contrib/pf/net/pf.c
+--- a/src/sys/contrib/pf/net/pf.c
++++ b/src/sys/contrib/pf/net/pf.c
 @@ -35,7 +35,7 @@
   *
   */
@@ -4964,8 +4964,8 @@ exit 0
  	struct pf_mtag	*pf_tag;
  
  	if ((pf_tag = pf_find_mtag(m)) != NULL)
---- a/sys/contrib/pf/net/pf_if.c
-+++ b/sys/contrib/pf/net/pf_if.c
+--- a/src/sys/contrib/pf/net/pf_if.c
++++ b/src/sys/contrib/pf/net/pf_if.c
 @@ -32,7 +32,7 @@
   * POSSIBILITY OF SUCH DAMAGE.
   */
@@ -5387,8 +5387,8 @@ exit 0
  void
  pfi_attach_ifnet_event(void *arg __unused, struct ifnet *ifp)
  {
---- a/sys/contrib/pf/net/pf_ioctl.c
-+++ b/sys/contrib/pf/net/pf_ioctl.c
+--- a/src/sys/contrib/pf/net/pf_ioctl.c
++++ b/src/sys/contrib/pf/net/pf_ioctl.c
 @@ -35,7 +35,7 @@
   *
   */
@@ -6829,8 +6829,8 @@ exit 0
  	RB_FOREACH(n, pf_src_tree, &V_tree_src_tracking) {
  #else
  	RB_FOREACH(n, pf_src_tree, &tree_src_tracking) {
---- a/sys/contrib/pf/net/pf_lb.c
-+++ b/sys/contrib/pf/net/pf_lb.c
+--- a/src/sys/contrib/pf/net/pf_lb.c
++++ b/src/sys/contrib/pf/net/pf_lb.c
 @@ -35,7 +35,7 @@
   *
   */
@@ -6975,8 +6975,8 @@ exit 0
  			pool_put(&V_pf_state_key_pl, *nkp);
  			pool_put(&V_pf_state_key_pl, *skp);
  #else
---- a/sys/contrib/pf/net/pf_norm.c
-+++ b/sys/contrib/pf/net/pf_norm.c
+--- a/src/sys/contrib/pf/net/pf_norm.c
++++ b/src/sys/contrib/pf/net/pf_norm.c
 @@ -25,7 +25,7 @@
   * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   */
@@ -7663,8 +7663,8 @@ exit 0
  	u_char		 opts[TCP_MAXOLEN];
  #else
  	u_char		 opts[MAX_TCPOPTLEN];
---- a/sys/contrib/pf/net/pf_osfp.c
-+++ b/sys/contrib/pf/net/pf_osfp.c
+--- a/src/sys/contrib/pf/net/pf_osfp.c
++++ b/src/sys/contrib/pf/net/pf_osfp.c
 @@ -17,7 +17,7 @@
   *
   */
@@ -7844,8 +7844,8 @@ exit 0
  		if (f != (f2 = pf_osfp_find(&V_pf_osfp_list, &find, 0))) {
  #else
  		if (f != (f2 = pf_osfp_find(&pf_osfp_list, &find, 0))) {
---- a/sys/contrib/pf/net/pf_ruleset.c
-+++ b/sys/contrib/pf/net/pf_ruleset.c
+--- a/src/sys/contrib/pf/net/pf_ruleset.c
++++ b/src/sys/contrib/pf/net/pf_ruleset.c
 @@ -35,7 +35,7 @@
   *
   */
@@ -7936,8 +7936,8 @@ exit 0
  		RB_REMOVE(pf_anchor_global, &V_pf_anchors, ruleset->anchor);
  #else
  		RB_REMOVE(pf_anchor_global, &pf_anchors, ruleset->anchor);
---- a/sys/contrib/pf/net/pf_table.c
-+++ b/sys/contrib/pf/net/pf_table.c
+--- a/src/sys/contrib/pf/net/pf_table.c
++++ b/src/sys/contrib/pf/net/pf_table.c
 @@ -30,7 +30,7 @@
   *
   */
@@ -8359,8 +8359,8 @@ exit 0
  		kt->pfrkt_ip6->rnh_walktree(kt->pfrkt_ip6, pfr_walktree, &w);
  #else
  		rn_walktree(kt->pfrkt_ip6, pfr_walktree, &w);
---- a/sys/contrib/pf/net/pfvar.h
-+++ b/sys/contrib/pf/net/pfvar.h
+--- a/src/sys/contrib/pf/net/pfvar.h
++++ b/src/sys/contrib/pf/net/pfvar.h
 @@ -37,7 +37,7 @@
  #include <sys/types.h>
  #include <sys/queue.h>

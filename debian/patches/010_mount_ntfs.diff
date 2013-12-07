@@ -2,8 +2,8 @@
  sbin/mount_ntfs/mount_ntfs.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sbin/mount_ntfs/mount_ntfs.c
-+++ b/sbin/mount_ntfs/mount_ntfs.c
+--- a/src/sbin/mount_ntfs/mount_ntfs.c
++++ b/src/sbin/mount_ntfs/mount_ntfs.c
 @@ -38,6 +38,7 @@
  #include <sys/mount.h>
  #include <sys/stat.h>

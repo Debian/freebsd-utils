@@ -1,5 +1,6 @@
-etc/regdomain.xml		/etc
-sbin/ifconfig/ifconfig		/sbin
-sbin/route/route		/sbin
+src/etc/regdomain.xml		/etc
+sbin/ifconfig			/sbin
+sbin/route			/sbin
+usr/bin/netstat			/usr/bin
 debian/local/scripts/sbin/route	/lib/freebsd
-usr.sbin/arp/arp                /usr/sbin/
+usr/sbin/arp			/usr/sbin

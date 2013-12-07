@@ -1,5 +1,5 @@
---- a/usr.bin/netstat/netgraph.c
-+++ b/usr.bin/netstat/netgraph.c
+--- a/src/usr.bin/netstat/netgraph.c
++++ b/src/usr.bin/netstat/netgraph.c
 @@ -76,8 +76,8 @@
  		const char *const modname = "ng_socket.ko";
  /* XXX We should get "mpath" from "sysctl kern.module_path" */
@@ -11,8 +11,8 @@
  		const char **pre;
  		struct kld_file_stat ks;
  		int fileid;
---- a/usr.bin/netstat/netstat.h
-+++ b/usr.bin/netstat/netstat.h
+--- a/src/usr.bin/netstat/netstat.h
++++ b/src/usr.bin/netstat/netstat.h
 @@ -32,6 +32,19 @@
  
  #include <sys/cdefs.h>

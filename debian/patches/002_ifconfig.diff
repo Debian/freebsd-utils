@@ -1,5 +1,5 @@
---- a/sbin/ifconfig/Makefile
-+++ b/sbin/ifconfig/Makefile
+--- a/src/sbin/ifconfig/Makefile
++++ b/src/sbin/ifconfig/Makefile
 @@ -36,7 +36,7 @@
  
  SRCS+=	ifieee80211.c regdomain.c # SIOC[GS]IEEE80211 support
@@ -9,8 +9,8 @@
  
  SRCS+=	ifcarp.c		# SIOC[GS]VH support
  SRCS+=	ifgroup.c		# ...
---- a/sbin/ifconfig/ifconfig.c
-+++ b/sbin/ifconfig/ifconfig.c
+--- a/src/sbin/ifconfig/ifconfig.c
++++ b/src/sbin/ifconfig/ifconfig.c
 @@ -76,6 +76,13 @@
  
  #include "ifconfig.h"

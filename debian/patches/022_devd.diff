@@ -1,5 +1,5 @@
---- a/sbin/devd/parse.y
-+++ b/sbin/devd/parse.y
+--- a/src/sbin/devd/parse.y
++++ b/src/sbin/devd/parse.y
 @@ -29,9 +29,9 @@
   * $FreeBSD$
   */
@@ -11,8 +11,8 @@
  
  %}
  
---- a/etc/devd.conf
-+++ b/etc/devd.conf
+--- a/src/etc/devd.conf
++++ b/src/etc/devd.conf
 @@ -1,8 +1,5 @@
 -# $FreeBSD$
 -#

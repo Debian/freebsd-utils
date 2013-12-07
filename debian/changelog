@@ -1,7 +1,15 @@
-freebsd-utils (9.2-3) UNRELEASED; urgency=low
+freebsd-utils (9.2+ds1-1) UNRELEASED; urgency=low
 
   * Drop freebsd-geom transitional package.
   * Fetch source code securely (https) in get-orig-source.
+  * Split udeb build from normal build, using a separate objdir by means
+    of MAKEOBJDIRPREFIX. This allows us to:
+    - Optimize udeb build for size (-Os).
+    - Restrict -DWITHOUT_JAIL only to udeb build. This effectively brings
+      back jail support to ifconfig.
+    - As a side requirement, source code is moved to src/ directory to
+      prevent dh_install from mistakenly installing source directories as
+      if they were executable files.
 
  -- Robert Millan <rmh@debian.org>  Sun, 01 Dec 2013 20:31:39 +0100
 

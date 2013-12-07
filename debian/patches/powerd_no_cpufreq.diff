@@ -1,8 +1,8 @@
 
 From SVN rev 234070.
 
---- a/usr.sbin/powerd/powerd.c
-+++ b/usr.sbin/powerd/powerd.c
+--- a/src/usr.sbin/powerd/powerd.c
++++ b/src/usr.sbin/powerd/powerd.c
 @@ -44,6 +44,7 @@
  #include <stdio.h>
  #include <stdlib.h>

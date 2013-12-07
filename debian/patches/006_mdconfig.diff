@@ -7,8 +7,8 @@
  sbin/mdconfig/mdconfig.c |   23 ++++++++++++++++++++---
  2 files changed, 21 insertions(+), 4 deletions(-)
 
---- a/sbin/mdconfig/mdconfig.c
-+++ b/sbin/mdconfig/mdconfig.c
+--- a/src/sbin/mdconfig/mdconfig.c
++++ b/src/sbin/mdconfig/mdconfig.c
 @@ -74,6 +74,24 @@
  #define CLASS_NAME_MD	"MD"
  

@@ -1,5 +1,5 @@
---- a/sbin/umount/umount.c
-+++ b/sbin/umount/umount.c
+--- a/src/sbin/umount/umount.c
++++ b/src/sbin/umount/umount.c
 @@ -401,7 +401,7 @@
  			free(orignfsdirname);
  			return (1);

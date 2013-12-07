@@ -1,3 +1,3 @@
-bin/kenv/kenv				/bin
-sbin/sysctl/sysctl			/bin
-sbin/mdconfig/mdconfig			/sbin
+debian/tmp-udeb/bin/kenv		/bin
+debian/tmp-udeb/sbin/sysctl		/bin
+debian/tmp-udeb/sbin/mdconfig		/sbin

@@ -5,8 +5,8 @@
  usr.bin/kdump/stat16.h |   55 ++++++++++++++++++++++++++
  4 files changed, 154 insertions(+), 55 deletions(-)
 
---- a/usr.bin/kdump/kdump.c
-+++ b/usr.bin/kdump/kdump.c
+--- a/src/usr.bin/kdump/kdump.c
++++ b/src/usr.bin/kdump/kdump.c
 @@ -55,6 +55,7 @@
  #include <sys/ioctl.h>
  #include <sys/socket.h>
@@ -51,8 +51,8 @@
  {
  	char mode[12], timestr[PATH_MAX + 4];
  	struct passwd *pwd;
---- a/usr.bin/kdump/Makefile
-+++ b/usr.bin/kdump/Makefile
+--- a/src/usr.bin/kdump/Makefile
++++ b/src/usr.bin/kdump/Makefile
 @@ -10,6 +10,7 @@
  PROG=		kdump
  SRCS=		kdump.c ioctl.c kdump_subr.c subr.c
@@ -74,8 +74,8 @@
  
  linux_syscalls.c:
  	/bin/sh ${.CURDIR}/../../sys/kern/makesyscalls.sh \
---- a/usr.bin/kdump/mksubr
-+++ b/usr.bin/kdump/mksubr
+--- a/src/usr.bin/kdump/mksubr
++++ b/src/usr.bin/kdump/mksubr
 @@ -50,7 +50,7 @@
  	echo "usage: sh $0 include-dir"
  	exit 1
@@ -271,7 +271,7 @@
  		if ($i ~ /define/) \
  			break; \
 --- /dev/null
-+++ b/usr.bin/kdump/stat16.h
++++ b/src/usr.bin/kdump/stat16.h
 @@ -0,0 +1,55 @@
 +/* Copyright (C) 2002, 2006 Free Software Foundation, Inc.
 +   This file is part of the GNU C Library.
@@ -328,8 +328,8 @@
 +#define _BIRTH_PADSIZE     (2*(8 - sizeof (long)))
 +    char __birth_padding[_BIRTH_PADSIZE];
 +  };
---- a/usr.bin/kdump/mkioctls
-+++ b/usr.bin/kdump/mkioctls
+--- a/src/usr.bin/kdump/mkioctls
++++ b/src/usr.bin/kdump/mkioctls
 @@ -15,21 +15,23 @@
  	echo "usage: sh $0 [-s] include-dir"
  	exit 1

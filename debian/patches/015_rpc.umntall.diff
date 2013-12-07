@@ -2,8 +2,8 @@
  usr.sbin/rpc.umntall/rpc.umntall.c |    8 +++-----
  1 file changed, 3 insertions(+), 5 deletions(-)
 
---- a/usr.sbin/rpc.umntall/rpc.umntall.c
-+++ b/usr.sbin/rpc.umntall/rpc.umntall.c
+--- a/src/usr.sbin/rpc.umntall/rpc.umntall.c
++++ b/src/usr.sbin/rpc.umntall/rpc.umntall.c
 @@ -176,8 +176,7 @@
  
  	try.tv_sec = 3;

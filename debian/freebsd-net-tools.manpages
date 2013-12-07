@@ -1,4 +1,4 @@
-sbin/ifconfig/ifconfig.8
-sbin/route/route.8
-usr.bin/netstat/netstat.1
-usr.sbin/arp/arp.8
+src/sbin/ifconfig/ifconfig.8
+src/sbin/route/route.8
+src/usr.bin/netstat/netstat.1
+src/usr.sbin/arp/arp.8

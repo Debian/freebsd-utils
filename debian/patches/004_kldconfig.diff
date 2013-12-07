@@ -1,5 +1,5 @@
---- a/sbin/kldconfig/Makefile
-+++ b/sbin/kldconfig/Makefile
+--- a/src/sbin/kldconfig/Makefile
++++ b/src/sbin/kldconfig/Makefile
 @@ -29,4 +29,6 @@
  PROG=		kldconfig
  MAN=		kldconfig.8
@@ -7,8 +7,8 @@
 +LDADD=		-lbsd
 +
  .include <bsd.prog.mk>
---- a/sbin/kldload/Makefile
-+++ b/sbin/kldload/Makefile
+--- a/src/sbin/kldload/Makefile
++++ b/src/sbin/kldload/Makefile
 @@ -29,4 +29,6 @@
  PROG=	kldload
  MAN=	kldload.8
@@ -16,8 +16,8 @@
 +LDADD= -lbsd
 +
  .include <bsd.prog.mk>
---- a/sbin/kldunload/Makefile
-+++ b/sbin/kldunload/Makefile
+--- a/src/sbin/kldunload/Makefile
++++ b/src/sbin/kldunload/Makefile
 @@ -29,4 +29,6 @@
  PROG=	kldunload
  MAN=	kldunload.8

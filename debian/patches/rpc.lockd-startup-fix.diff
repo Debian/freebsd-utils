@@ -1,5 +1,5 @@
---- a/usr.sbin/rpc.lockd/lockd.c
-+++ b/usr.sbin/rpc.lockd/lockd.c
+--- a/src/usr.sbin/rpc.lockd/lockd.c
++++ b/src/usr.sbin/rpc.lockd/lockd.c
 @@ -905,6 +905,7 @@
  						sin->sin_family = AF_INET;
  						sin->sin_port = htons(0);

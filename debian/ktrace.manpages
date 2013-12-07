@@ -1,2 +1,2 @@
-usr.bin/ktrace/ktrace.1
-usr.bin/kdump/kdump.1
+src/usr.bin/ktrace/ktrace.1
+src/usr.bin/kdump/kdump.1

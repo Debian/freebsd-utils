@@ -1,5 +1,5 @@
---- a/contrib/pf/authpf/authpf.c
-+++ b/contrib/pf/authpf/authpf.c
+--- a/src/contrib/pf/authpf/authpf.c
++++ b/src/contrib/pf/authpf/authpf.c
 @@ -37,7 +37,7 @@
  #if 1
  #include <inttypes.h>
@@ -63,8 +63,8 @@
  			} else if (buf[0] == '%') {
  				/* check group membership */
  				int cnt; 
---- a/contrib/pf/ftp-proxy/ftp-proxy.c
-+++ b/contrib/pf/ftp-proxy/ftp-proxy.c
+--- a/src/contrib/pf/ftp-proxy/ftp-proxy.c
++++ b/src/contrib/pf/ftp-proxy/ftp-proxy.c
 @@ -104,7 +104,7 @@
  int	drop_privs(void);
  void	end_session(struct session *);
@@ -101,8 +101,8 @@
  			logmsg(LOG_DEBUG, "#%d server: %s", s->id, linebuf);
  			if (!server_parse(s)) {
  				end_session(s);
---- a/contrib/pf/pfctl/parse.y
-+++ b/contrib/pf/pfctl/parse.y
+--- a/src/contrib/pf/pfctl/parse.y
++++ b/src/contrib/pf/pfctl/parse.y
 @@ -427,6 +427,7 @@
  	} v;
  	int lineno;
@@ -111,8 +111,8 @@
  
  #define PPORT_RANGE	1
  #define PPORT_STAR	2
---- a/contrib/pf/pfctl/pfctl.h
-+++ b/contrib/pf/pfctl/pfctl.h
+--- a/src/contrib/pf/pfctl/pfctl.h
++++ b/src/contrib/pf/pfctl/pfctl.h
 @@ -36,6 +36,12 @@
  
  enum pfctl_show { PFCTL_SHOW_RULES, PFCTL_SHOW_LABELS, PFCTL_SHOW_NOTHING };
@@ -126,8 +126,8 @@
  enum {	PFRB_TABLES = 1, PFRB_TSTATS, PFRB_ADDRS, PFRB_ASTATS,
  	PFRB_IFACES, PFRB_TRANS, PFRB_MAX };
  struct pfr_buffer {
---- a/contrib/pf/pfctl/pfctl_parser.c
-+++ b/contrib/pf/pfctl/pfctl_parser.c
+--- a/src/contrib/pf/pfctl/pfctl_parser.c
++++ b/src/contrib/pf/pfctl/pfctl_parser.c
 @@ -59,6 +59,28 @@
  #include <ifaddrs.h>
  #include <unistd.h>

@@ -1,5 +1,5 @@
---- a/sbin/route/route.c
-+++ b/sbin/route/route.c
+--- a/src/sbin/route/route.c
++++ b/src/sbin/route/route.c
 @@ -167,7 +167,7 @@
  	if (argc < 2)
  		usage(NULL);

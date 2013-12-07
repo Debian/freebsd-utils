@@ -1,3 +1,3 @@
-sbin/kldload/kldload		/sbin
-sbin/kldunload/kldunload	/sbin
-sbin/kldstat/kldstat		/bin
+debian/tmp-udeb/sbin/kldload		/sbin
+debian/tmp-udeb/sbin/kldunload		/sbin
+debian/tmp-udeb/sbin/kldstat		/bin

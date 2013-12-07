@@ -1,5 +1,5 @@
---- a/usr.sbin/ppp/bundle.c
-+++ b/usr.sbin/ppp/bundle.c
+--- a/src/usr.sbin/ppp/bundle.c
++++ b/src/usr.sbin/ppp/bundle.c
 @@ -699,7 +699,7 @@
    static struct bundle bundle;		/* there can be only one */
    int enoentcount, err, minunit, maxunit;
@@ -27,8 +27,8 @@
        if (bundle.unit == minunit && !kldtried++) {
          /*
           * Attempt to load the tunnel interface KLD if it isn't loaded
---- a/usr.sbin/ppp/cbcp.c
-+++ b/usr.sbin/ppp/cbcp.c
+--- a/src/usr.sbin/ppp/cbcp.c
++++ b/src/usr.sbin/ppp/cbcp.c
 @@ -28,7 +28,7 @@
  
  #include <sys/param.h>
@@ -38,8 +38,8 @@
  #include <netinet/in.h>
  #endif
  #include <sys/un.h>
---- a/usr.sbin/ppp/chap_ms.c
-+++ b/usr.sbin/ppp/chap_ms.c
+--- a/src/usr.sbin/ppp/chap_ms.c
++++ b/src/usr.sbin/ppp/chap_ms.c
 @@ -29,8 +29,9 @@
   * $FreeBSD$
   */
@@ -60,8 +60,8 @@
  #define LENGTH 20
  static char *
  SHA1_End(SHA_CTX *ctx, char *buf)
---- a/usr.sbin/ppp/defs.c
-+++ b/usr.sbin/ppp/defs.c
+--- a/src/usr.sbin/ppp/defs.c
++++ b/src/usr.sbin/ppp/defs.c
 @@ -39,16 +39,16 @@
  #include <stdio.h>
  #include <stdlib.h>
@@ -113,8 +113,8 @@
  int
  loadmodules(int how, const char *module, ...)
  {
---- a/usr.sbin/ppp/defs.h
-+++ b/usr.sbin/ppp/defs.h
+--- a/src/usr.sbin/ppp/defs.h
++++ b/src/usr.sbin/ppp/defs.h
 @@ -28,8 +28,10 @@
   * $FreeBSD$
   */
@@ -136,8 +136,8 @@
  extern void randinit(void);
  #else
  #define random arc4random
---- a/usr.sbin/ppp/id.c
-+++ b/usr.sbin/ppp/id.c
+--- a/src/usr.sbin/ppp/id.c
++++ b/src/usr.sbin/ppp/id.c
 @@ -40,7 +40,7 @@
  #include <stdio.h>
  #include <string.h>
@@ -156,8 +156,8 @@
  int
  ID0kldload(const char *dev)
  {
---- a/usr.sbin/ppp/id.h
-+++ b/usr.sbin/ppp/id.h
+--- a/src/usr.sbin/ppp/id.h
++++ b/src/usr.sbin/ppp/id.h
 @@ -26,6 +26,8 @@
   * $FreeBSD$
   */
@@ -185,8 +185,8 @@
  #include <sys/param.h>
  #include <sys/linker.h>
  #define ID0kldload kldload
---- a/usr.sbin/ppp/iface.c
-+++ b/usr.sbin/ppp/iface.c
+--- a/src/usr.sbin/ppp/iface.c
++++ b/src/usr.sbin/ppp/iface.c
 @@ -31,7 +31,7 @@
  #include <netinet/in.h>
  #include <net/if.h>
@@ -214,8 +214,8 @@
    ifrq.ifr_flagshigh = new_flags >> 16;
  #endif
  
---- a/usr.sbin/ppp/lqr.c
-+++ b/usr.sbin/ppp/lqr.c
+--- a/src/usr.sbin/ppp/lqr.c
++++ b/src/usr.sbin/ppp/lqr.c
 @@ -30,7 +30,7 @@
  
  #include <sys/param.h>
@@ -225,8 +225,8 @@
  #include <netinet/in.h>
  #endif
  #include <sys/un.h>
---- a/usr.sbin/ppp/tun.c
-+++ b/usr.sbin/ppp/tun.c
+--- a/src/usr.sbin/ppp/tun.c
++++ b/src/usr.sbin/ppp/tun.c
 @@ -29,7 +29,7 @@
  #include <sys/param.h>
  

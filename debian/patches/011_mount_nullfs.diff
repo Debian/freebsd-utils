@@ -2,8 +2,8 @@
  sbin/mount_nullfs/mount_nullfs.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sbin/mount_nullfs/mount_nullfs.c
-+++ b/sbin/mount_nullfs/mount_nullfs.c
+--- a/src/sbin/mount_nullfs/mount_nullfs.c
++++ b/src/sbin/mount_nullfs/mount_nullfs.c
 @@ -58,7 +58,7 @@
  #include "mntopts.h"
  

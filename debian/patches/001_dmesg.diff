@@ -3,8 +3,8 @@
  sbin/dmesg/dmesg.c  |    7 +++++--
  2 files changed, 6 insertions(+), 3 deletions(-)
 
---- a/sbin/dmesg/dmesg.c
-+++ b/sbin/dmesg/dmesg.c
+--- a/src/sbin/dmesg/dmesg.c
++++ b/src/sbin/dmesg/dmesg.c
 @@ -68,7 +68,7 @@
  	{ NULL, 0, 0, 0, 0 },
  };
@@ -33,8 +33,8 @@
  		case '?':
  		default:
  			usage();
---- a/sbin/dmesg/Makefile
-+++ b/sbin/dmesg/Makefile
+--- a/src/sbin/dmesg/Makefile
++++ b/src/sbin/dmesg/Makefile
 @@ -4,7 +4,7 @@
  PROG=	dmesg
  MAN=	dmesg.8

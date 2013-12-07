@@ -1,4 +1,4 @@
-usr.sbin/mountd/mountd.8
-usr.sbin/mountd/exports.5
-usr.sbin/mountd/netgroup.5
-usr.sbin/nfsd/nfsd.8
+src/usr.sbin/mountd/mountd.8
+src/usr.sbin/mountd/exports.5
+src/usr.sbin/mountd/netgroup.5
+src/usr.sbin/nfsd/nfsd.8

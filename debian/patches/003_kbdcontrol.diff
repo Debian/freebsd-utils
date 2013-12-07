@@ -2,8 +2,8 @@
  usr.sbin/kbdcontrol/kbdcontrol.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/usr.sbin/kbdcontrol/kbdcontrol.c
-+++ b/usr.sbin/kbdcontrol/kbdcontrol.c
+--- a/src/usr.sbin/kbdcontrol/kbdcontrol.c
++++ b/src/usr.sbin/kbdcontrol/kbdcontrol.c
 @@ -138,7 +138,7 @@
  void		set_keyboard(char *device);
  void		set_keyrates(char *opt);

@@ -2,8 +2,8 @@
  sbin/sysctl/sysctl.c |    3 +++
  1 file changed, 3 insertions(+)
 
---- a/sbin/sysctl/sysctl.c
-+++ b/sbin/sysctl/sysctl.c
+--- a/src/sbin/sysctl/sysctl.c
++++ b/src/sbin/sysctl/sysctl.c
 @@ -57,6 +57,7 @@
  #include <stdlib.h>
  #include <string.h>

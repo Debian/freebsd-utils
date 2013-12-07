@@ -1,8 +1,8 @@
 
 Merged in SVN (rev 231642).
 
---- a/sbin/ifconfig/Makefile
-+++ b/sbin/ifconfig/Makefile
+--- a/src/sbin/ifconfig/Makefile
++++ b/src/sbin/ifconfig/Makefile
 @@ -35,8 +35,8 @@
  SRCS+=	ifgif.c			# GIF reversed header workaround
  
@@ -26,8 +26,8 @@ Merged in SVN (rev 231642).
  
  MAN=	ifconfig.8
  
---- a/sbin/ifconfig/ifconfig.c
-+++ b/sbin/ifconfig/ifconfig.c
+--- a/src/sbin/ifconfig/ifconfig.c
++++ b/src/sbin/ifconfig/ifconfig.c
 @@ -66,7 +66,9 @@
  #include <err.h>
  #include <errno.h>

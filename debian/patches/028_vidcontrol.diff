@@ -3,8 +3,8 @@
  usr.sbin/vidcontrol/vidcontrol.c |    1 +
  2 files changed, 2 insertions(+)
 
---- a/usr.sbin/vidcontrol/Makefile
-+++ b/usr.sbin/vidcontrol/Makefile
+--- a/src/usr.sbin/vidcontrol/Makefile
++++ b/src/usr.sbin/vidcontrol/Makefile
 @@ -2,5 +2,6 @@
  
  PROG=	vidcontrol

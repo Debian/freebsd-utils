@@ -1,2 +1,3 @@
-usr.sbin/ppp/ppp		/usr/sbin/
-usr.sbin/pppctl/pppctl		/usr/sbin/
+usr/sbin/ppp		/usr/sbin/
+usr/sbin/pppctl		/usr/sbin/
+usr/share/man/man8/ppp.8.gz

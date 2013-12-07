@@ -1,5 +1,5 @@
-sbin/kldload/kldload		/sbin
-sbin/kldunload/kldunload	/sbin
-sbin/kldconfig/kldconfig	/sbin
-sbin/kldstat/kldstat		/bin
-debian/modules				/etc
+sbin/kldload		/sbin
+sbin/kldunload		/sbin
+sbin/kldconfig		/sbin
+sbin/kldstat		/bin
+debian/modules		/etc

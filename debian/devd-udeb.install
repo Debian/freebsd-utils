@@ -1,3 +1,3 @@
-sbin/devd/devd				/sbin
-etc/devd.conf				/etc
-etc/devd/usb.conf			/etc/devd
+debian/tmp-udeb/sbin/devd		/sbin
+src/etc/devd.conf			/etc
+src/etc/devd/usb.conf			/etc/devd

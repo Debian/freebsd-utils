@@ -5,8 +5,8 @@ http://lists.freebsd.org/pipermail/freebsd-fs/2013-July/017794.html
 
 Also see kfreebsd-10/debian/patches/mount_remount.diff
 
---- a/sbin/mount/mount.c
-+++ b/sbin/mount/mount.c
+--- a/src/sbin/mount/mount.c
++++ b/src/sbin/mount/mount.c
 @@ -252,8 +252,11 @@
  	options = NULL;
  	vfslist = NULL;

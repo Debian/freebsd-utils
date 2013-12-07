@@ -1,5 +1,5 @@
---- a/sbin/devfs/extern.h
-+++ b/sbin/devfs/extern.h
+--- a/src/sbin/devfs/extern.h
++++ b/src/sbin/devfs/extern.h
 @@ -50,7 +50,7 @@
  uint16_t eatonum(const char *);
  size_t efgetln(FILE *, char **);
@@ -9,8 +9,8 @@
  
  extern int mpfd;		/* Mount-point file descriptor. */
  
---- a/sbin/devfs/Makefile
-+++ b/sbin/devfs/Makefile
+--- a/src/sbin/devfs/Makefile
++++ b/src/sbin/devfs/Makefile
 @@ -3,5 +3,6 @@
  PROG=	devfs
  SRCS=	devfs.c rule.c
@@ -18,8 +18,8 @@
 +LDADD+= -lbsd
  
  .include <bsd.prog.mk>
---- a/sbin/devfs/rule.c
-+++ b/sbin/devfs/rule.c
+--- a/src/sbin/devfs/rule.c
++++ b/src/sbin/devfs/rule.c
 @@ -85,8 +85,8 @@
  	int ch;
  
@@ -31,8 +31,8 @@
  		switch (ch) {
  		case 's':
  			in_rsnum = eatonum(optarg);
---- a/sbin/devfs/devfs.c
-+++ b/sbin/devfs/devfs.c
+--- a/src/sbin/devfs/devfs.c
++++ b/src/sbin/devfs/devfs.c
 @@ -62,7 +62,7 @@
  	int ch;
  

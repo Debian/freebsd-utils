@@ -1,4 +1,4 @@
-etc/pf.os			/etc
-share/examples/pf/pf.conf	/etc
-sbin/pfctl/pfctl		/sbin
-usr.sbin/authpf/authpf		/usr/sbin/
+src/etc/pf.os			/etc
+src/share/examples/pf/pf.conf	/etc
+sbin/pfctl			/sbin
+usr/sbin/authpf			/usr/sbin/

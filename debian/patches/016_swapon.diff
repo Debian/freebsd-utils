@@ -7,8 +7,8 @@ something sane instead...
  sbin/swapon/swapon.c |   13 +++++++++++--
  2 files changed, 12 insertions(+), 3 deletions(-)
 
---- a/sbin/swapon/swapon.c
-+++ b/sbin/swapon/swapon.c
+--- a/src/sbin/swapon/swapon.c
++++ b/src/sbin/swapon/swapon.c
 @@ -41,6 +41,7 @@
  #include <sys/cdefs.h>
  __FBSDID("$FreeBSD$");

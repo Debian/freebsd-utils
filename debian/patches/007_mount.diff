@@ -1,5 +1,5 @@
---- a/sbin/mount/mount.c
-+++ b/sbin/mount/mount.c
+--- a/src/sbin/mount/mount.c
++++ b/src/sbin/mount/mount.c
 @@ -662,11 +662,13 @@
  			(void)printf(", reads: sync %ju async %ju",
  			    (uintmax_t)sfp->f_syncreads,

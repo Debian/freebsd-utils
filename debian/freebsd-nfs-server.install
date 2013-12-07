@@ -1,2 +1,2 @@
-usr.sbin/mountd/mountd			/usr/sbin
-usr.sbin/nfsd/nfsd			/usr/sbin
+usr/sbin/mountd			/usr/sbin
+usr/sbin/nfsd			/usr/sbin

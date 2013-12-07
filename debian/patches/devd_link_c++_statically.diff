@@ -1,5 +1,5 @@
---- a/sbin/devd/Makefile
-+++ b/sbin/devd/Makefile
+--- a/src/sbin/devd/Makefile
++++ b/src/sbin/devd/Makefile
 @@ -11,6 +11,18 @@
  DPADD=	${LIBL} ${LIBUTIL}
  LDADD=	-ll -lutil

@@ -1,2 +1,2 @@
-usr.sbin/ppp/README.changes
-usr.sbin/ppp/README.nat
+src/usr.sbin/ppp/README.changes
+src/usr.sbin/ppp/README.nat

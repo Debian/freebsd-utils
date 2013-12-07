@@ -1,8 +1,8 @@
 
 From HEAD (SVN rev 253372)
 
---- a/sbin/mount/mount.c
-+++ b/sbin/mount/mount.c
+--- a/src/sbin/mount/mount.c
++++ b/src/sbin/mount/mount.c
 @@ -252,7 +252,7 @@
  	options = NULL;
  	vfslist = NULL;
@@ -22,8 +22,8 @@ From HEAD (SVN rev 253372)
  		case 'o':
  			if (*optarg) {
  				options = catopt(options, optarg);
---- a/sbin/mount/mount.8
-+++ b/sbin/mount/mount.8
+--- a/src/sbin/mount/mount.8
++++ b/src/sbin/mount/mount.8
 @@ -111,6 +111,9 @@
  .Fl a
  option, also mount those file systems which are marked as

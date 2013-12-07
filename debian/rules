@@ -2,13 +2,15 @@
 # Sample debian/rules that uses cdbs.  Originaly written by Robert Millan.
 # This file is public domain.
 
+export SHELL = bash
+
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
 CFLAGS = -Wall -g -pipe -fPIC -D_GNU_SOURCE \
 	-isystem /usr/include/tirpc \
 	-Werror=implicit-function-declaration \
-	-isystem /usr/include/freebsd -I$(CURDIR)/debian/local/include -I$(CURDIR)/include -lbsd \
+	-isystem /usr/include/freebsd -I$(CURDIR)/debian/local/include -I$(CURDIR)/src/include -lbsd \
 	$(NULL)
 CXXFLAGS = $(CFLAGS)
 
@@ -27,10 +29,11 @@ version		:= $(shell echo $(full_version) | sed -e 's/[~+-].*//g')
 major           := $(shell echo $(version) | sed -e 's/\..*//g')
 revision	:= $(shell echo $(full_version) | sed -e 's/^[^+-]*//g')
 
-SVN		:= https://svn0.us-west.freebsd.org/base/release/$(version).0
-#SVN		:= https://svn0.us-west.freebsd.org/base/releng/$(version)
-#SVN		:= https://svn0.us-west.freebsd.org/base/stable/$(major)
-#SVN		:= https://svn0.us-west.freebsd.org/base/head
+SVN_BASE	:= https://svn0.us-west.freebsd.org/base
+SVN		:= $(SVN_BASE)/release/$(version).0
+#SVN		:= $(SVN_BASE)/releng/$(version)
+#SVN		:= $(SVN_BASE)/stable/$(major)
+#SVN		:= $(SVN_BASE)/base/head
 
 SOURCE = freebsd-utils
 ORIGDIR = $(SOURCE)-$(tar_version)
@@ -38,13 +41,28 @@ TARNAME = $(SOURCE)_$(tar_version).orig.tar.gz
 
 PATH := /usr/lib/freebsd:$(PATH)
 DESTDIR = $(CURDIR)/debian/tmp
-PMAKE = COPTS="$(CFLAGS)" CFLAGS="$(CFLAGS)" \
-        NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
-        DESTDIR=$(DESTDIR) make
+PMAKE = \
+	MAKEOBJDIRPREFIX=$(CURDIR)/obj-deb \
+	CFLAGS="$(CFLAGS)" \
+	NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
+	DESTDIR="$(DESTDIR)" \
+	make -C src $(PMAKE_FLAGS)
+PMAKE_UDEB = \
+	MAKEOBJDIRPREFIX=$(CURDIR)/obj-udeb \
+	CFLAGS="$(CFLAGS) -Os" \
+	NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
+	DESTDIR="$(DESTDIR)-udeb" \
+	make -C src $(PMAKE_FLAGS) -DRESCUE=yes -DWITHOUT_JAIL
 
-RPCHDRS=include/rpcsvc/nfs_prot.h include/rpcsvc/nlm_prot.h \
-	include/rpcsvc/mount.h include/rpcsvc/sm_inter.h \
-	sys/kgssapi/gssd.h
+# for ppp
+PMAKE_FLAGS += -DPPP_NO_PAM -DPPP_NO_NAT -DPPP_NO_DES -DPPP_NO_SUID -DPPP_NO_ATM -DPPP_NO_RADIUS
+
+RPCHDRS= \
+	src/include/rpcsvc/nfs_prot.h \
+	src/include/rpcsvc/nlm_prot.h \
+	src/include/rpcsvc/mount.h \
+	src/include/rpcsvc/sm_inter.h \
+	src/sys/kgssapi/gssd.h
 
 .SUFFIXES: .x .h
 
@@ -56,14 +74,21 @@ build: build-arch build-indep
 get-orig-source:
 	rm -rf $(ORIGDIR)
 	mkdir -p \
-		$(ORIGDIR)/sys/kern \
-		$(ORIGDIR)/sys/amd64/linux32 \
-		$(ORIGDIR)/sys/i386/linux \
-		$(ORIGDIR)/sys/dev/usb \
-		$(ORIGDIR)/etc \
-		$(ORIGDIR)/include/rpcsvc \
-		$(ORIGDIR)/sys/kgssapi
+		$(ORIGDIR)/src/sys/kern \
+		$(ORIGDIR)/src/sys/amd64/linux32 \
+		$(ORIGDIR)/src/sys/i386/linux \
+		$(ORIGDIR)/src/sys/dev/usb \
+		$(ORIGDIR)/src/sys/kgssapi \
+		$(ORIGDIR)/src/etc \
+		$(ORIGDIR)/src/include/rpcsvc \
+		$(ORIGDIR)/src/{bin,sbin,usr.bin,usr.sbin} \
+		$(NULL)
 	for i in sbin/dmesg sbin/sysctl \
+		\
+		bin/Makefile.inc \
+		sbin/Makefile.inc \
+		usr.bin/Makefile.inc \
+		usr.sbin/Makefile.inc \
 		\
 		usr.bin/kdump \
 		usr.bin/ktrace \
@@ -75,6 +100,7 @@ get-orig-source:
 		 usr.sbin/jail bin/chflags \
 		 sbin/devd etc/devd.conf etc/devd sys/dev/usb/usbdevs \
 		 usr.sbin/acpi/acpiconf \
+		usr.sbin/acpi/Makefile \
 		usr.sbin/acpi/Makefile.inc \
 		sys/contrib/dev/acpica/include \
 		 sbin/kldconfig sbin/kldload sbin/kldstat sbin/kldunload \
@@ -104,189 +130,32 @@ get-orig-source:
 		 usr.bin/showmount \
 		 usr.sbin/powerd \
 	; do \
-	    svn export $(SVN)/$$i $(ORIGDIR)/$$i || exit ; \
+	    svn export $(SVN)/$$i $(ORIGDIR)/src/$$i || exit ; \
 	done
 	tar --numeric-owner --owner 0 --group 0 -czf ../$(TARNAME) $(ORIGDIR)
 	rm -rf $(ORIGDIR)
 
-build-arch: freebsd-utils gbde kbdcontrol vidcontrol kldutils freebsd-net-tools freebsd-nfs-utils freebsd-ppp powerd
+build-arch: build-deb build-udeb
+build-indep:
+	:
 
-freebsd-utils: freebsd-utils-stamp
-freebsd-utils-stamp: $(RPCHDRS)
-#	$(PMAKE) -C bin/chflags
-	$(PMAKE) -C bin/kenv
-	$(PMAKE) -C sbin/atacontrol
-	$(PMAKE) -C sbin/camcontrol
-	$(PMAKE) -C sbin/ccdconfig
-	$(PMAKE) -C sbin/devd
-	$(PMAKE) -C etc/devd
-	$(PMAKE) -C sbin/devfs
-	$(PMAKE) -C sbin/dmesg
-	$(PMAKE) -C sbin/dumpon
-	$(PMAKE) -C sbin/geom
-	$(PMAKE) -C sbin/mdconfig
-	$(PMAKE) -C sbin/mount
-	$(PMAKE) -C sbin/mount_cd9660
-	$(PMAKE) -C sbin/mount_ext2fs
-	$(PMAKE) -C sbin/mount_hpfs
-	$(PMAKE) -C sbin/mount_msdosfs
-#	$(PMAKE) -C sbin/mount_nfs
-	$(PMAKE) -C sbin/mount_ntfs
-	$(PMAKE) -C sbin/mount_nullfs
-	$(PMAKE) -C sbin/mount_reiserfs
-	$(PMAKE) -C sbin/mount_udf
-	$(PMAKE) -C sbin/mount_unionfs
-	$(PMAKE) -C sbin/mount_std
-	$(PMAKE) -C sbin/savecore
-	$(PMAKE) -C sbin/swapon
-	$(PMAKE) -C sbin/sysctl
-	$(PMAKE) -C sbin/umount
-	$(PMAKE) -C usr.bin/kdump
-	$(PMAKE) -C usr.bin/ktrace
-	$(PMAKE) -C usr.bin/mkuzip
-	$(PMAKE) -C usr.sbin/acpi/acpiconf
-	$(PMAKE) -C usr.sbin/rpc.umntall
-	$(PMAKE) -C usr.sbin/jail
+build-deb: build-deb-stamp
+build-deb-stamp:$(RPCHDRS)
+	$(PMAKE) obj
+	$(PMAKE)
 	touch $@
 
-gbde: gbde-stamp
-gbde-stamp:
-#	$(PMAKE) -C sbin/gbde
-	touch $@
-
-kbdcontrol: kbdcontrol-stamp
-kbdcontrol-stamp:
-	$(PMAKE) -C usr.sbin/kbdcontrol
-	touch $@
-
-vidcontrol: vidcontrol-stamp
-vidcontrol-stamp:
-	$(PMAKE) -C usr.sbin/vidcontrol
-	$(PMAKE) -C share/syscons/scrnmaps
-	touch $@
-
-kldutils: kldutils-stamp
-kldutils-stamp:
-	$(PMAKE) -C sbin/kldconfig
-	$(PMAKE) -C sbin/kldload
-	$(PMAKE) -C sbin/kldstat
-	$(PMAKE) -C sbin/kldunload
-	touch $@
-
-freebsd-net-tools: freebsd-net-tools-stamp
-freebsd-net-tools-stamp:
-	$(PMAKE) -C sbin/ifconfig -DWITHOUT_JAIL
-	$(PMAKE) -C sbin/pfctl
-	$(PMAKE) -C sbin/route
-	$(PMAKE) -C usr.bin/netstat
-	$(PMAKE) -C usr.sbin/arp
-	$(PMAKE) -C usr.sbin/authpf
-	touch $@
-
-freebsd-ppp: freebsd-ppp-stamp
-freebsd-ppp-stamp:
-	$(PMAKE) -C usr.sbin/ppp -DPPP_NO_PAM -DPPP_NO_NAT -DPPP_NO_DES -DPPP_NO_SUID -DPPP_NO_ATM -DPPP_NO_RADIUS
-	$(PMAKE) -C usr.sbin/pppctl
-	touch $@
-
-freebsd-nfs-utils: freebsd-nfs-utils-stamp
-freebsd-nfs-utils-stamp:
-#	$(PMAKE) -C usr.bin/showmount
-	$(PMAKE) -C sbin/mount_nfs
-	$(PMAKE) -C sbin/nfsiod
-#	$(PMAKE) -C usr.sbin/gssd
-#	$(PMAKE) -C usr.sbin/nfscbd
-#	$(PMAKE) -C usr.sbin/nfsuserd
-#	$(PMAKE) -C usr.sbin/nfsrevoke
-#	$(PMAKE) -C usr.sbin/nfsdumpstate
-	$(PMAKE) -C usr.sbin/rpc.statd
-	$(PMAKE) -C usr.sbin/rpc.lockd
-	$(PMAKE) -C usr.sbin/mountd
-	$(PMAKE) -C usr.sbin/nfsd
-	touch $@
-
-powerd: powerd-stamp
-powerd-stamp:
-	$(PMAKE) -C usr.sbin/powerd
-	touch $@
-
-build-indep: build-indep-stamp
-build-indep-stamp:
+build-udeb: build-udeb-stamp
+build-udeb-stamp:
+	$(PMAKE_UDEB) obj
+	$(PMAKE_UDEB)
 	touch $@
 
 clean:
 	dh_testdir
 	dh_testroot
 
-	[ ! -f lib/Makefile ] || $(MAKE) -C lib clean
-
-	$(PMAKE) -C bin/chflags clean
-	$(PMAKE) -C bin/kenv clean
-	$(PMAKE) -C sbin/ccdconfig clean
-	$(PMAKE) -C sbin/atacontrol clean
-	$(PMAKE) -C sbin/camcontrol clean
-	$(PMAKE) -C sbin/devd clean
-	$(PMAKE) -C etc/devd clean
-	$(PMAKE) -C sbin/devfs clean
-	$(PMAKE) -C sbin/dmesg clean
-	$(PMAKE) -C sbin/dumpon clean
-	$(PMAKE) -C sbin/geom clean
-	$(PMAKE) -C sbin/mdconfig clean
-	$(PMAKE) -C sbin/mount clean
-	$(PMAKE) -C sbin/mount_cd9660 clean
-	$(PMAKE) -C sbin/mount_ext2fs clean
-	$(PMAKE) -C sbin/mount_hpfs clean
-	$(PMAKE) -C sbin/mount_msdosfs clean
-	$(PMAKE) -C sbin/mount_nfs clean
-	$(PMAKE) -C sbin/mount_ntfs clean
-	$(PMAKE) -C sbin/mount_nullfs clean
-	$(PMAKE) -C sbin/mount_reiserfs clean
-	$(PMAKE) -C sbin/mount_udf clean
-	$(PMAKE) -C sbin/mount_unionfs clean
-	$(PMAKE) -C sbin/mount_std clean
-	$(PMAKE) -C sbin/savecore clean
-	$(PMAKE) -C sbin/swapon clean
-	$(PMAKE) -C sbin/sysctl  clean
-	$(PMAKE) -C sbin/umount clean
-	$(PMAKE) -C usr.bin/kdump clean
-	$(PMAKE) -C usr.bin/ktrace clean
-	$(PMAKE) -C usr.bin/mkuzip clean
-	$(PMAKE) -C usr.sbin/acpi/acpiconf clean
-	$(PMAKE) -C usr.sbin/rpc.umntall clean
-	$(PMAKE) -C usr.sbin/jail clean
-
-	$(PMAKE) -C sbin/gbde clean
-
-	$(PMAKE) -C usr.sbin/kbdcontrol clean
-
-	$(PMAKE) -C usr.sbin/vidcontrol clean
-	$(PMAKE) -C share/syscons/scrnmaps clean
-
-	$(PMAKE) -C sbin/kldconfig clean
-	$(PMAKE) -C sbin/kldload clean
-	$(PMAKE) -C sbin/kldstat clean
-	$(PMAKE) -C sbin/kldunload clean
-
-	$(PMAKE) -C sbin/ifconfig clean
-	$(PMAKE) -C sbin/pfctl clean
-	$(PMAKE) -C sbin/route clean
-	$(PMAKE) -C usr.bin/netstat clean
-	$(PMAKE) -C usr.sbin/arp clean
-	$(PMAKE) -C usr.sbin/authpf clean
-	$(PMAKE) -C usr.sbin/ppp clean
-	$(PMAKE) -C usr.sbin/pppctl clean
-
-	$(PMAKE) -C sbin/nfsiod clean
-	$(PMAKE) -C usr.sbin/gssd clean
-	$(PMAKE) -C usr.sbin/nfscbd clean
-	$(PMAKE) -C usr.sbin/nfsuserd clean
-	$(PMAKE) -C usr.sbin/nfsrevoke clean
-	$(PMAKE) -C usr.sbin/nfsdumpstate clean
-	$(PMAKE) -C usr.sbin/rpc.statd clean
-	$(PMAKE) -C usr.sbin/rpc.lockd clean
-	$(PMAKE) -C usr.sbin/mountd clean
-	$(PMAKE) -C usr.sbin/nfsd clean
-	$(PMAKE) -C usr.sbin/powerd clean
+	rm -rf obj{-deb,-udeb} debian/tmp-udeb
 
 	$(RM) $(RPCHDRS)
 
@@ -301,9 +170,15 @@ install-arch:
 	dh_testroot
 	dh_prep -a
 	dh_installdirs -a
+
+	rm -rf debian/tmp-udeb
+
+	mkdir -p debian/tmp{,-udeb}/{{,usr/}{bin,sbin},usr/share/man/man{1,5,8},lib/geom,etc/devd,usr/share/syscons/scrnmaps}
+
+	$(PMAKE) install
+	$(PMAKE_UDEB) install
+
 	dh_install -a
-	mkdir -p debian/freebsd-net-tools/usr/bin
-	install -m 2755 -g kmem usr.bin/netstat/netstat debian/freebsd-net-tools/usr/bin/
 
 # Build architecture-independent files here.
 binary-indep: build install

@@ -1,2 +1,2 @@
-sbin/devd/devd.8
-sbin/devd/devd.conf.5
+src/sbin/devd/devd.8
+src/sbin/devd/devd.conf.5

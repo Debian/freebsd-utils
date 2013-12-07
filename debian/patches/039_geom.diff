@@ -1,5 +1,5 @@
---- a/sbin/geom/misc/subr.c
-+++ b/sbin/geom/misc/subr.c
+--- a/src/sbin/geom/misc/subr.c
++++ b/src/sbin/geom/misc/subr.c
 @@ -177,7 +177,7 @@
  	if (*s != '\0')
  		return (EINVAL);
@@ -9,8 +9,8 @@
  		return (ERANGE);
  	number *= mult * unit;
  	if (number % sectorsize)
---- a/sys/crypto/sha2/sha2.c
-+++ b/sys/crypto/sha2/sha2.c
+--- a/src/sys/crypto/sha2/sha2.c
++++ b/src/sys/crypto/sha2/sha2.c
 @@ -67,8 +67,10 @@
   *
   */

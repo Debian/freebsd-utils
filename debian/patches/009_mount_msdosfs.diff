@@ -2,8 +2,8 @@
  sbin/mount_msdosfs/mount_msdosfs.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sbin/mount_msdosfs/mount_msdosfs.c
-+++ b/sbin/mount_msdosfs/mount_msdosfs.c
+--- a/src/sbin/mount_msdosfs/mount_msdosfs.c
++++ b/src/sbin/mount_msdosfs/mount_msdosfs.c
 @@ -49,7 +49,7 @@
  #include <pwd.h>
  #include <stdio.h>
