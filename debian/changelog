@@ -5,6 +5,7 @@ freebsd-utils (9.2+ds1-1) UNRELEASED; urgency=low
   * Split udeb build from normal build, using a separate objdir by means
     of MAKEOBJDIRPREFIX. This allows us to:
     - Optimize udeb build for size (-Os).
+    - Build udeb with -DWITHOUT_IPX_SUPPORT (for ifconfig).
     - Restrict -DWITHOUT_JAIL only to udeb build. This effectively brings
       back jail support to ifconfig.
     - As a side requirement, source code is moved to src/ directory to
