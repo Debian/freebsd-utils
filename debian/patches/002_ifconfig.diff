@@ -1,14 +1,3 @@
---- a/src/sbin/ifconfig/Makefile
-+++ b/src/sbin/ifconfig/Makefile
-@@ -36,7 +36,7 @@
- 
- SRCS+=	ifieee80211.c regdomain.c # SIOC[GS]IEEE80211 support
- DPADD+=	${LIBBSDXML} ${LIBSBUF}
--LDADD+=	-lbsdxml -lsbuf
-+LDADD+=	-lexpat -lsbuf -lbsd -lfreebsd-glue
- 
- SRCS+=	ifcarp.c		# SIOC[GS]VH support
- SRCS+=	ifgroup.c		# ...
 --- a/src/sbin/ifconfig/ifconfig.c
 +++ b/src/sbin/ifconfig/ifconfig.c
 @@ -76,6 +76,13 @@

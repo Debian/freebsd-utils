@@ -1,3 +1,14 @@
+--- a/src/sbin/ifconfig/Makefile
++++ b/src/sbin/ifconfig/Makefile
+@@ -38,6 +38,8 @@
+ DPADD+=	${LIBBSDXML} ${LIBSBUF}
+ LDADD+=	-lbsdxml -lsbuf
+ 
++LDADD+= -lbsd -lfreebsd-glue
++
+ SRCS+=	ifcarp.c		# SIOC[GS]VH support
+ SRCS+=	ifgroup.c		# ...
+ SRCS+=	ifpfsync.c		# pfsync(4) support
 --- a/src/usr.sbin/ppp/Makefile
 +++ b/src/usr.sbin/ppp/Makefile
 @@ -38,10 +38,10 @@
