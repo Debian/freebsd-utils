@@ -12,6 +12,8 @@ freebsd-utils (9.2+ds1-1) UNRELEASED; urgency=low
       prevent dh_install from mistakenly installing source directories as
       if they were executable files.
   * Leave -lbsdxml untouched (latest freebsd-glue supports it).
+  * netstat_numeric_default.diff: Honor -n flag when listing the default
+    route (for compatibility with Linux route(8)).
 
  -- Robert Millan <rmh@debian.org>  Sun, 01 Dec 2013 20:31:39 +0100
 

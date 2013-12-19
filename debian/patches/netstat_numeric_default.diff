@@ -1,0 +1,23 @@
+
+Do not hardcode "default". Instead, let netname() handle this. This makes
+"netstat -n" a print numeric address as requested.
+
+Note: it relies on /etc/networks defining "default", which FreeBSD's
+currently doesn't.
+
+--- a/src/usr.bin/netstat/route.c
++++ b/src/usr.bin/netstat/route.c
+@@ -616,12 +616,7 @@
+ 	    {
+ 		struct sockaddr_in *sockin = (struct sockaddr_in *)sa;
+ 
+-		if ((sockin->sin_addr.s_addr == INADDR_ANY) &&
+-			mask &&
+-			ntohl(((struct sockaddr_in *)mask)->sin_addr.s_addr)
+-				==0L)
+-				cp = "default" ;
+-		else if (flags & RTF_HOST)
++		if (flags & RTF_HOST)
+ 			cp = routename(sockin->sin_addr.s_addr);
+ 		else if (mask)
+ 			cp = netname(sockin->sin_addr.s_addr,
