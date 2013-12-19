@@ -9,7 +9,7 @@
  		switch(ch) {
  		case 'n':
  			nflag = 1;
-@@ -243,6 +243,11 @@
+@@ -247,6 +249,11 @@
  
  	if (fib < 0)
  		return (0);
