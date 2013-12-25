@@ -1,3 +1,14 @@
+--- a/src/usr.sbin/acpi/Makefile
++++ b/src/usr.sbin/acpi/Makefile
+@@ -2,6 +2,7 @@
+ # $Id: Makefile,v 1.1 2000/07/14 18:16:22 iwasaki Exp $
+ # $FreeBSD$
+ 
+-SUBDIR= acpiconf acpidb acpidump iasl
++SUBDIR= acpiconf
++# acpidb acpidump iasl
+ 
+ .include <bsd.subdir.mk>
 --- a/src/sbin/ifconfig/Makefile
 +++ b/src/sbin/ifconfig/Makefile
 @@ -38,6 +38,8 @@
