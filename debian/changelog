@@ -1,4 +1,4 @@
-freebsd-utils (9.2+ds1-1) UNRELEASED; urgency=low
+freebsd-utils (9.2+ds1-1) unstable; urgency=low
 
   * Drop freebsd-geom transitional package.
   * Fetch source code securely (https) in get-orig-source.
@@ -18,7 +18,7 @@ freebsd-utils (9.2+ds1-1) UNRELEASED; urgency=low
     to "netstat -r" to list existing routes (for compatibility with
     Linux route(8)).
 
- -- Robert Millan <rmh@debian.org>  Sun, 01 Dec 2013 20:31:39 +0100
+ -- Robert Millan <rmh@debian.org>  Wed, 25 Dec 2013 18:46:00 +0100
 
 freebsd-utils (9.2-2) unstable; urgency=low
 
