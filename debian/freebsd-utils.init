@@ -15,6 +15,9 @@ PATH=/sbin:/bin
 
 . /lib/lsb/init-functions
 
+# Comment this out for sysctl to print every item changed
+QUIET_SYSCTL="-q"
+
 case "$1" in
   start)
     if [ "$(readlink /etc/mtab)" != "/proc/mounts" ] ; then
@@ -64,6 +67,19 @@ case "$1" in
       mount -t fdescfs fdescfs /dev/fd
     fi
     log_action_end_msg 0
+
+	log_action_begin_msg "Setting kernel variables "
+	STATUS=0
+	for file in /etc/sysctl.conf ; do
+		if [ -r "$file" ] ; then
+			if [ "$VERBOSE" = "yes" ] ; then
+				log_action_cont_msg " $file"
+			fi
+			sysctl $QUIET_SYSCTL -p "$file" || STATUS=$?
+		fi
+	done
+	log_action_end_msg $STATUS
+
     ;;
 
   stop|reload|restart|force-reload)

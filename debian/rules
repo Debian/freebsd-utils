@@ -87,7 +87,8 @@ get-orig-source:
 		$(ORIGDIR)/src/include/rpcsvc \
 		$(ORIGDIR)/src/{bin,sbin,usr.bin,usr.sbin} \
 		$(NULL)
-	for i in sbin/dmesg sbin/sysctl \
+	for i in sbin/dmesg \
+		sbin/sysctl etc/sysctl.conf \
 		\
 		bin/Makefile.inc \
 		sbin/Makefile.inc \

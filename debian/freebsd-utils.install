@@ -3,6 +3,7 @@ bin/kenv				/bin
 sbin/mount				/bin
 sbin/umount				/lib/freebsd
 sbin/sysctl				/lib/freebsd
+src/etc/sysctl.conf			/etc
 
 debian/local/devfs.d/*			/etc/devfs.d
 debian/local/scripts/bin/sysctl		/sbin
