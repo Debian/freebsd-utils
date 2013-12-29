@@ -3,6 +3,7 @@ freebsd-utils (9.2+ds2-1) UNRELEASED; urgency=low
   * Add /etc/sysctl.conf. It used to be provided by procps, but now it
     isn't. Its content is kernel-specific anyway, so let's just use the
     FreeBSD version.
+  * Correctly setup BSD version of MAKEFLAGS to support parallel builds.
 
  -- Robert Millan <rmh@debian.org>  Fri, 27 Dec 2013 13:59:57 +0100
 

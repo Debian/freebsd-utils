@@ -22,6 +22,13 @@ else
 	CXXFLAGS += -O2
 endif
 
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+	NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+
+	# Do not mess with MAKEFLAGS until we transfer control to BSD make (see below)
+	BSD_MAKEFLAGS += -j$(NUMJOBS)
+endif
+
 full_version	:= $(shell dpkg-parsechangelog | grep ^Version: | sed -e 's/^.*: //g')
 tar_version	:= $(shell echo $(full_version) | sed -e 's/-.*//g')
 svn_revision	:= $(shell echo $(full_version) | sed -e 's/.*~svn\([0-9]*\)-[0-9]*/\1/g')
@@ -42,12 +49,14 @@ TARNAME = $(SOURCE)_$(tar_version).orig.tar.gz
 PATH := /usr/lib/freebsd:$(PATH)
 DESTDIR = $(CURDIR)/debian/tmp
 PMAKE = \
+	MAKEFLAGS=$(BSD_MAKEFLAGS) \
 	MAKEOBJDIRPREFIX=$(CURDIR)/obj-deb \
 	CFLAGS="$(CFLAGS)" \
 	NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
 	DESTDIR="$(DESTDIR)" \
 	make -C src $(PMAKE_FLAGS)
 PMAKE_UDEB = \
+	MAKEFLAGS=$(BSD_MAKEFLAGS) \
 	MAKEOBJDIRPREFIX=$(CURDIR)/obj-udeb \
 	CFLAGS="$(CFLAGS) -Os" \
 	NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
