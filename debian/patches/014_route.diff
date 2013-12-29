@@ -1,6 +1,6 @@
 --- a/src/sbin/route/route.c
 +++ b/src/sbin/route/route.c
-@@ -167,7 +167,7 @@
+@@ -174,7 +174,7 @@
  	if (argc < 2)
  		usage(NULL);
  
@@ -9,7 +9,7 @@
  		switch(ch) {
  		case 'n':
  			nflag = 1;
-@@ -247,6 +249,11 @@
+@@ -250,6 +250,11 @@
  
  	if (fib < 0)
  		return (0);
