@@ -1,59 +1,19 @@
 --- a/src/contrib/pf/authpf/authpf.c
 +++ b/src/contrib/pf/authpf/authpf.c
-@@ -37,7 +37,7 @@
- #if 1
- #include <inttypes.h>
- #endif
--#include <login_cap.h>
-+//#include <login_cap.h>
- #include <pwd.h>
- #include <grp.h>
- #include <signal.h>
-@@ -99,7 +99,6 @@
- 	gid_t		 gid;
- 	uid_t		 uid;
- 	const char	*shell;
--	login_cap_t	*lc;
- 
- 	if (strcmp(__progname, "-authpf-noip") == 0)
-                 user_ip = 0;
-@@ -150,35 +149,19 @@
+@@ -149,10 +149,12 @@
  		goto die;
  	}
  
--	if ((lc = login_getclass(pw->pw_class)) != NULL)
--		shell = login_getcapstr(lc, "shell", pw->pw_shell,
--		    pw->pw_shell);
--	else
++#if 0 /* we don't have pw_class */
+ 	if ((lc = login_getclass(pw->pw_class)) != NULL)
+ 		shell = login_getcapstr(lc, "shell", pw->pw_shell,
+ 		    pw->pw_shell);
+ 	else
++#endif
  		shell = pw->pw_shell;
  
--#ifndef __FreeBSD__
--	login_close(lc);
--#endif
--
- 	if (strcmp(shell, PATH_AUTHPF_SHELL) && 
- 	    strcmp(shell, PATH_AUTHPF_SHELL_NOIP)) {
- 		syslog(LOG_ERR, "wrong shell for user %s, uid %u",
- 		    pw->pw_name, pw->pw_uid);
--#ifdef __FreeBSD__
--	login_close(lc);
--#else
- 		if (shell != pw->pw_shell)
- 			free(shell);
--#endif
- 		goto die;
- 	}
- 
--#ifdef __FreeBSD__
--	login_close(lc);
--#else
- 	if (shell != pw->pw_shell)
- 		free(shell);
--#endif
- 
- 	/*
- 	 * Paranoia, but this data _does_ come from outside authpf, and
-@@ -521,9 +504,6 @@
+ #if 0
+@@ -520,9 +522,6 @@
  			}
  
  			if (buf[0] == '@') {
@@ -65,7 +25,7 @@
  				int cnt; 
 --- a/src/contrib/pf/ftp-proxy/ftp-proxy.c
 +++ b/src/contrib/pf/ftp-proxy/ftp-proxy.c
-@@ -104,7 +104,7 @@
+@@ -103,7 +103,7 @@
  int	drop_privs(void);
  void	end_session(struct session *);
  void	exit_daemon(void);
@@ -74,7 +34,7 @@
  void	handle_connection(const int, short, void *);
  void	handle_signal(int, short, void *);
  struct session * init_session(void);
-@@ -250,7 +250,7 @@
+@@ -249,7 +249,7 @@
  		    buf_avail);
  		s->cbuf_valid += clientread;
  
@@ -83,7 +43,7 @@
  			logmsg(LOG_DEBUG, "#%d client: %s", s->id, linebuf);
  			if (!client_parse(s)) {
  				end_session(s);
-@@ -344,7 +344,7 @@
+@@ -343,7 +343,7 @@
  }
  
  int
@@ -92,7 +52,7 @@
  {
  	size_t i;
  
-@@ -1088,7 +1088,7 @@
+@@ -1087,7 +1087,7 @@
  		    buf_avail);
  		s->sbuf_valid += srvread;
  
@@ -101,59 +61,22 @@
  			logmsg(LOG_DEBUG, "#%d server: %s", s->id, linebuf);
  			if (!server_parse(s)) {
  				end_session(s);
---- a/src/contrib/pf/pfctl/parse.y
-+++ b/src/contrib/pf/pfctl/parse.y
-@@ -427,6 +427,7 @@
- 	} v;
- 	int lineno;
- } YYSTYPE;
-+#define YYSTYPE_IS_DECLARED 1
+--- a/src/sbin/pfctl/pfctl_parser.h
++++ b/src/sbin/pfctl/pfctl_parser.h
+@@ -159,6 +159,8 @@
+ 	}			 data;
+ };
  
- #define PPORT_RANGE	1
- #define PPORT_STAR	2
---- a/src/contrib/pf/pfctl/pfctl.h
-+++ b/src/contrib/pf/pfctl/pfctl.h
-@@ -36,6 +36,12 @@
- 
- enum pfctl_show { PFCTL_SHOW_RULES, PFCTL_SHOW_LABELS, PFCTL_SHOW_NOTHING };
- 
-+#include <string.h>
-+#include <stdlib.h>
-+#define __BSD_VISIBLE 1
-+#define __XSI_VISIBLE 1
-+#include <sys/limits.h>
++#define	SIMPLEQ_END(head)		NULL
 +
- enum {	PFRB_TABLES = 1, PFRB_TSTATS, PFRB_ADDRS, PFRB_ASTATS,
- 	PFRB_IFACES, PFRB_TRANS, PFRB_MAX };
- struct pfr_buffer {
---- a/src/contrib/pf/pfctl/pfctl_parser.c
-+++ b/src/contrib/pf/pfctl/pfctl_parser.c
-@@ -59,6 +59,28 @@
- #include <ifaddrs.h>
- #include <unistd.h>
- 
-+
-+
-+/* RFC2292 decls */
-+#define ICMP6_MEMBERSHIP_QUERY          130     /* group membership query */
-+#define ICMP6_MEMBERSHIP_REPORT         131     /* group membership report */
-+#define ICMP6_MEMBERSHIP_REDUCTION      132     /* group membership termination */
-+#define ICMP6_DST_UNREACH_NOTNEIGHBOR 2 /* not a neighbor(obsolete) */
-+#define MLD_LISTENER_QUERY              130     /* multicast listener query */
-+#define MLD_LISTENER_REPORT             131     /* multicast listener report */
-+#define MLD_LISTENER_DONE               132     /* multicast listener done */
-+#define ICMP6_ROUTER_RENUMBERING        138     /* router renumbering */
-+#define ICMP6_WRUREQUEST                139     /* who are you request */
-+#define ICMP6_WRUREPLY                  140     /* who are you reply */
-+#define ICMP6_FQDN_QUERY                139     /* FQDN query */
-+#define ICMP6_FQDN_REPLY                140     /* FQDN reply */
-+#define ICMP6_NI_QUERY                  139     /* node information request */
-+#define ICMP6_NI_REPLY                  140     /* node information reply */
-+#define MLD_MTRACE_RESP                 200     /* mtrace resp (to sender) */
-+#define MLD_MTRACE                      201     /* mtrace messages */
-+#define ICMP6_DST_UNREACH_BEYONDSCOPE   2       /* beyond scope of source address */
-+#define ND_REDIRECT_ONLINK      0       /* redirect to an on-link node */
-+#define ND_REDIRECT_ROUTER      1       /* redirect to a better router */
- #include "pfctl_parser.h"
- #include "pfctl.h"
- 
+ #ifdef __FreeBSD__
+ /*
+  * XXX
+@@ -169,7 +171,6 @@
+ #define	SIMPLEQ_HEAD_INITIALIZER	STAILQ_HEAD_INITIALIZER
+ #define	SIMPLEQ_ENTRY			STAILQ_ENTRY
+ #define	SIMPLEQ_FIRST			STAILQ_FIRST
+-#define	SIMPLEQ_END(head)		NULL
+ #define	SIMPLEQ_EMPTY			STAILQ_EMPTY
+ #define	SIMPLEQ_NEXT			STAILQ_NEXT
+ /*#define	SIMPLEQ_FOREACH			STAILQ_FOREACH*/

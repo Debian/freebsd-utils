@@ -1,16 +1,3 @@
---- a/src/sbin/devd/parse.y
-+++ b/src/sbin/devd/parse.y
-@@ -29,9 +29,9 @@
-  * $FreeBSD$
-  */
- 
--#include "devd.h"
- #include <stdio.h>
- #include <string.h>
-+#include "devd.h"
- 
- %}
- 
 --- a/src/etc/devd.conf
 +++ b/src/etc/devd.conf
 @@ -1,8 +1,5 @@
@@ -30,7 +17,7 @@
  	pid-file "/var/run/devd.pid";
  
  	# Setup some shorthand for regex that we use later in the file.
-@@ -27,144 +23,6 @@
+@@ -27,112 +23,6 @@
  # Note that the attach/detach with the highest value wins, so that one can
  # override these general rules.
  
@@ -41,7 +28,7 @@
 -# NB: DETACH events are ignored; the kernel should handle all cleanup
 -#     (routes, arp cache).  Beware of races against immediate create
 -#     of a device with the same name; e.g.
--#	ifconfig bridge0 destroy; ifconfig bridge0 create
+-#     ifconfig bridge0 destroy; ifconfig bridge0 create
 -#
 -notify 0 {
 -	match "system"		"IFNET";
@@ -140,42 +127,10 @@
 -	action "/etc/rc.d/moused stop $cdev";
 -};
 -
--# Firmware download into the ActiveWire board. After the firmware download is
--# done, the device detaches and reappears as something new and shiny
--# automatically.
--attach 100 {
--	match "vendor"	"0x0854";
--	match "product"	"0x0100";
--	match "release"	"0x0000";
--	action "/usr/local/bin/ezdownload -f /usr/local/share/usb/firmware/0854.0100.0_01.hex $device-name";
--};
--
--# Firmware download for Entrega Serial DB25 adapter.
--attach 100 {
--	match "vendor"	"0x1645";
--	match "product"	"0x8001";
--	match "release"	"0x0101";
--	action "if ! kldstat -n usio > /dev/null 2>&1 ; then kldload usio; fi; /usr/sbin/ezdownload -v -f /usr/share/usb/firmware/1645.8001.0101 /dev/$device-name";
--};
--
--# This entry starts the ColdSync tool in daemon mode. Make sure you have an up
--# to date /usr/local/etc/palms. We override the 'listen' settings for port and
--# type in /usr/local/etc/coldsync.conf.
--notify 100 {
--	match "system"		"USB";
--	match "subsystem"	"DEVICE";
--	match "type"		"ATTACH";
--	match "vendor"		"0x082d";
--	match "product"		"0x0100";
--	match "release"		"0x0100";
--	action "/usr/local/bin/coldsync -md -p /dev/$cdev -t usb";
--};
--
--#
- # Rescan scsi device-names on attach, but not detach.  However, it is
- # disabled by default due to reports of problems.
- #
-@@ -211,13 +69,6 @@
+ # Firmware download into the ActiveWire board. After the firmware download is
+ # done, the device detaches and reappears as something new and shiny
+ # automatically.
+@@ -211,13 +101,6 @@
  		vendor $vendor bus $bus";
  };
  
@@ -189,7 +144,7 @@
  # Notify all users before beginning emergency shutdown when we get
  # a _CRT or _HOT thermal event and we're going to power down the system
  # very soon.
-@@ -259,19 +110,6 @@
+@@ -259,19 +142,6 @@
  	action "logger -p kern.warn 'ZFS: checksum mismatch, zpool=$pool path=$vdev_path offset=$zio_offset size=$zio_size'";
  };
  

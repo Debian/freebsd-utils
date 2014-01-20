@@ -71,7 +71,7 @@
  #include <sys/module.h>
  #endif
  #include <termios.h>
--#if !defined(__FreeBSD__) || __FreeBSD__ < 3
+-#ifndef __FreeBSD__
 +#ifndef __FreeBSD_kernel__
  #include <time.h>
  #endif
@@ -82,29 +82,7 @@
  #include "id.h"
  #include "log.h"
  #endif
-@@ -56,20 +56,11 @@
- 
- #define	issep(c)	((c) == '\t' || (c) == ' ')
- 
--#if defined(__NetBSD__) || __FreeBSD__ < 3
-+#ifdef __NetBSD__
- void
- randinit()
- {
--#if defined(__FreeBSD__)
--  static int initdone;		/* srandomdev() call is only required once */
--
--  if (!initdone) {
--    initdone = 1;
--    srandomdev();
--  }
--#else
-   srandom((time(NULL)^getpid())+random());
--#endif
- }
- #endif
- 
-@@ -420,7 +411,7 @@
+@@ -411,7 +411,7 @@
    }
  }
  
@@ -124,18 +102,9 @@
  /* Check the following definitions for your machine environment */
 -#ifdef __FreeBSD__
 +#ifdef __FreeBSD_kernel__
- # define  MODEM_LIST	"/dev/cuad1\0/dev/cuad0"	/* name of tty device */
+ # define  MODEM_LIST	"/dev/cuau1\0/dev/cuau0"	/* name of tty device */
  #else
  # ifdef __OpenBSD__
-@@ -117,7 +119,7 @@
- 
- #define ROUNDUP(x) ((x) ? (1 + (((x) - 1) | (sizeof(long) - 1))) : sizeof(long))
- 
--#if defined(__NetBSD__) || __FreeBSD__ < 3
-+#ifdef __NetBSD__
- extern void randinit(void);
- #else
- #define random arc4random
 --- a/src/usr.sbin/ppp/id.c
 +++ b/src/usr.sbin/ppp/id.c
 @@ -40,7 +40,7 @@

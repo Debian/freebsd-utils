@@ -7,20 +7,26 @@ Also see kfreebsd-10/debian/patches/mount_remount.diff
 
 --- a/src/sbin/mount/mount.c
 +++ b/src/sbin/mount/mount.c
-@@ -252,8 +252,11 @@
+@@ -253,7 +253,7 @@
  	options = NULL;
  	vfslist = NULL;
  	vfstype = "ufs";
--	while ((ch = getopt(argc, argv, "adF:flno:prt:uvw")) != -1)
-+	while ((ch = getopt(argc, argv, "adF:flno:prt:uvwO:")) != -1)
+-	while ((ch = getopt(argc, argv, "adF:fLlno:prt:uvw")) != -1)
++	while ((ch = getopt(argc, argv, "adF:fLlno:prt:uvwO:")) != -1)
  		switch (ch) {
-+		case 'O':
-+			/* Compatibility glue. */
-+			break;
  		case 'a':
  			all = 1;
+@@ -277,6 +277,9 @@
+ 		case 'n':
+ 			/* For compatibility with the Linux version of mount. */
  			break;
-@@ -764,6 +767,11 @@
++		case 'O':
++			/* For compatibility with the Linux version of mount. */
++			break;
+ 		case 'o':
+ 			if (*optarg) {
+ 				options = catopt(options, optarg);
+@@ -774,6 +777,11 @@
  			} else if (strncmp(p, groupquotaeq,
  			    sizeof(groupquotaeq) - 1) == 0) {
  				continue;

@@ -52,7 +52,7 @@
  
 --- a/src/usr.sbin/mountd/mountd.c
 +++ b/src/usr.sbin/mountd/mountd.c
-@@ -2118,12 +2118,18 @@
+@@ -2115,12 +2115,18 @@
  
  		if (!strcmp(seclist, "sys"))
  			flavor = AUTH_SYS;

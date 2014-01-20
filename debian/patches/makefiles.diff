@@ -17,7 +17,7 @@
  
 +LDADD+= -lbsd -lfreebsd-glue
 +
- SRCS+=	ifcarp.c		# SIOC[GS]VH support
+ SRCS+=	carp.c			# SIOC[GS]VH support
  SRCS+=	ifgroup.c		# ...
  SRCS+=	ifpfsync.c		# pfsync(4) support
 --- a/src/usr.sbin/ppp/Makefile
@@ -34,7 +34,7 @@
 +LDADD= -lcrypt      -lutil-freebsd -lz
  DPADD=	${LIBCRYPT} ${LIBMD} ${LIBUTIL} ${LIBZ}
  
- .SUFFIXES: .8 .8.m4
+ .if defined(PPP_CONFDIR) && !empty(PPP_CONFDIR)
 --- a/src/usr.sbin/nfsd/Makefile
 +++ b/src/usr.sbin/nfsd/Makefile
 @@ -3,5 +3,7 @@
@@ -92,7 +92,7 @@
  .include <bsd.prog.mk>
 --- a/src/sbin/pfctl/Makefile
 +++ b/src/sbin/pfctl/Makefile
-@@ -22,7 +22,7 @@
+@@ -18,7 +18,7 @@
  
  YFLAGS=
  
@@ -103,7 +103,7 @@
  .include <bsd.prog.mk>
 --- a/src/usr.sbin/authpf/Makefile
 +++ b/src/usr.sbin/authpf/Makefile
-@@ -6,7 +6,7 @@
+@@ -5,7 +5,7 @@
  PROG=	authpf
  MAN=	authpf.8
  BINOWN=	root
@@ -112,12 +112,12 @@
  BINMODE= 6555
  
  SRCS=   authpf.c
-@@ -16,7 +16,7 @@
+@@ -13,7 +13,7 @@
  # XXX ALTQ:
  CFLAGS+= -DENABLE_ALTQ
  
 -LDADD+= -lm -lmd -lutil
-+LDADD+= -lm
++LDADD+= -lm      -lutil-freebsd
  DPADD+= ${LIBM} ${LIBMD} ${LIBUTIL}
  
  WARNS?=	3
@@ -263,15 +263,6 @@
  
  .if ${MK_NETGRAPH_SUPPORT} != "no"
  SRCS+=	netgraph.c
---- a/src/sbin/atacontrol/Makefile
-+++ b/src/sbin/atacontrol/Makefile
-@@ -3,4 +3,6 @@
- PROG=	atacontrol
- MAN=	atacontrol.8
- 
-+LDADD+=	-lfreebsd-glue
-+
- .include <bsd.prog.mk>
 --- a/src/sbin/umount/Makefile
 +++ b/src/sbin/umount/Makefile
 @@ -6,6 +6,8 @@
@@ -287,13 +278,13 @@
 +++ b/src/sbin/route/Makefile
 @@ -9,6 +9,8 @@
  WARNS?=	3
- CLEANFILES+=keywords.h _keywords.tmp
+ CLEANFILES+=keywords.h
  
 +LDADD+=	-lfreebsd-glue
 +
  CFLAGS+= -DNS
- 
- .if ${MK_INET6_SUPPORT} != "no"
+ .if ${MK_INET_SUPPORT} != "no"
+ CFLAGS+= -DINET
 --- a/src/sbin/mount/Makefile
 +++ b/src/sbin/mount/Makefile
 @@ -7,6 +7,8 @@
@@ -317,8 +308,8 @@
 +
 +LDADD+=	-lfreebsd-glue
  
- YFLAGS+=-v
- CFLAGS+=-I. -I${.CURDIR}
+ NO_WMISSING_VARIABLE_DECLARATIONS=
+ 
 --- a/src/sbin/camcontrol/Makefile
 +++ b/src/sbin/camcontrol/Makefile
 @@ -12,7 +12,7 @@
@@ -371,7 +362,7 @@
 +.include <bsd.subdir.mk>
 --- /dev/null
 +++ b/src/sbin/Makefile
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,36 @@
 +SUBDIR = \
 +	devd \
 +	ifconfig \
@@ -385,7 +376,6 @@
 +
 +.if !defined(RESCUE)
 +SUBDIR += \
-+	atacontrol \
 +	camcontrol \
 +	ccdconfig \
 +	devfs \
@@ -395,14 +385,9 @@
 +	kldconfig \
 +	mount \
 +	mount_cd9660 \
-+	mount_ext2fs \
-+	mount_hpfs \
 +	mount_msdosfs \
 +	mount_nfs \
-+	mount_ntfs \
 +	mount_nullfs \
-+	mount_reiserfs \
-+	mount_std \
 +	mount_udf \
 +	mount_unionfs \
 +	nfsiod \

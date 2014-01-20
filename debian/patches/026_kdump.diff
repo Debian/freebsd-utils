@@ -1,13 +1,6 @@
----
- usr.bin/kdump/Makefile |    5 +-
- usr.bin/kdump/kdump.c  |   46 +++++++++++----------
- usr.bin/kdump/mksubr   |  103 +++++++++++++++++++++++++++++++++----------------
- usr.bin/kdump/stat16.h |   55 ++++++++++++++++++++++++++
- 4 files changed, 154 insertions(+), 55 deletions(-)
-
 --- a/src/usr.bin/kdump/kdump.c
 +++ b/src/usr.bin/kdump/kdump.c
-@@ -55,6 +55,7 @@
+@@ -56,6 +56,7 @@
  #include <sys/ioctl.h>
  #include <sys/socket.h>
  #include <sys/stat.h>
@@ -15,7 +8,7 @@
  #include <sys/sysent.h>
  #include <sys/un.h>
  #include <sys/queue.h>
-@@ -69,6 +70,8 @@
+@@ -71,6 +72,8 @@
  #include <netinet/in.h>
  #include <ctype.h>
  #include <dlfcn.h>
@@ -24,25 +17,32 @@
  #include <err.h>
  #include <grp.h>
  #include <inttypes.h>
-@@ -98,7 +101,7 @@
- void ktrcsw_old(struct ktr_csw_old *);
+@@ -106,7 +109,7 @@
  void ktruser(int, unsigned char *);
+ void ktrcaprights(cap_rights_t *);
  void ktrsockaddr(struct sockaddr *);
 -void ktrstat(struct stat *);
 +void ktrstat(struct stat16 *);
  void ktrstruct(char *, size_t);
+ void ktrcapfail(struct ktr_cap_fail *);
  void ktrfault(struct ktr_fault *);
- void ktrfaultend(struct ktr_faultend *);
-@@ -808,7 +811,7 @@
+@@ -1161,6 +1164,7 @@
  				ip++;
  				narg--;
- 				c = ',';
--			} else if (ktr->ktr_code == SYS___semctl) {
-+			} else if (ktr->ktr_code == SYS_semctl) {
- 				print_number(ip,narg,c);
- 				print_number(ip,narg,c);
- 				(void)putchar(',');
-@@ -1414,7 +1417,7 @@
+ 				break;
++#ifdef SYS_procctl
+ 			case SYS_procctl:
+ 				putchar('(');
+ 				idtypename(*ip, decimal);
+@@ -1173,6 +1177,7 @@
+ 				ip++;
+ 				narg--;
+ 				break;
++#endif
+ 			}
+ 		}
+ 		while (narg > 0) {
+@@ -1643,7 +1648,7 @@
  }
  
  void
@@ -53,80 +53,78 @@
  	struct passwd *pwd;
 --- a/src/usr.bin/kdump/Makefile
 +++ b/src/usr.bin/kdump/Makefile
-@@ -10,6 +10,7 @@
- PROG=		kdump
- SRCS=		kdump.c ioctl.c kdump_subr.c subr.c
- CFLAGS+=	-I${.CURDIR}/../ktrace -I${.CURDIR} -I${.CURDIR}/../..
-+LDADD+=		-lbsd
+@@ -12,6 +12,9 @@
+ DPSRCS=		kdump_subr.h 
+ CFLAGS+=	-I${.CURDIR}/../ktrace -I${.CURDIR} -I${.CURDIR}/../.. -I.
  
++CFLAGS+=	-Wno-error=implicit-function-declaration
++LDADD+=		-lfreebsd-glue
++
  .if ${MACHINE_ARCH} == "amd64" || ${MACHINE_ARCH} == "i386"
  SRCS+=		linux_syscalls.c
-@@ -21,10 +22,10 @@
+ .endif
+@@ -22,14 +25,14 @@
  
  ioctl.c: mkioctls
- 	env CPP="${CPP}" \
--	   sh ${.CURDIR}/mkioctls ${DESTDIR}/usr/include > ${.TARGET}
-+	   sh ${.CURDIR}/mkioctls /usr/include /usr/include/*-kfreebsd-gnu > ${.TARGET}
+ 	env MACHINE=${MACHINE} CPP="${CPP}" \
+-	    sh ${.CURDIR}/mkioctls print ${DESTDIR}/usr/include > ${.TARGET}
++	    sh ${.CURDIR}/mkioctls print /usr/src/kfreebsd-headers-10.0-1/sys > ${.TARGET}
  
- kdump_subr.c: mksubr
--	sh ${.CURDIR}/mksubr ${DESTDIR}/usr/include > ${.TARGET}
-+	sh ${.CURDIR}/mksubr /usr/include /usr/include/*-kfreebsd-gnu > ${.TARGET}
+ kdump_subr.h: mksubr
+-	sh ${.CURDIR}/mksubr ${DESTDIR}/usr/include | \
++	sh ${.CURDIR}/mksubr /usr/src/kfreebsd-headers-10.0-1/sys | \
+ 	    sed -n 's/^\([a-z].*)\)$$/void \1;/p' >${.TARGET}
+ 
+ kdump_subr.c: mksubr kdump_subr.h
+-	sh ${.CURDIR}/mksubr ${DESTDIR}/usr/include >${.TARGET}
++	sh ${.CURDIR}/mksubr /usr/src/kfreebsd-headers-10.0-1/sys >${.TARGET}
  
  linux_syscalls.c:
  	/bin/sh ${.CURDIR}/../../sys/kern/makesyscalls.sh \
 --- a/src/usr.bin/kdump/mksubr
 +++ b/src/usr.bin/kdump/mksubr
-@@ -50,7 +50,7 @@
- 	echo "usage: sh $0 include-dir"
- 	exit 1
- fi
--include_dir=$1
-+include_dirs="$*"
- 
- #
- # Automatically generates a C function that will print out the
-@@ -74,13 +74,16 @@
- 	int	or = 0;
- 	printf("%#x<", arg);
- _EOF_
-+	for include_dir in $include_dirs ; do if test -e $include_dir/$file ; then \
- 	egrep "^#[[:space:]]*define[[:space:]]+"${grep}"[[:space:]]*" \
--		$include_dir/$file | \
-+		$include_dir/$file ; fi ; done | \
- 	awk '{ for (i = 1; i <= NF; i++) \
+@@ -80,7 +80,10 @@
  		if ($i ~ /define/) \
  			break; \
  		++i; \
--		printf "\tif(!((arg>0)^((%s)>0)))\n\t\tif_print_or(arg, %s, or);\n", $i, $i }'
-+		n = $i ; \
-+		sub("__", "", n); \
-+		printf "\tif(!((arg>0)^((%s)>0)))\n\t\tif_print_or(arg, %s, or);\n", $i, n }'
+-		printf "\tif (!((arg > 0) ^ ((%s) > 0)))\n\t\tif_print_or(arg, %s, or);\n", $i, $i }'
++		if ($i) { \
++		printf "#ifdef %s\n", $i; \
++		printf "\tif (!((arg > 0) ^ ((%s) > 0)))\n\t\tif_print_or(arg, %s, or);\n", $i, $i; \
++		printf "#endif\n" } }'
  cat <<_EOF_
  	printf(">");
  	if (or == 0)
-@@ -107,8 +110,9 @@
- {
- 	switch (arg) {
- _EOF_
-+	for include_dir in $include_dirs ; do if test -e $include_dir/$file ; then \
- 	egrep "^#[[:space:]]*define[[:space:]]+"${grep}"[[:space:]]*" \
--		$include_dir/$file | \
-+		$include_dir/$file ; fi ; done | \
- 	awk '{ for (i = 1; i <= NF; i++) \
+@@ -113,7 +116,10 @@
  		if ($i ~ /define/) \
  			break; \
-@@ -139,8 +143,9 @@
- $name (int arg)
- {
+ 		++i; \
+-		printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i }'
++		if ($i) { \
++		printf "#ifdef %s\n", $i; \
++		printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i; \
++		printf "#endif\n" } }'
+ cat <<_EOF_
+ 	default: /* Should not reach */
+ 		printf("<invalid=%jd>", arg);
+@@ -141,10 +147,14 @@
  _EOF_
-+	for include_dir in $include_dirs ; do if test -e $include_dir/$file ; then \
  	egrep "^#[[:space:]]*define[[:space:]]+"${grep}"[[:space:]]*" \
--		$include_dir/$file | \
-+		$include_dir/$file ; fi ; done | \
- 	awk '{ printf "\t"; \
+ 		$include_dir/$file | \
+-	awk '{ printf "\t"; \
++	awk '{
++		if ($2) { \
++		printf "#ifdef %s\n", $2; \
++		printf "\t"; \
  		if (NR > 1) \
  			printf "else " ; \
-@@ -160,6 +165,7 @@
+-		printf "if (arg == %s) \n\t\tprintf(\"%s\");\n", $2, $2 }'
++		printf "if (arg == %s) \n\t\tprintf(\"%s\");\n", $2, $2;
++		printf "#endif\n" } }'
+ cat <<_EOF_
+ 	else /* Should not reach */
+ 		printf("<invalid=%jd>", arg);
+@@ -161,6 +171,7 @@
  #include <sys/fcntl.h>
  #include <sys/stat.h>
  #include <sys/unistd.h>
@@ -134,7 +132,7 @@
  #include <sys/mman.h>
  #include <sys/wait.h>
  #define _KERNEL
-@@ -173,11 +179,7 @@
+@@ -175,11 +186,7 @@
  #include <sys/reboot.h>
  #include <sched.h>
  #include <sys/linker.h>
@@ -146,7 +144,7 @@
  #include <aio.h>
  #include <sys/sem.h>
  #include <sys/ipc.h>
-@@ -190,6 +192,20 @@
+@@ -193,6 +200,20 @@
  
  #include "kdump_subr.h"
  
@@ -167,109 +165,127 @@
  /*
   * These are simple support macros. print_or utilizes a variable
   * defined in the calling function to track whether or not it should
-@@ -353,47 +369,48 @@
+@@ -336,6 +357,7 @@
+ 	case P_PID:
+ 		printf("P_PID");
+ 		break;
++#if 0
+ 	case P_PPID:
+ 		printf("P_PPID");
+ 		break;
+@@ -381,6 +403,7 @@
+ 	case P_PSETID:
+ 		printf("P_PSETID");
+ 		break;
++#endif
+ 	default:
+ 		if (decimal) {
+ 			printf("%d", idtype);
+@@ -438,10 +461,14 @@
+ void
+ socktypenamewithflags(int type)
+ {
++#ifdef SOCK_CLOEXEC
+ 	if (type & SOCK_CLOEXEC)
+ 		printf("SOCK_CLOEXEC|"), type &= ~SOCK_CLOEXEC;
++#endif
++#ifdef SOCK_NONBLOCK
+ 	if (type & SOCK_NONBLOCK)
+ 		printf("SOCK_NONBLOCK|"), type &= ~SOCK_NONBLOCK;
++#endif
+ 	socktypename(type);
  }
  _EOF_
- 
--auto_or_type "modename" "S_[A-Z]+[[:space:]]+[0-6]{7}" "sys/stat.h"
--auto_or_type "flagsname" "O_[A-Z]+[[:space:]]+0x[0-9A-Fa-f]+" "sys/fcntl.h"
--auto_or_type "accessmodename" "[A-Z]_OK[[:space:]]+0?x?[0-9A-Fa-f]+" "sys/unistd.h"
--auto_or_type "mmapprotname" "PROT_[A-Z]+[[:space:]]+0x[0-9A-Fa-f]+" "sys/mman.h"
--auto_or_type "mmapflagsname" "MAP_[A-Z]+[[:space:]]+0x[0-9A-Fa-f]+" "sys/mman.h"
--auto_or_type "wait4optname" "W[A-Z]+[[:space:]]+[0-9]+" "sys/wait.h"
- auto_or_type "getfsstatflagsname" "MNT_[A-Z]+[[:space:]]+[1-9][0-9]*" "sys/mount.h"
- auto_or_type "mountflagsname" "MNT_[A-Z]+[[:space:]]+0x[0-9]+" "sys/mount.h"
- auto_or_type "rebootoptname" "RB_[A-Z]+[[:space:]]+0x[0-9]+" "sys/reboot.h"
--auto_or_type "flockname" "LOCK_[A-Z]+[[:space:]]+0x[0-9]+" "sys/fcntl.h"
- auto_or_type "thrcreateflagsname" "THR_[A-Z]+[[:space:]]+0x[0-9]+" "sys/thr.h"
--auto_or_type "mlockallname" "MCL_[A-Z]+[[:space:]]+0x[0-9]+" "sys/mman.h"
--auto_or_type "shmatname" "SHM_[A-Z]+[[:space:]]+[0-9]{6}+" "sys/shm.h"
--auto_or_type "rforkname" "RF[A-Z]+[[:space:]]+\([0-9]+<<[0-9]+\)" "sys/unistd.h"
- auto_or_type "nfssvcname" "NFSSVC_[A-Z0-9]+[[:space:]]+0x[0-9]+" "nfs/nfssvc.h"
- 
--auto_switch_type "whencename" "SEEK_[A-Z]+[[:space:]]+[0-9]+" "sys/unistd.h"
- auto_switch_type "rlimitname" "RLIMIT_[A-Z]+[[:space:]]+[0-9]+" "sys/resource.h"
- auto_switch_type "shutdownhowname" "SHUT_[A-Z]+[[:space:]]+[0-9]+" "sys/socket.h"
--auto_switch_type "prioname" "PRIO_[A-Z]+[[:space:]]+[0-9]" "sys/resource.h"
--auto_switch_type "fadvisebehavname" "POSIX_FADV_[A-Z]+[[:space:]]+[0-9]+" "sys/fcntl.h"
--auto_switch_type "madvisebehavname" "_?MADV_[A-Z]+[[:space:]]+[0-9]+" "sys/mman.h"
--auto_switch_type "msyncflagsname" "MS_[A-Z]+[[:space:]]+0x[0-9]+" "sys/mman.h"
- auto_switch_type "schedpolicyname" "SCHED_[A-Z]+[[:space:]]+[0-9]+" "sched.h"
- auto_switch_type "kldunloadfflagsname" "LINKER_UNLOAD_[A-Z]+[[:space:]]+[0-9]+" "sys/linker.h"
- auto_switch_type "extattrctlname" "EXTATTR_NAMESPACE_[A-Z]+[[:space:]]+0x[0-9]+" "sys/extattr.h"
- auto_switch_type "kldsymcmdname" "KLDSYM_[A-Z]+[[:space:]]+[0-9]+" "sys/linker.h"
- auto_switch_type "sendfileflagsname" "SF_[A-Z]+[[:space:]]+[0-9]+" "sys/socket.h"
- auto_switch_type "acltypename" "ACL_TYPE_[A-Z4_]+[[:space:]]+0x[0-9]+" "sys/acl.h"
--auto_switch_type "sigprocmaskhowname" "SIG_[A-Z]+[[:space:]]+[0-9]+" "sys/signal.h"
- auto_switch_type "lio_listioname" "LIO_(NO)?WAIT[[:space:]]+[0-9]+" "aio.h"
--auto_switch_type "minheritname" "INHERIT_[A-Z]+[[:space:]]+[0-9]+" "sys/mman.h"
- auto_switch_type "quotactlname" "Q_[A-Z]+[[:space:]]+0x[0-9]+" "ufs/ufs/quota.h"
--auto_if_type "sockdomainname" "PF_[[:alnum:]]+[[:space:]]+" "sys/socket.h"
--auto_if_type "sockfamilyname" "AF_[[:alnum:]]+[[:space:]]+" "sys/socket.h"
- auto_if_type "sockipprotoname" "IPPROTO_[[:alnum:]]+[[:space:]]+" "netinet/in.h"
--auto_switch_type "sockoptname" "SO_[A-Z]+[[:space:]]+0x[0-9]+" "sys/socket.h"
--auto_switch_type "socktypename" "SOCK_[A-Z]+[[:space:]]+[1-9]+[0-9]*" "sys/socket.h"
- auto_switch_type "ptraceopname" "PT_[[:alnum:]_]+[[:space:]]+[0-9]+" "sys/ptrace.h"
- auto_switch_type "vmresultname" "KERN_[A-Z]+[[:space:]]+[0-9]+" "vm/vm_param.h"
- 
-+auto_or_type "modename" "S_[A-Z]+[[:space:]]+[0-6]{7}" "bits/stat.h"
-+auto_or_type "flagsname" "O_[A-Z]+[[:space:]]+0x[0-9A-Fa-f]+" "bits/fcntl.h"
-+auto_or_type "accessmodename" "[A-Z]_OK[[:space:]]+0?x?[0-9A-Fa-f]+" "fcntl.h"
-+auto_or_type "mmapprotname" "PROT_[A-Z]+[[:space:]]+0x[0-9A-Fa-f]+" "bits/mman.h"
-+auto_or_type "mmapflagsname" "MAP_[A-Z]+[[:space:]]+0x[0-9A-Fa-f]+" "bits/mman.h"
-+auto_or_type "wait4optname" "W[A-Z]+[[:space:]]+[0-9]+" "bits/waitflags.h"
-+auto_or_type "flockname" "LOCK_[A-Z]+[[:space:]]+0x[0-9]+" "bits/fcntl.h"
-+auto_or_type "mlockallname" "MCL_[A-Z]+[[:space:]]+0x[0-9]+" "bits/mman.h"
-+auto_or_type "shmatname" "SHM_[A-Z]+[[:space:]]+[0-9]{6}+" "bits/shm.h"
-+auto_or_type "rforkname" "RF[A-Z]+[[:space:]]+\([0-9]+<<[0-9]+\)" "sys/rfork.h"
-+auto_switch_type "whencename" "SEEK_[A-Z]+[[:space:]]+[0-9]+" "stdio.h"
-+auto_switch_type "prioname" "PRIO_[A-Z]+[[:space:]]+[0-9]" "bits/resource.h"
-+auto_switch_type "fadvisebehavname" "POSIX_FADV_[A-Z]+[[:space:]]+[0-9]+" "bits/fcntl.h"
-+auto_switch_type "madvisebehavname" "_?MADV_[A-Z]+[[:space:]]+[0-9]+" "bits/mman.h"
-+auto_switch_type "msyncflagsname" "MS_[A-Z]+[[:space:]]+0x[0-9]+" "bits/mman.h"
-+auto_switch_type "sigprocmaskhowname" "SIG_[A-Z]+[[:space:]]+[0-9]+" "bits/sigaction.h"
-+auto_switch_type "minheritname" "INHERIT_[A-Z]+[[:space:]]+[0-9]+" "bits/mman.h"
-+auto_if_type "sockdomainname" "PF_[[:alnum:]]+[[:space:]]+" "bits/socket.h"
-+auto_if_type "sockfamilyname" "AF_[[:alnum:]]+[[:space:]]+" "bits/socket.h"
-+auto_switch_type "sockoptname" "SO_[A-Z]+[[:space:]]+0x[0-9]+" "bits/socket.h"
-+auto_switch_type "socktypename" "SOCK_[A-Z]+[[:space:]]+[1-9]+[0-9]*" "bits/socket.h"
-+
- cat <<_EOF_
- /*
-  * AUTO - Special
-@@ -405,8 +422,9 @@
- {
- 	switch (cmd) {
- _EOF_
-+	for include_dir in $include_dirs ; do if test -e $include_dir/$file ; then \
- egrep "^#[[:space:]]*define[[:space:]]+F_[A-Z]+[[:space:]]+[0-9]+[[:space:]]*" \
--	$include_dir/sys/fcntl.h | \
-+	$include_dir/sys/fcntl.h ; fi ; done | \
- 	awk 'BEGIN { o=0 } { for (i = 1; i <= NF; i++) \
- 		if ($i ~ /define/) \
+@@ -456,7 +483,7 @@
+ auto_or_type     "getfsstatflagsname"  "MNT_[A-Z]+[[:space:]]+[1-9][0-9]*"            "sys/mount.h"
+ auto_switch_type "kldsymcmdname"       "KLDSYM_[A-Z]+[[:space:]]+[0-9]+"              "sys/linker.h"
+ auto_switch_type "kldunloadfflagsname" "LINKER_UNLOAD_[A-Z]+[[:space:]]+[0-9]+"       "sys/linker.h"
+-auto_switch_type "lio_listioname"      "LIO_(NO)?WAIT[[:space:]]+[0-9]+"              "aio.h"
++auto_switch_type "lio_listioname"      "LIO_(NO)?WAIT[[:space:]]+[0-9]+"              "sys/aio.h"
+ auto_switch_type "madvisebehavname"    "_?MADV_[A-Z]+[[:space:]]+[0-9]+"              "sys/mman.h"
+ auto_switch_type "minheritname"        "INHERIT_[A-Z]+[[:space:]]+[0-9]+"             "sys/mman.h"
+ auto_or_type     "mlockallname"        "MCL_[A-Z]+[[:space:]]+0x[0-9]+"               "sys/mman.h"
+@@ -472,7 +499,7 @@
+ auto_or_type     "rebootoptname"       "RB_[A-Z]+[[:space:]]+0x[0-9]+"                "sys/reboot.h"
+ auto_or_type     "rforkname"           "RF[A-Z]+[[:space:]]+\([0-9]+<<[0-9]+\)"       "sys/unistd.h"
+ auto_switch_type "rlimitname"          "RLIMIT_[A-Z]+[[:space:]]+[0-9]+"              "sys/resource.h"
+-auto_switch_type "schedpolicyname"     "SCHED_[A-Z]+[[:space:]]+[0-9]+"               "sched.h"
++auto_switch_type "schedpolicyname"     "SCHED_[A-Z]+[[:space:]]+[0-9]+"               "sys/sched.h"
+ auto_switch_type "sendfileflagsname"   "SF_[A-Z]+[[:space:]]+[0-9]+"                  "sys/socket.h"
+ auto_or_type     "shmatname"           "SHM_[A-Z]+[[:space:]]+[0-9]{6}+"              "sys/shm.h"
+ auto_switch_type "shutdownhowname"     "SHUT_[A-Z]+[[:space:]]+[0-9]+"                "sys/socket.h"
+@@ -511,7 +538,11 @@
  			break; \
-@@ -454,8 +472,9 @@
+ 		++i; \
+ 		if (o <= $(i+1)) \
++			{
++			if ($i) { \
++			printf "#ifdef %s\n", $i; \
+ 			printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i; \
++			printf "#endif\n"; } } \
+ 		else \
+ 			exit; \
+ 		o = $(i+1) }'
+@@ -549,7 +580,6 @@
+ void
+ mmapflagsname(int flags)
  {
- 	switch (func) {
- _EOF_
--egrep "^#[[:space:]]*define[[:space:]]+RTP_[A-Z]+[[:space:]]+0x[0-9]+[[:space:]]*" \
--	$include_dir/sys/rtprio.h | grep -v RTP_PRIO | \
-+	for include_dir in $include_dirs ; do if test -e $include_dir/$file ; then \
-+egrep "^#[[:space:]]*define[[:space:]]+RTP_[A-Z]+[[:space:]]+[0-9]+[[:space:]]*" \
-+	$include_dir/sys/rtprio.h ; fi ; done | grep -v RTP_PRIO | \
- 	awk '{ for (i = 1; i <= NF; i++) \
- 		if ($i ~ /define/) \
- 			break; \
-@@ -486,7 +505,8 @@
- 
+-	int align;
+ 	int or = 0;
  	printf("%#x<", flags);
  _EOF_
--egrep "^#[[:space:]]*define[[:space:]]+MSG_[A-Z]+[[:space:]]+0x[0-9]+[[:space:]]*" $include_dir/sys/socket.h | \
-+	for include_dir in $include_dirs ; do if test -e $include_dir/$file ; then \
-+egrep "^#[[:space:]]*define[[:space:]]+MSG_[A-Z]*" $include_dir/bits/socket.h ; fi ; done | \
- 	awk '{ for (i = 1; i <= NF; i++) \
+@@ -559,13 +589,17 @@
  		if ($i ~ /define/) \
  			break; \
+ 		++i; \
+-		printf "\tif (!((flags > 0) ^ ((%s) > 0)))\n\t\tif_print_or(flags, %s, or);\n", $i, $i }'
++		if ($i) { \
++		printf "#ifdef %s\n", $i; \
++		printf "\tif (!((flags > 0) ^ ((%s) > 0)))\n\t\tif_print_or(flags, %s, or);\n", $i, $i; \
++		printf "#endif\n" } }'
+ cat <<_EOF_
+ #ifdef MAP_32BIT
+ 	if (!((flags > 0) ^ ((MAP_32BIT) > 0)))
+ 		if_print_or(flags, MAP_32BIT, or);
+ #endif
+-	align = flags & MAP_ALIGNMENT_MASK;
++#ifdef MAP_ALIGNMENT_MASK
++	int align = flags & MAP_ALIGNMENT_MASK;
+ 	if (align != 0) {
+ 		if (align == MAP_ALIGNED_SUPER)
+ 			print_or("MAP_ALIGNED_SUPER", or);
+@@ -577,6 +611,7 @@
+ 	printf(">");
+ 	if (or == 0)
+ 		printf("<invalid>%d", flags);
++#endif
+ }
+ 
+ /*
+@@ -628,7 +663,10 @@
+ 		if ($i ~ /define/) \
+ 			break; \
+ 		++i; \
+-		printf "\tif(!((flags>0)^((%s)>0)))\n\t\tif_print_or(flags, %s, or);\n", $i, $i }'
++		if ($i) { \
++		printf "#ifdef %s\n", $i; \
++		printf "\tif(!((flags>0)^((%s)>0)))\n\t\tif_print_or(flags, %s, or);\n", $i, $i; \
++		printf "#endif\n" } }'
+ cat <<_EOF_
+ 	printf(">");
+ }
+@@ -649,7 +687,10 @@
+ 		if ($i ~ /define/) \
+ 			break; \
+ 		++i; \
+-		printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i }'
++		if ($i) { \
++		printf "#ifdef %s\n", $i; \
++		printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i; \
++		printf "#endif\n" } }'
+ cat <<_EOF_
+ 	default:
+ 		switch (sig) {
 --- /dev/null
 +++ b/src/usr.bin/kdump/stat16.h
 @@ -0,0 +1,55 @@
@@ -328,32 +344,3 @@
 +#define _BIRTH_PADSIZE     (2*(8 - sizeof (long)))
 +    char __birth_padding[_BIRTH_PADSIZE];
 +  };
---- a/src/usr.bin/kdump/mkioctls
-+++ b/src/usr.bin/kdump/mkioctls
-@@ -15,21 +15,23 @@
- 	echo "usage: sh $0 [-s] include-dir"
- 	exit 1
- fi
-+include_dirs="$*"
- 
- LC_ALL=C; export LC_ALL
- 
- # Build a list of headers that have ioctls in them.
- # XXX should we use an ANSI cpp?
- ioctl_includes=`
--	cd $1
--	find -H -s * -name '*.h' |
-+	for include_dir in $include_dirs ; do
-+	cd $include_dir
-+	find -H -s * -name '*.h' ; done |
- 		xargs egrep -l \
- '^#[ 	]*define[ 	]+[A-Za-z_][A-Za-z0-9_]*[ 	]+_IO[^a-z0-9_]' |
- 		awk '{printf("#include <%s>\\\\n", $1)}'
- `
- 
- awk -v x="$ioctl_includes" 'BEGIN {print x}' |
--	$CPP -I$1 -dM -DCOMPAT_43TTY - |
-+	$CPP -dM -DCOMPAT_43TTY - |
- 	awk -v ioctl_includes="$ioctl_includes" -v use_switch="$use_switch" '
- BEGIN {
- 	print "/* XXX obnoxious prerequisites. */"

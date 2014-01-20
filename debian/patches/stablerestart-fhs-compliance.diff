@@ -1,8 +1,8 @@
 --- a/src/usr.sbin/nfsd/nfsd.c
 +++ b/src/usr.sbin/nfsd/nfsd.c
-@@ -80,8 +80,8 @@
- int	debug = 0;
- #endif
+@@ -78,8 +78,8 @@
+ 
+ static int	debug = 0;
  
 -#define	NFSD_STABLERESTART	"/var/db/nfs-stablerestart"
 -#define	NFSD_STABLEBACKUP	"/var/db/nfs-stablerestart.bak"
@@ -10,10 +10,10 @@
 +#define	NFSD_STABLEBACKUP	"/var/lib/freebsd-nfs-server/nfs-stablerestart.bak"
  #define	MAXNFSDCNT	256
  #define	DEFNFSDCNT	 4
- pid_t	children[MAXNFSDCNT];	/* PIDs of children */
+ static pid_t children[MAXNFSDCNT]; /* PIDs of children */
 --- a/src/usr.sbin/nfsd/nfsv4.4
 +++ b/src/usr.sbin/nfsd/nfsv4.4
-@@ -311,10 +311,10 @@
+@@ -309,10 +309,10 @@
  If all other nfsd threads are blocked waiting for lock(s) held by this nfsd
  thread, then there isn't an nfsd thread to service the Close RPC.
  .Sh FILES

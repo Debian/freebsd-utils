@@ -4,15 +4,15 @@
 
 --- a/src/sbin/sysctl/sysctl.c
 +++ b/src/sbin/sysctl/sysctl.c
-@@ -57,6 +57,7 @@
- #include <stdlib.h>
+@@ -58,6 +58,7 @@
  #include <string.h>
+ #include <sysexits.h>
  #include <unistd.h>
 +#include <time.h>
  
- static int	aflag, bflag, dflag, eflag, hflag, iflag;
- static int	Nflag, nflag, oflag, qflag, xflag, warncount;
-@@ -353,6 +354,7 @@
+ static const char *conffile;
+ 
+@@ -471,6 +472,7 @@
  static int
  S_loadavg(int l2, void *p)
  {
@@ -20,7 +20,7 @@
  	struct loadavg *tv = (struct loadavg*)p;
  
  	if (l2 != sizeof(*tv)) {
-@@ -363,6 +365,7 @@
+@@ -481,6 +483,7 @@
  		(double)tv->ldavg[0]/(double)tv->fscale,
  		(double)tv->ldavg[1]/(double)tv->fscale,
  		(double)tv->ldavg[2]/(double)tv->fscale);

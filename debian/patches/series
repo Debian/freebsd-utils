@@ -1,27 +1,20 @@
 # Patches from (or merged in) upstream
-ifconfig_nojail.diff
-powerd_no_cpufreq.diff
 savecore_signal.diff
-mount_n.diff
 
 # Patches that are in good shape for merging upstream
 pf_regex_c.diff
-pf_regex_followup.diff
 mount_cli_compat.diff
 ppp_macros.diff
 netstat_numeric_default.diff
 route_list.diff
+001_dmesg.diff
 
 # Other patches that might or might not be mergeable
-001_dmesg.diff
 002_ifconfig.diff
-003_kbdcontrol.diff
 004_kldconfig.diff
 006_mdconfig.diff
 007_mount.diff
-008_mount_hpfs.diff
 009_mount_msdosfs.diff
-010_mount_ntfs.diff
 011_mount_nullfs.diff
 013_pf.diff
 014_route.diff
@@ -35,7 +28,6 @@ route_list.diff
 026_kdump.diff
 028_vidcontrol.diff
 035_nfs.diff
-039_geom.diff
 041_delete_key.diff
 devd_link_c++_statically.diff
 stablerestart-fhs-compliance.diff
@@ -43,4 +35,5 @@ rpc.lockd-startup-fix.diff
 
 # Patches that are likely to be Debian-specific
 ifr_fib_kludge.diff
+ifi_vhid.diff
 makefiles.diff

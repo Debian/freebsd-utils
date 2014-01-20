@@ -1,29 +1,15 @@
----
- sbin/dmesg/Makefile |    2 +-
- sbin/dmesg/dmesg.c  |    7 +++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
 --- a/src/sbin/dmesg/dmesg.c
 +++ b/src/sbin/dmesg/dmesg.c
-@@ -68,7 +68,7 @@
- 	{ NULL, 0, 0, 0, 0 },
- };
- 
--void usage(void) __dead2;
-+void usage(void);
- 
- #define	KREAD(addr, var) \
- 	kvm_read(kd, addr, &var, sizeof(var)) != sizeof(var)
-@@ -86,7 +86,7 @@
- 	all = 0;
+@@ -87,7 +87,7 @@
+ 	clear = false;
  	(void) setlocale(LC_CTYPE, "");
  	memf = nlistf = NULL;
--	while ((ch = getopt(argc, argv, "aM:N:")) != -1)
-+	while ((ch = getopt(argc, argv, "aM:N:s:n:")) != -1)
+-	while ((ch = getopt(argc, argv, "acM:N:")) != -1)
++	while ((ch = getopt(argc, argv, "acM:N:s:n:")) != -1)
  		switch(ch) {
  		case 'a':
- 			all++;
-@@ -97,6 +97,9 @@
+ 			all = true;
+@@ -101,6 +101,9 @@
  		case 'N':
  			nlistf = optarg;
  			break;
@@ -35,12 +21,10 @@
  			usage();
 --- a/src/sbin/dmesg/Makefile
 +++ b/src/sbin/dmesg/Makefile
-@@ -4,7 +4,7 @@
- PROG=	dmesg
- MAN=	dmesg.8
- 
--LDADD=	-lkvm
-+LDADD=	-lkvm -lbsd
+@@ -7,4 +7,6 @@
+ LDADD=	-lkvm
  DPADD=	${LIBKVM}
  
++LDADD+=	-lbsd
++
  .include <bsd.prog.mk>

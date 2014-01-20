@@ -34,7 +34,7 @@
  usage(void)
  {
  
-@@ -315,8 +333,7 @@
+@@ -333,8 +351,7 @@
  
  	mdio.md_version = MDIOVERSION;
  

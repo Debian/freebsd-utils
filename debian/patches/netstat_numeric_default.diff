@@ -7,7 +7,7 @@ currently doesn't.
 
 --- a/src/usr.bin/netstat/route.c
 +++ b/src/usr.bin/netstat/route.c
-@@ -616,12 +616,7 @@
+@@ -622,12 +622,7 @@
  	    {
  		struct sockaddr_in *sockin = (struct sockaddr_in *)sa;
  

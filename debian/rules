@@ -122,12 +122,13 @@ get-orig-source:
 		 sbin/ifconfig etc/regdomain.xml \
 		 sbin/route usr.bin/netstat usr.sbin/rpc.umntall \
 		 usr.sbin/ppp usr.sbin/pppctl usr.sbin/arp usr.bin/mkuzip \
-		 sbin/ipfw contrib/pf sbin/pfctl usr.sbin/authpf sys/contrib/pf/net \
-		 sbin/mount_std sbin/umount sbin/mount_cd9660 \
-		 sbin/mount_ext2fs sbin/mount_hpfs sbin/mount_msdosfs \
-		 sbin/mount_ntfs sbin/mount_nullfs sbin/mount_udf sbin/mount_unionfs \
-		 sbin/mount_reiserfs sbin/mount \
-		 sbin/mdconfig sbin/ccdconfig sbin/swapon sbin/atacontrol sbin/camcontrol \
+		 sbin/ipfw contrib/pf sbin/pfctl usr.sbin/authpf sys/netpfil/pf \
+		 sbin/umount sbin/mount_cd9660 \
+		 sbin/mount_msdosfs \
+		sbin/mount_fusefs \
+		sbin/mount_nullfs sbin/mount_udf sbin/mount_unionfs \
+		sbin/mount \
+		 sbin/mdconfig sbin/ccdconfig sbin/swapon sbin/camcontrol \
 		 sbin/gbde bin/kenv \
 		 sbin/geom sys/geom/eli sys/crypto/sha2 \
 		 usr.sbin/kbdcontrol usr.sbin/vidcontrol share/syscons \

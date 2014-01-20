@@ -1,11 +1,16 @@
-freebsd-utils (9.2+ds2-1) UNRELEASED; urgency=low
+freebsd-utils (10.0-1) UNRELEASED; urgency=low
 
+  * New upstream release.
+    - Refresh all patches.
+    - Remove atacontrol(8).
+
+  [ Robert Millan ]
   * Add /etc/sysctl.conf. It used to be provided by procps, but now it
     isn't. Its content is kernel-specific anyway, so let's just use the
     FreeBSD version.
   * Correctly setup BSD version of MAKEFLAGS to support parallel builds.
 
- -- Robert Millan <rmh@debian.org>  Fri, 27 Dec 2013 13:59:57 +0100
+ -- Robert Millan <rmh@debian.org>  Sat, 18 Jan 2014 01:37:52 +0100
 
 freebsd-utils (9.2+ds1-1) unstable; urgency=low
 
