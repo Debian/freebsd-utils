@@ -10,6 +10,8 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  freebsd-buildutils (>= 9.0-8~),
  freebsd-glue (>= 0.2.17~),
  kfreebsd-kernel-headers (>= 10.0~3),
+# for kdump
+ kfreebsd-headers-10.0-1,
  libc0.1-dev (>= 2.13-26),
  libbsd-dev (>= 0.3.0),
 # zlib1g-dev: savecore
