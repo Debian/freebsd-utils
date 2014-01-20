@@ -1,4 +1,4 @@
-freebsd-utils (10.0-1) UNRELEASED; urgency=low
+freebsd-utils (10.0-1) experimental; urgency=low
 
   * New upstream release.
     - Refresh all patches.
@@ -10,7 +10,7 @@ freebsd-utils (10.0-1) UNRELEASED; urgency=low
     FreeBSD version.
   * Correctly setup BSD version of MAKEFLAGS to support parallel builds.
 
- -- Robert Millan <rmh@debian.org>  Sat, 18 Jan 2014 01:37:52 +0100
+ -- Robert Millan <rmh@debian.org>  Tue, 21 Jan 2014 00:24:13 +0100
 
 freebsd-utils (9.2+ds1-1) unstable; urgency=low
 
