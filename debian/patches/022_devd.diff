@@ -17,7 +17,7 @@
  	pid-file "/var/run/devd.pid";
  
  	# Setup some shorthand for regex that we use later in the file.
-@@ -27,112 +23,6 @@
+@@ -27,84 +23,6 @@
  # Note that the attach/detach with the highest value wins, so that one can
  # override these general rules.
  
@@ -99,16 +99,13 @@
 -#	action "sleep 2 && /usr/sbin/ath3kfw -d $device-name -f /usr/local/etc/ath3k-1.fw";
 -#};
 -
--# When a USB keyboard arrives, attach it as the console keyboard.
--attach 100 {
--	device-name "ukbd0";
--	action "/etc/rc.d/syscons setkeyboard /dev/ukbd0";
--};
--detach 100 {
--	device-name "ukbd0";
--	action "/etc/rc.d/syscons setkeyboard /dev/kbd0";
--};
--
+ # When a USB keyboard arrives, attach it as the console keyboard.
+ attach 100 {
+ 	device-name "ukbd0";
+@@ -115,24 +33,6 @@
+ 	action "/etc/rc.d/syscons setkeyboard /dev/kbd0";
+ };
+ 
 -notify 100 {
 -	match "system" "DEVFS";
 -	match "subsystem" "CDEV";
@@ -130,7 +127,7 @@
  # Firmware download into the ActiveWire board. After the firmware download is
  # done, the device detaches and reappears as something new and shiny
  # automatically.
-@@ -211,13 +101,6 @@
+@@ -211,13 +111,6 @@
  		vendor $vendor bus $bus";
  };
  
@@ -144,7 +141,7 @@
  # Notify all users before beginning emergency shutdown when we get
  # a _CRT or _HOT thermal event and we're going to power down the system
  # very soon.
-@@ -259,19 +142,6 @@
+@@ -259,19 +152,6 @@
  	action "logger -p kern.warn 'ZFS: checksum mismatch, zpool=$pool path=$vdev_path offset=$zio_offset size=$zio_size'";
  };
  

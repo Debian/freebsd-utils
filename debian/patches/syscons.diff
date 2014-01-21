@@ -1,0 +1,31 @@
+
+For now we just use this script to service USB keyboard events
+(see devd.conf).
+
+In the future we could add an init.d script to handle startup
+settings, etc.
+
+--- a/src/etc/rc.d/syscons
++++ b/src/etc/rc.d/syscons
+@@ -31,8 +31,6 @@
+ # REQUIRE: LOGIN
+ # KEYWORD: nojail
+ 
+-. /etc/rc.subr
+-
+ name="syscons"
+ extra_commands="setkeyboard"
+ setkeyboard_cmd="syscons_setkeyboard"
+@@ -258,6 +256,9 @@
+ 	[ -n "${_sc_initdone}" ] && echo '.'
+ }
+ 
+-load_rc_config $name
+-run_rc_command $*
+-
++case "$1" in
++	setkeyboard)
++		shift
++		syscons_setkeyboard $*
++	;;
++esac

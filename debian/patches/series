@@ -1,4 +1,6 @@
 # Patches from (or merged in) upstream
+svn_HEAD_syscons.diff
+syscons.diff
 savecore_signal.diff
 
 # Patches that are in good shape for merging upstream

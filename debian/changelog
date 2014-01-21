@@ -1,3 +1,9 @@
+freebsd-utils (10.0-2) UNRELEASED; urgency=low
+
+  * Handle USB keyboard attach/detach events.
+
+ -- Robert Millan <rmh@debian.org>  Tue, 21 Jan 2014 12:38:27 +0100
+
 freebsd-utils (10.0-1) experimental; urgency=low
 
   * New upstream release.

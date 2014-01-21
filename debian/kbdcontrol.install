@@ -1,3 +1,4 @@
 usr/sbin/kbdcontrol			/sbin
 src/share/syscons/keymaps/*.kbd		/usr/share/syscons/keymaps
 debian/local/keymaps/*.kbd		/usr/share/syscons/keymaps
+src/etc/rc.d/syscons			/etc/rc.d
