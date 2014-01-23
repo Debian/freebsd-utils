@@ -88,10 +88,10 @@
  			break; \
  		++i; \
 -		printf "\tif (!((arg > 0) ^ ((%s) > 0)))\n\t\tif_print_or(arg, %s, or);\n", $i, $i }'
-+		if ($i) { \
 +		printf "#ifdef %s\n", $i; \
 +		printf "\tif (!((arg > 0) ^ ((%s) > 0)))\n\t\tif_print_or(arg, %s, or);\n", $i, $i; \
-+		printf "#endif\n" } }'
++		printf "#endif\n" \
++		}'
  cat <<_EOF_
  	printf(">");
  	if (or == 0)
@@ -100,10 +100,10 @@
  			break; \
  		++i; \
 -		printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i }'
-+		if ($i) { \
 +		printf "#ifdef %s\n", $i; \
 +		printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i; \
-+		printf "#endif\n" } }'
++		printf "#endif\n" \
++		}'
  cat <<_EOF_
  	default: /* Should not reach */
  		printf("<invalid=%jd>", arg);
@@ -113,14 +113,14 @@
  		$include_dir/$file | \
 -	awk '{ printf "\t"; \
 +	awk '{
-+		if ($2) { \
 +		printf "#ifdef %s\n", $2; \
 +		printf "\t"; \
  		if (NR > 1) \
  			printf "else " ; \
 -		printf "if (arg == %s) \n\t\tprintf(\"%s\");\n", $2, $2 }'
 +		printf "if (arg == %s) \n\t\tprintf(\"%s\");\n", $2, $2;
-+		printf "#endif\n" } }'
++		printf "#endif\n" \
++		}'
  cat <<_EOF_
  	else /* Should not reach */
  		printf("<invalid=%jd>", arg);
@@ -218,11 +218,11 @@
  			break; \
  		++i; \
  		if (o <= $(i+1)) \
-+			{
-+			if ($i) { \
++			{ \
 +			printf "#ifdef %s\n", $i; \
  			printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i; \
-+			printf "#endif\n"; } } \
++			printf "#endif\n";
++			} \
  		else \
  			exit; \
  		o = $(i+1) }'
@@ -239,10 +239,10 @@
  			break; \
  		++i; \
 -		printf "\tif (!((flags > 0) ^ ((%s) > 0)))\n\t\tif_print_or(flags, %s, or);\n", $i, $i }'
-+		if ($i) { \
 +		printf "#ifdef %s\n", $i; \
 +		printf "\tif (!((flags > 0) ^ ((%s) > 0)))\n\t\tif_print_or(flags, %s, or);\n", $i, $i; \
-+		printf "#endif\n" } }'
++		printf "#endif\n" \
++		}'
  cat <<_EOF_
  #ifdef MAP_32BIT
  	if (!((flags > 0) ^ ((MAP_32BIT) > 0)))
@@ -267,10 +267,10 @@
  			break; \
  		++i; \
 -		printf "\tif(!((flags>0)^((%s)>0)))\n\t\tif_print_or(flags, %s, or);\n", $i, $i }'
-+		if ($i) { \
 +		printf "#ifdef %s\n", $i; \
 +		printf "\tif(!((flags>0)^((%s)>0)))\n\t\tif_print_or(flags, %s, or);\n", $i, $i; \
-+		printf "#endif\n" } }'
++		printf "#endif\n" \
++		}'
  cat <<_EOF_
  	printf(">");
  }
@@ -279,10 +279,10 @@
  			break; \
  		++i; \
 -		printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i }'
-+		if ($i) { \
 +		printf "#ifdef %s\n", $i; \
 +		printf "\tcase %s:\n\t\tprintf(\"%s\");\n\t\tbreak;\n", $i, $i; \
-+		printf "#endif\n" } }'
++		printf "#endif\n" \
++		}'
  cat <<_EOF_
  	default:
  		switch (sig) {
