@@ -44,9 +44,6 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  libssl-dev,
 # jail, ppp
  libutil-freebsd-dev,
-Build-Conflicts:
-# /usr/include/bits symlink breaks usr.bin/kdump/{mkioctls,mksubr}
- libc0.1-dev-i386,
 Vcs-Browser: http://anonscm.debian.org/viewvc/glibc-bsd/trunk/freebsd-utils/
 Vcs-Svn: svn://anonscm.debian.org/glibc-bsd/trunk/freebsd-utils/
 Standards-Version: 3.9.2
