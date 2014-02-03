@@ -5,6 +5,7 @@ freebsd-utils (10.0-2) UNRELEASED; urgency=low
     kdump is now using headers from kfreebsd-headers-10.0-1).
   * Remove kludge that allowed auto-detected macros to be missing when
     building kdump. (Closes: #736202)
+  * Consistently use the new SIOCAIFADDR ABI in ifconfig. (Closes: #736238)
 
  -- Robert Millan <rmh@debian.org>  Tue, 21 Jan 2014 12:38:27 +0100
 

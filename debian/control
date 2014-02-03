@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  flex | flex-old,
  freebsd-buildutils (>= 9.0-8~),
  freebsd-glue (>= 0.2.17~),
- kfreebsd-kernel-headers (>= 10.0~3),
+ kfreebsd-kernel-headers (>= 10.0~4),
 # for kdump
  kfreebsd-headers-10.0-1,
  libc0.1-dev (>= 2.13-26),
@@ -145,7 +145,12 @@ Architecture: kfreebsd-any
 Depends: ${shlibs:Depends}, ${misc:Depends},
 Replaces: freebsd-utils (<< 5.4), freebsd-hackedutils (<< 7), net-tools
 Provides: net-tools
-Breaks: ifupdown (<< 0.7~alpha5+really0.6.16~), isc-dhcp-client (<< 4.2.2-2~)
+Breaks:
+ ifupdown (<< 0.7~alpha5+really0.6.16~),
+ isc-dhcp-client (<< 4.2.2-2~),
+# ifconfig requires kfreebsd >= 10 due to new SIOCAIFADDR ABI
+# (see r228768 in upstream svn)
+ kfreebsd-image-8, kfreebsd-image-9,
 Description: FreeBSD networking tools
  This package provides the FreeBSD tools needed to manage networking on
  GNU/kFreeBSD.
