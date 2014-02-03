@@ -1,4 +1,4 @@
-freebsd-utils (10.0-2) UNRELEASED; urgency=low
+freebsd-utils (10.0-2) experimental; urgency=low
 
   * Handle USB keyboard attach/detach events.
   * Remove Build-Conflicts on libc0.1-dev-i386 (not needed anymore since
@@ -7,7 +7,7 @@ freebsd-utils (10.0-2) UNRELEASED; urgency=low
     building kdump. (Closes: #736202)
   * Consistently use the new SIOCAIFADDR ABI in ifconfig. (Closes: #736238)
 
- -- Robert Millan <rmh@debian.org>  Tue, 21 Jan 2014 12:38:27 +0100
+ -- Robert Millan <rmh@debian.org>  Mon, 03 Feb 2014 23:25:03 +0100
 
 freebsd-utils (10.0-1) experimental; urgency=low
 
