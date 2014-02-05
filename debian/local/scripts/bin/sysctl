@@ -1,31 +1,3 @@
 #!/bin/sh
-set -e
-
-args=""
-quiet="false"
-use_sysctl_conf=false
-
-while [ $# -gt 0 ]; do
-  case "$1" in
-    -q) quiet=true ;;
-    -p) use_sysctl_conf=true ;;
-    *)  if [ -n "${args}" ] ; then args="${args} $1" ; else args="$1" ; fi ;;
-  esac
-  shift
-done
-
-if ${quiet} ; then
-  if ${use_sysctl_conf} ; then
-    sed /etc/sysctl.conf -e "s/\( \|\t\)*//g" -e "/^#/d" -e "/^$/d" \
-    | (while read i ; do /lib/freebsd/sysctl ${args} ${i} >/dev/null ; done)
-  else
-    /lib/freebsd/sysctl ${args} >/dev/null
-  fi
-else
-  if ${use_sysctl_conf} ; then
-    sed /etc/sysctl.conf -e "s/\( \|\t\)*//g" -e "/^#/d" -e "/^$/d" \
-    | (while read i ; do /lib/freebsd/sysctl ${args} ${i} ; done)
-  else
-    exec /lib/freebsd/sysctl ${args}
-  fi
-fi
+echo "$0: deprecated, use /sbin/sysctl instead" >&2
+exec /sbin/sysctl $@

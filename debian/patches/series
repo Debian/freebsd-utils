@@ -5,7 +5,7 @@ savecore_signal.diff
 
 # Patches that are in good shape for merging upstream
 pf_regex_c.diff
-mount_cli_compat.diff
+cli_compat.diff
 ppp_macros.diff
 netstat_numeric_default.diff
 route_list.diff

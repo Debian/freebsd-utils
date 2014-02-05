@@ -38,3 +38,23 @@ Also see kfreebsd-10/debian/patches/mount_remount.diff
  			} else if (*p == '-') {
  				append_arg(a, p);
  				p = strchr(p, '=');
+--- a/src/sbin/sysctl/sysctl.c
++++ b/src/sbin/sysctl/sysctl.c
+@@ -93,7 +93,7 @@
+ 	setbuf(stdout,0);
+ 	setbuf(stderr,0);
+ 
+-	while ((ch = getopt(argc, argv, "Aabdef:hiNnoqTwWxX")) != -1) {
++	while ((ch = getopt(argc, argv, "Aabdef:hiNnoqTwWxXp:")) != -1) {
+ 		switch (ch) {
+ 		case 'A':
+ 			/* compatibility */
+@@ -111,6 +111,8 @@
+ 		case 'e':
+ 			eflag = 1;
+ 			break;
++		case 'p':
++			/* For compatibility with the Linux version of sysctl. */
+ 		case 'f':
+ 			conffile = optarg;
+ 			break;
