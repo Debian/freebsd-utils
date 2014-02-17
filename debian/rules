@@ -26,7 +26,7 @@ ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 	NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 
 	# Do not mess with MAKEFLAGS until we transfer control to BSD make (see below)
-	BSD_MAKEFLAGS += -j$(NUMJOBS)
+#	BSD_MAKEFLAGS += -j$(NUMJOBS)
 endif
 
 full_version	:= $(shell dpkg-parsechangelog | grep ^Version: | sed -e 's/^.*: //g')

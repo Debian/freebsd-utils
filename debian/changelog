@@ -3,6 +3,8 @@ freebsd-utils (10.0-3) UNRELEASED; urgency=low
   * Add 'sysctl -p' support. Replace /sbin/sysctl wrapper script with
     actual binary.
   * Add /usr/{bin,sbin} to devd PATH (needed for /usr/bin/logger).
+  * Disable parallel builds until switch to bmake (for some reason
+    DPSRCS in kdump is ignored by fmake).
 
  -- Robert Millan <rmh@debian.org>  Wed, 05 Feb 2014 22:09:43 +0100
 
