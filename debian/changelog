@@ -1,4 +1,4 @@
-freebsd-utils (10.0-3) UNRELEASED; urgency=low
+freebsd-utils (10.0-3) experimental; urgency=low
 
   * Add 'sysctl -p' support. Replace /sbin/sysctl wrapper script with
     actual binary.
@@ -6,7 +6,7 @@ freebsd-utils (10.0-3) UNRELEASED; urgency=low
   * Disable parallel builds until switch to bmake (for some reason
     DPSRCS in kdump is ignored by fmake).
 
- -- Robert Millan <rmh@debian.org>  Wed, 05 Feb 2014 22:09:43 +0100
+ -- Robert Millan <rmh@debian.org>  Mon, 17 Feb 2014 16:47:54 +0100
 
 freebsd-utils (10.0-2) experimental; urgency=low
 
