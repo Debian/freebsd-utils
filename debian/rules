@@ -92,7 +92,7 @@ get-orig-source:
 		$(ORIGDIR)/src/sys/i386/linux \
 		$(ORIGDIR)/src/sys/dev/usb \
 		$(ORIGDIR)/src/sys/kgssapi \
-		$(ORIGDIR)/src/etc \
+		$(ORIGDIR)/src/etc/rc.d \
 		$(ORIGDIR)/src/include/rpcsvc \
 		$(ORIGDIR)/src/{bin,sbin,usr.bin,usr.sbin} \
 		$(NULL)
