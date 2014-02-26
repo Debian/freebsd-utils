@@ -95,6 +95,7 @@ get-orig-source:
 		$(ORIGDIR)/src/etc/rc.d \
 		$(ORIGDIR)/src/include/rpcsvc \
 		$(ORIGDIR)/src/{bin,sbin,usr.bin,usr.sbin} \
+		$(ORIGDIR)/src/share/man/man5 \
 		$(NULL)
 	for i in sbin/dmesg \
 		sbin/sysctl etc/sysctl.conf \
@@ -135,6 +136,7 @@ get-orig-source:
 		etc/rc.d/syscons \
 		 sbin/savecore sbin/dumpon \
 		share/examples/pf etc/pf.os \
+		share/man/man5/pf.conf.5 share/man/man5/pf.os.5 \
 		 usr.sbin/mountd usr.sbin/rpc.statd usr.sbin/rpc.lockd \
 		 usr.sbin/gssd usr.sbin/nfsd usr.sbin/nfscbd \
 		 usr.sbin/nfsdumpstate usr.sbin/nfsuserd usr.sbin/nfsrevoke \
