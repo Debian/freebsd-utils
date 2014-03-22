@@ -1,4 +1,4 @@
-freebsd-utils (10.0+ds1-1) UNRELEASED; urgency=low
+freebsd-utils (10.0+ds1-1) unstable; urgency=low
 
   [ Mats Erik Andersson ]
   * Fetch pf.conf(5) and pf.os(5) from new location.
@@ -6,7 +6,7 @@ freebsd-utils (10.0+ds1-1) UNRELEASED; urgency=low
   [ Robert Millan ]
   * Remove ifmediareq kludges. B-D on libc0.1-dev >= 2.18-2 instead.
 
- -- Robert Millan <rmh@debian.org>  Sat, 22 Mar 2014 23:09:57 +0100
+ -- Robert Millan <rmh@debian.org>  Sat, 22 Mar 2014 23:42:34 +0100
 
 freebsd-utils (10.0-3) experimental; urgency=low
 
