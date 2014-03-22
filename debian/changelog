@@ -1,3 +1,10 @@
+freebsd-utils (10.0+ds1-1) UNRELEASED; urgency=low
+
+  [ Mats Erik Andersson ]
+  * Fetch pf.conf(5) and pf.os(5) from new location.
+
+ -- Robert Millan <rmh@debian.org>  Sat, 22 Mar 2014 23:09:57 +0100
+
 freebsd-utils (10.0-3) experimental; urgency=low
 
   * Add 'sysctl -p' support. Replace /sbin/sysctl wrapper script with
