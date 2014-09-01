@@ -1,3 +1,9 @@
+freebsd-utils (10.1-1) experimental; urgency=medium
+
+  * Upload from 10-STABLE to experimental
+
+ -- Christoph Egger <christoph@debian.org>  Sun, 31 Aug 2014 12:37:04 -0700
+
 freebsd-utils (10.0+ds1-1) unstable; urgency=low
 
   [ Mats Erik Andersson ]

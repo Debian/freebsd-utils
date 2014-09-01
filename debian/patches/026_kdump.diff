@@ -1,6 +1,8 @@
---- a/src/usr.bin/kdump/kdump.c
-+++ b/src/usr.bin/kdump/kdump.c
-@@ -56,6 +56,7 @@
+Index: freebsd-utils-jessie/src/usr.bin/kdump/kdump.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.bin/kdump/kdump.c
++++ freebsd-utils-jessie/src/usr.bin/kdump/kdump.c
+@@ -56,6 +56,7 @@ extern int errno;
  #include <sys/ioctl.h>
  #include <sys/socket.h>
  #include <sys/stat.h>
@@ -8,7 +10,7 @@
  #include <sys/sysent.h>
  #include <sys/un.h>
  #include <sys/queue.h>
-@@ -71,6 +72,8 @@
+@@ -71,6 +72,8 @@ extern int errno;
  #include <netinet/in.h>
  #include <ctype.h>
  #include <dlfcn.h>
@@ -17,7 +19,7 @@
  #include <err.h>
  #include <grp.h>
  #include <inttypes.h>
-@@ -106,7 +109,7 @@
+@@ -106,7 +109,7 @@ void ktruser_rtld(int, unsigned char *);
  void ktruser(int, unsigned char *);
  void ktrcaprights(cap_rights_t *);
  void ktrsockaddr(struct sockaddr *);
@@ -26,7 +28,7 @@
  void ktrstruct(char *, size_t);
  void ktrcapfail(struct ktr_cap_fail *);
  void ktrfault(struct ktr_fault *);
-@@ -1161,6 +1164,7 @@
+@@ -1175,6 +1178,7 @@ ktrsyscall(struct ktr_syscall *ktr, u_in
  				ip++;
  				narg--;
  				break;
@@ -34,7 +36,7 @@
  			case SYS_procctl:
  				putchar('(');
  				idtypename(*ip, decimal);
-@@ -1173,6 +1177,7 @@
+@@ -1187,6 +1191,7 @@ ktrsyscall(struct ktr_syscall *ktr, u_in
  				ip++;
  				narg--;
  				break;
@@ -42,7 +44,7 @@
  			}
  		}
  		while (narg > 0) {
-@@ -1643,7 +1648,7 @@
+@@ -1661,7 +1666,7 @@ ktrsockaddr(struct sockaddr *sa)
  }
  
  void
@@ -51,11 +53,13 @@
  {
  	char mode[12], timestr[PATH_MAX + 4];
  	struct passwd *pwd;
---- a/src/usr.bin/kdump/Makefile
-+++ b/src/usr.bin/kdump/Makefile
-@@ -12,6 +12,9 @@
- DPSRCS=		kdump_subr.h 
- CFLAGS+=	-I${.CURDIR}/../ktrace -I${.CURDIR} -I${.CURDIR}/../.. -I.
+Index: freebsd-utils-jessie/src/usr.bin/kdump/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.bin/kdump/Makefile
++++ freebsd-utils-jessie/src/usr.bin/kdump/Makefile
+@@ -18,6 +18,9 @@ CFLAGS+=	-I${.CURDIR}/../ktrace -I${.CUR
+ CFLAGS+=-DPF
+ .endif
  
 +CFLAGS+=	-Wno-error=implicit-function-declaration
 +LDADD+=		-lfreebsd-glue
@@ -63,7 +67,7 @@
  .if ${MACHINE_ARCH} == "amd64" || ${MACHINE_ARCH} == "i386"
  SRCS+=		linux_syscalls.c
  .endif
-@@ -22,14 +25,14 @@
+@@ -28,14 +31,14 @@ CLEANFILES=	ioctl.c kdump_subr.c kdump_s
  
  ioctl.c: mkioctls
  	env MACHINE=${MACHINE} CPP="${CPP}" \
@@ -81,9 +85,11 @@
  
  linux_syscalls.c:
  	/bin/sh ${.CURDIR}/../../sys/kern/makesyscalls.sh \
---- a/src/usr.bin/kdump/mksubr
-+++ b/src/usr.bin/kdump/mksubr
-@@ -80,7 +80,10 @@
+Index: freebsd-utils-jessie/src/usr.bin/kdump/mksubr
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.bin/kdump/mksubr
++++ freebsd-utils-jessie/src/usr.bin/kdump/mksubr
+@@ -80,7 +80,10 @@ _EOF_
  		if ($i ~ /define/) \
  			break; \
  		++i; \
@@ -95,7 +101,7 @@
  cat <<_EOF_
  	printf(">");
  	if (or == 0)
-@@ -113,7 +116,10 @@
+@@ -113,7 +116,10 @@ _EOF_
  		if ($i ~ /define/) \
  			break; \
  		++i; \
@@ -107,7 +113,7 @@
  cat <<_EOF_
  	default: /* Should not reach */
  		printf("<invalid=%jd>", arg);
-@@ -141,10 +147,14 @@
+@@ -141,10 +147,14 @@ $name(intmax_t arg)
  _EOF_
  	egrep "^#[[:space:]]*define[[:space:]]+"${grep}"[[:space:]]*" \
  		$include_dir/$file | \
@@ -124,7 +130,7 @@
  cat <<_EOF_
  	else /* Should not reach */
  		printf("<invalid=%jd>", arg);
-@@ -161,6 +171,7 @@
+@@ -161,6 +171,7 @@ cat <<_EOF_
  #include <sys/fcntl.h>
  #include <sys/stat.h>
  #include <sys/unistd.h>
@@ -132,7 +138,7 @@
  #include <sys/mman.h>
  #include <sys/wait.h>
  #define _KERNEL
-@@ -175,11 +186,7 @@
+@@ -175,11 +186,7 @@ cat <<_EOF_
  #include <sys/reboot.h>
  #include <sched.h>
  #include <sys/linker.h>
@@ -144,7 +150,7 @@
  #include <aio.h>
  #include <sys/sem.h>
  #include <sys/ipc.h>
-@@ -193,6 +200,20 @@
+@@ -193,6 +200,20 @@ cat <<_EOF_
  
  #include "kdump_subr.h"
  
@@ -165,7 +171,7 @@
  /*
   * These are simple support macros. print_or utilizes a variable
   * defined in the calling function to track whether or not it should
-@@ -336,6 +357,7 @@
+@@ -336,6 +357,7 @@ idtypename(idtype_t idtype, int decimal)
  	case P_PID:
  		printf("P_PID");
  		break;
@@ -173,7 +179,7 @@
  	case P_PPID:
  		printf("P_PPID");
  		break;
-@@ -381,6 +403,7 @@
+@@ -381,6 +403,7 @@ idtypename(idtype_t idtype, int decimal)
  	case P_PSETID:
  		printf("P_PSETID");
  		break;
@@ -181,7 +187,7 @@
  	default:
  		if (decimal) {
  			printf("%d", idtype);
-@@ -438,10 +461,14 @@
+@@ -438,10 +461,14 @@ vmprotname (int type)
  void
  socktypenamewithflags(int type)
  {
@@ -196,7 +202,7 @@
  	socktypename(type);
  }
  _EOF_
-@@ -456,7 +483,7 @@
+@@ -456,7 +483,7 @@ auto_or_type     "flockname"           "
  auto_or_type     "getfsstatflagsname"  "MNT_[A-Z]+[[:space:]]+[1-9][0-9]*"            "sys/mount.h"
  auto_switch_type "kldsymcmdname"       "KLDSYM_[A-Z]+[[:space:]]+[0-9]+"              "sys/linker.h"
  auto_switch_type "kldunloadfflagsname" "LINKER_UNLOAD_[A-Z]+[[:space:]]+[0-9]+"       "sys/linker.h"
@@ -205,7 +211,7 @@
  auto_switch_type "madvisebehavname"    "_?MADV_[A-Z]+[[:space:]]+[0-9]+"              "sys/mman.h"
  auto_switch_type "minheritname"        "INHERIT_[A-Z]+[[:space:]]+[0-9]+"             "sys/mman.h"
  auto_or_type     "mlockallname"        "MCL_[A-Z]+[[:space:]]+0x[0-9]+"               "sys/mman.h"
-@@ -472,7 +499,7 @@
+@@ -472,7 +499,7 @@ auto_switch_type "quotactlname"        "
  auto_or_type     "rebootoptname"       "RB_[A-Z]+[[:space:]]+0x[0-9]+"                "sys/reboot.h"
  auto_or_type     "rforkname"           "RF[A-Z]+[[:space:]]+\([0-9]+<<[0-9]+\)"       "sys/unistd.h"
  auto_switch_type "rlimitname"          "RLIMIT_[A-Z]+[[:space:]]+[0-9]+"              "sys/resource.h"
@@ -214,7 +220,7 @@
  auto_switch_type "sendfileflagsname"   "SF_[A-Z]+[[:space:]]+[0-9]+"                  "sys/socket.h"
  auto_or_type     "shmatname"           "SHM_[A-Z]+[[:space:]]+[0-9]{6}+"              "sys/shm.h"
  auto_switch_type "shutdownhowname"     "SHUT_[A-Z]+[[:space:]]+[0-9]+"                "sys/socket.h"
-@@ -511,7 +538,11 @@
+@@ -511,7 +538,11 @@ egrep "^#[[:space:]]*define[[:space:]]+F
  			break; \
  		++i; \
  		if (o <= $(i+1)) \
@@ -226,7 +232,7 @@
  		else \
  			exit; \
  		o = $(i+1) }'
-@@ -549,7 +580,6 @@
+@@ -549,7 +580,6 @@ cat <<_EOF_
  void
  mmapflagsname(int flags)
  {
@@ -234,7 +240,7 @@
  	int or = 0;
  	printf("%#x<", flags);
  _EOF_
-@@ -559,13 +589,17 @@
+@@ -559,13 +589,17 @@ egrep "^#[[:space:]]*define[[:space:]]+M
  		if ($i ~ /define/) \
  			break; \
  		++i; \
@@ -254,7 +260,7 @@
  	if (align != 0) {
  		if (align == MAP_ALIGNED_SUPER)
  			print_or("MAP_ALIGNED_SUPER", or);
-@@ -577,6 +611,7 @@
+@@ -577,6 +611,7 @@ cat <<_EOF_
  	printf(">");
  	if (or == 0)
  		printf("<invalid>%d", flags);
@@ -262,7 +268,7 @@
  }
  
  /*
-@@ -628,7 +663,10 @@
+@@ -628,7 +663,10 @@ egrep "^#[[:space:]]*define[[:space:]]+M
  		if ($i ~ /define/) \
  			break; \
  		++i; \
@@ -274,7 +280,7 @@
  cat <<_EOF_
  	printf(">");
  }
-@@ -649,7 +687,10 @@
+@@ -649,7 +687,10 @@ egrep "^#[[:space:]]*define[[:space:]]+S
  		if ($i ~ /define/) \
  			break; \
  		++i; \
@@ -286,8 +292,10 @@
  cat <<_EOF_
  	default:
  		switch (sig) {
+Index: freebsd-utils-jessie/src/usr.bin/kdump/stat16.h
+===================================================================
 --- /dev/null
-+++ b/src/usr.bin/kdump/stat16.h
++++ freebsd-utils-jessie/src/usr.bin/kdump/stat16.h
 @@ -0,0 +1,55 @@
 +/* Copyright (C) 2002, 2006 Free Software Foundation, Inc.
 +   This file is part of the GNU C Library.

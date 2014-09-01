@@ -37,9 +37,9 @@ major           := $(shell echo $(version) | sed -e 's/\..*//g')
 revision	:= $(shell echo $(full_version) | sed -e 's/^[^+-]*//g')
 
 SVN_BASE	:= https://svn0.us-west.freebsd.org/base
-SVN		:= $(SVN_BASE)/release/$(version).0
+#SVN		:= $(SVN_BASE)/release/$(version).0
 #SVN		:= $(SVN_BASE)/releng/$(version)
-#SVN		:= $(SVN_BASE)/stable/$(major)
+SVN		:= $(SVN_BASE)/stable/$(major)
 #SVN		:= $(SVN_BASE)/base/head
 
 SOURCE = freebsd-utils
@@ -52,7 +52,7 @@ PMAKE = \
 	MAKEFLAGS=$(BSD_MAKEFLAGS) \
 	MAKEOBJDIRPREFIX=$(CURDIR)/obj-deb \
 	CFLAGS="$(CFLAGS)" \
-	NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
+	NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO MK_TESTS=no\
 	DESTDIR="$(DESTDIR)" \
 	make -C src $(PMAKE_FLAGS)
 PMAKE_UDEB = \
@@ -123,7 +123,7 @@ get-orig-source:
 		 sbin/ifconfig etc/regdomain.xml \
 		 sbin/route usr.bin/netstat usr.sbin/rpc.umntall \
 		 usr.sbin/ppp usr.sbin/pppctl usr.sbin/arp usr.bin/mkuzip \
-		 sbin/ipfw contrib/pf sbin/pfctl usr.sbin/authpf sys/netpfil/pf \
+		 sbin/ipfw contrib/pf sbin/pfctl sbin/pflogd usr.sbin/authpf sys/netpfil/pf \
 		 sbin/umount sbin/mount_cd9660 \
 		 sbin/mount_msdosfs \
 		sbin/mount_fusefs \

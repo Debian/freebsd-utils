@@ -1,6 +1,8 @@
---- a/src/sbin/devd/Makefile
-+++ b/src/sbin/devd/Makefile
-@@ -11,6 +11,18 @@
+Index: freebsd-utils-jessie/src/sbin/devd/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/devd/Makefile
++++ freebsd-utils-jessie/src/sbin/devd/Makefile
+@@ -13,6 +13,18 @@ NO_SHARED?=YES
  DPADD=	${LIBL} ${LIBUTIL}
  LDADD=	-ll -lutil
  

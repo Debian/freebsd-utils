@@ -1,15 +1,17 @@
---- a/src/sbin/route/route.c
-+++ b/src/sbin/route/route.c
-@@ -163,7 +163,7 @@
+Index: freebsd-utils-jessie/src/sbin/route/route.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/route/route.c
++++ freebsd-utils-jessie/src/sbin/route/route.c
+@@ -162,7 +162,7 @@ main(int argc, char **argv)
  	if (argc < 2)
  		usage(NULL);
  
--	while ((ch = getopt(argc, argv, "nqdtv")) != -1)
-+	while ((ch = getopt(argc, argv, "+nqdtv")) != -1)
+-	while ((ch = getopt(argc, argv, "46nqdtv")) != -1)
++	while ((ch = getopt(argc, argv, "+46nqdtv")) != -1)
  		switch(ch) {
- 		case 'n':
- 			nflag = 1;
-@@ -239,6 +239,11 @@
+ 		case '4':
+ #ifdef INET
+@@ -254,6 +254,11 @@ set_sofib(int fib)
  
  	if (fib < 0)
  		return (0);

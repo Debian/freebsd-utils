@@ -13,9 +13,11 @@ for d in b/src/contrib/pf ; do \
 
 exit 0
 
---- a/src/contrib/pf/authpf/authpf.c
-+++ b/src/contrib/pf/authpf/authpf.c
-@@ -33,7 +33,7 @@
+Index: freebsd-utils-jessie/src/contrib/pf/authpf/authpf.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/contrib/pf/authpf/authpf.c
++++ freebsd-utils-jessie/src/contrib/pf/authpf/authpf.c
+@@ -33,7 +33,7 @@ __FBSDID("$FreeBSD: stable/10/contrib/pf
  
  #include <err.h>
  #include <errno.h>
@@ -24,7 +26,7 @@ exit 0
  #include <inttypes.h>
  #endif
  #include <login_cap.h>
-@@ -74,7 +74,7 @@
+@@ -74,7 +74,7 @@ struct timeval	Tstart, Tend;	/* start an
  
  volatile sig_atomic_t	want_death;
  static void		need_death(int signo);
@@ -33,7 +35,7 @@ exit 0
  static __dead2 void	do_death(int);
  #else
  static __dead void	do_death(int);
-@@ -155,7 +155,7 @@
+@@ -155,7 +155,7 @@ main(void)
  	else
  		shell = pw->pw_shell;
  
@@ -42,7 +44,7 @@ exit 0
  	login_close(lc);
  #endif
  
-@@ -163,7 +163,7 @@
+@@ -163,7 +163,7 @@ main(void)
  	    strcmp(shell, PATH_AUTHPF_SHELL_NOIP)) {
  		syslog(LOG_ERR, "wrong shell for user %s, uid %u",
  		    pw->pw_name, pw->pw_uid);
@@ -51,7 +53,7 @@ exit 0
  	login_close(lc);
  #else
  		if (shell != pw->pw_shell)
-@@ -172,7 +172,7 @@
+@@ -172,7 +172,7 @@ main(void)
  		goto die;
  	}
  
@@ -60,7 +62,7 @@ exit 0
  	login_close(lc);
  #else
  	if (shell != pw->pw_shell)
-@@ -932,7 +932,7 @@
+@@ -932,7 +932,7 @@ need_death(int signo __unused)
  /*
   * function that removes our stuff when we go away.
   */
@@ -69,9 +71,11 @@ exit 0
  static __dead2 void
  #else
  static __dead void
---- a/src/contrib/pf/ftp-proxy/ftp-proxy.c
-+++ b/src/contrib/pf/ftp-proxy/ftp-proxy.c
-@@ -585,7 +585,7 @@
+Index: freebsd-utils-jessie/src/contrib/pf/ftp-proxy/ftp-proxy.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/contrib/pf/ftp-proxy/ftp-proxy.c
++++ freebsd-utils-jessie/src/contrib/pf/ftp-proxy/ftp-proxy.c
+@@ -585,7 +585,7 @@ logmsg(int pri, const char *message, ...
  
  		/* We don't care about truncation. */
  		vsnprintf(buf, sizeof buf, message, ap);
@@ -80,8 +84,10 @@ exit 0
  		strvis(visbuf, buf, VIS_CSTYLE | VIS_NL);
  #else
  		strnvis(visbuf, buf, sizeof visbuf, VIS_CSTYLE | VIS_NL);
---- a/src/contrib/pf/libevent/kqueue.c
-+++ b/src/contrib/pf/libevent/kqueue.c
+Index: freebsd-utils-jessie/src/contrib/pf/libevent/kqueue.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/contrib/pf/libevent/kqueue.c
++++ freebsd-utils-jessie/src/contrib/pf/libevent/kqueue.c
 @@ -48,7 +48,7 @@
  #include <inttypes.h>
  #endif
@@ -91,9 +97,11 @@ exit 0
  #define INTPTR(x)	(intptr_t)x
  #else
  #define INTPTR(x)	x
---- a/src/contrib/pf/pflogd/pflogd.c
-+++ b/src/contrib/pf/pflogd/pflogd.c
-@@ -51,7 +51,7 @@
+Index: freebsd-utils-jessie/src/contrib/pf/pflogd/pflogd.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/contrib/pf/pflogd/pflogd.c
++++ freebsd-utils-jessie/src/contrib/pf/pflogd/pflogd.c
+@@ -51,7 +51,7 @@ __FBSDID("$FreeBSD: stable/10/contrib/pf
  #include <errno.h>
  #include <stdarg.h>
  #include <fcntl.h>
@@ -102,7 +110,7 @@ exit 0
  #include <ifaddrs.h>
  #include "pidfile.h"
  #else
-@@ -161,7 +161,7 @@
+@@ -161,7 +161,7 @@ logmsg(int pri, const char *message, ...
  	va_end(ap);
  }
  
@@ -111,7 +119,7 @@ exit 0
  __dead2 void
  #else
  __dead void
-@@ -215,7 +215,7 @@
+@@ -215,7 +215,7 @@ set_pcap_filter(void)
  int
  if_exists(char *ifname)
  {
@@ -120,7 +128,7 @@ exit 0
  	struct ifaddrs *ifdata, *mb;
  	int exists = 0;
  
-@@ -406,7 +406,7 @@
+@@ -406,7 +406,7 @@ int
  scan_dump(FILE *fp, off_t size)
  {
  	struct pcap_file_header hdr;
@@ -129,7 +137,7 @@ exit 0
  	struct pcap_sf_pkthdr ph;
  #else
  	struct pcap_pkthdr ph;
-@@ -479,7 +479,7 @@
+@@ -479,7 +479,7 @@ void
  dump_packet_nobuf(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
  {
  	FILE *f = (FILE *)user;
@@ -138,7 +146,7 @@ exit 0
  	struct pcap_sf_pkthdr sh;
  #endif
  
-@@ -488,7 +488,7 @@
+@@ -488,7 +488,7 @@ dump_packet_nobuf(u_char *user, const st
  		return;
  	}
  
@@ -147,7 +155,7 @@ exit 0
  	sh.ts.tv_sec = (bpf_int32)h->ts.tv_sec;
  	sh.ts.tv_usec = (bpf_int32)h->ts.tv_usec;
  	sh.caplen = h->caplen;
-@@ -501,7 +501,7 @@
+@@ -501,7 +501,7 @@ dump_packet_nobuf(u_char *user, const st
  		off_t pos = ftello(f);
  
  		/* try to undo header to prevent corruption */
@@ -156,7 +164,7 @@ exit 0
  		if (pos < sizeof(sh) ||
  		    ftruncate(fileno(f), pos - sizeof(sh))) {
  #else
-@@ -576,7 +576,7 @@
+@@ -576,7 +576,7 @@ void
  dump_packet(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
  {
  	FILE *f = (FILE *)user;
@@ -165,7 +173,7 @@ exit 0
  	struct pcap_sf_pkthdr sh;
  	size_t len = sizeof(sh) + h->caplen;
  #else
-@@ -609,7 +609,7 @@
+@@ -609,7 +609,7 @@ dump_packet(u_char *user, const struct p
  	}
  
   append:       
@@ -174,9 +182,11 @@ exit 0
  	sh.ts.tv_sec = (bpf_int32)h->ts.tv_sec;
  	sh.ts.tv_usec = (bpf_int32)h->ts.tv_usec;
  	sh.caplen = h->caplen;
---- a/src/contrib/pf/pflogd/pidfile.c
-+++ b/src/contrib/pf/pflogd/pidfile.c
-@@ -48,7 +48,7 @@
+Index: freebsd-utils-jessie/src/contrib/pf/pflogd/pidfile.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/contrib/pf/pflogd/pidfile.c
++++ freebsd-utils-jessie/src/contrib/pf/pflogd/pidfile.c
+@@ -41,7 +41,7 @@ static const char rcsid[] = "$OpenBSD: p
  #include <stdio.h>
  #include <stdlib.h>
  #include <unistd.h>
@@ -185,9 +195,11 @@ exit 0
  #include "pidfile.h"
  #else
  #include <util.h>
---- a/src/contrib/pf/pflogd/privsep.c
-+++ b/src/contrib/pf/pflogd/privsep.c
-@@ -73,7 +73,7 @@
+Index: freebsd-utils-jessie/src/contrib/pf/pflogd/privsep.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/contrib/pf/pflogd/privsep.c
++++ freebsd-utils-jessie/src/contrib/pf/pflogd/privsep.c
+@@ -73,7 +73,7 @@ priv_init(void)
  	int snaplen, ret, olderrno;
  	struct passwd *pw;
  
@@ -196,9 +208,11 @@ exit 0
  	for (i = 1; i < NSIG; i++)
  #else
  	for (i = 1; i < _NSIG; i++)
---- a/src/contrib/pf/tftp-proxy/filter.c
-+++ b/src/contrib/pf/tftp-proxy/filter.c
-@@ -298,7 +298,7 @@
+Index: freebsd-utils-jessie/src/contrib/pf/tftp-proxy/filter.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/contrib/pf/tftp-proxy/filter.c
++++ freebsd-utils-jessie/src/contrib/pf/tftp-proxy/filter.c
+@@ -298,7 +298,7 @@ prepare_rule(u_int32_t id, int rs_num, s
  		pfr.rule.quick = 1;
  		pfr.rule.log = rule_log;
  		pfr.rule.keep_state = 1;
@@ -207,9 +221,11 @@ exit 0
  		pfr.rule.flags = (proto == IPPROTO_TCP ? TH_SYN : 0);
  		pfr.rule.flagset = (proto == IPPROTO_TCP ?
  		    (TH_SYN|TH_ACK|TH_FIN|TH_RST) : 0);
---- a/src/sbin/pfctl/parse.y
-+++ b/src/sbin/pfctl/parse.y
-@@ -33,7 +33,7 @@
+Index: freebsd-utils-jessie/src/sbin/pfctl/parse.y
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/pfctl/parse.y
++++ freebsd-utils-jessie/src/sbin/pfctl/parse.y
+@@ -33,7 +33,7 @@ __FBSDID("$FreeBSD: stable/10/sbin/pfctl
  #include <sys/types.h>
  #include <sys/socket.h>
  #include <sys/stat.h>
@@ -218,7 +234,7 @@ exit 0
  #include <sys/sysctl.h>
  #endif
  #include <net/if.h>
-@@ -2217,7 +2217,7 @@
+@@ -2217,7 +2217,7 @@ pfrule		: action dir logquick interface
  				}
  				free($9.queues.pqname);
  			}
@@ -227,7 +243,7 @@ exit 0
  			r.divert.port = $9.divert.port;
  #else
  			if ((r.divert.port = $9.divert.port)) {
-@@ -2362,7 +2362,7 @@
+@@ -2362,7 +2362,7 @@ filter_opt	: USER uids {
  			filter_opts.rtableid = $2;
  		}
  		| DIVERTTO portplain {
@@ -236,7 +252,7 @@ exit 0
  			filter_opts.divert.port = $2.a;
  			if (!filter_opts.divert.port) {
  				yyerror("invalid divert port: %u", ntohs($2.a));
-@@ -2371,7 +2371,7 @@
+@@ -2371,7 +2371,7 @@ filter_opt	: USER uids {
  #endif
  		}
  		| DIVERTTO STRING PORT portplain {
@@ -245,7 +261,7 @@ exit 0
  			if ((filter_opts.divert.addr = host($2)) == NULL) {
  				yyerror("could not parse divert address: %s",
  				    $2);
-@@ -2389,7 +2389,7 @@
+@@ -2389,7 +2389,7 @@ filter_opt	: USER uids {
  			}
  		}
  		| DIVERTREPLY {
@@ -254,7 +270,7 @@ exit 0
  			yyerror("divert-reply has no meaning in FreeBSD pf(4)");
  			YYERROR;
  #else
-@@ -2855,7 +2855,7 @@
+@@ -2855,7 +2855,7 @@ host		: STRING			{
  			char	*buf;
  
  			/* ie. for 10/8 parsing */
@@ -263,7 +279,7 @@ exit 0
  			if (asprintf(&buf, "%lld/%lld", (long long)$1, (long long)$3) == -1)
  #else
  			if (asprintf(&buf, "%lld/%lld", $1, $3) == -1)
-@@ -6020,7 +6020,7 @@
+@@ -6020,7 +6020,7 @@ pfctl_load_anchors(int dev, struct pfctl
  int
  rt_tableid_max(void)
  {
@@ -272,9 +288,11 @@ exit 0
  	int fibs;
  	size_t l = sizeof(fibs);
  
---- a/src/sbin/pfctl/pfctl.c
-+++ b/src/sbin/pfctl/pfctl.c
-@@ -39,7 +39,7 @@
+Index: freebsd-utils-jessie/src/sbin/pfctl/pfctl.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/pfctl/pfctl.c
++++ freebsd-utils-jessie/src/sbin/pfctl/pfctl.c
+@@ -39,7 +39,7 @@ __FBSDID("$FreeBSD: stable/10/sbin/pfctl
  #include <sys/socket.h>
  #include <sys/stat.h>
  
@@ -283,7 +301,7 @@ exit 0
  #include <sys/endian.h>
  #endif
  
-@@ -250,7 +250,7 @@
+@@ -251,7 +251,7 @@ pfctl_enable(int dev, int opts)
  	if (ioctl(dev, DIOCSTART)) {
  		if (errno == EEXIST)
  			errx(1, "pf already enabled");
@@ -292,7 +310,7 @@ exit 0
  		else if (errno == ESRCH)
  			errx(1, "pfil registeration failed");
  #endif
-@@ -2185,7 +2185,7 @@
+@@ -2186,7 +2186,7 @@ main(int argc, char *argv[])
  		/* turn off options */
  		opts &= ~ (PF_OPT_DISABLE | PF_OPT_ENABLE);
  		clearopt = showopt = debugopt = NULL;
@@ -301,9 +319,11 @@ exit 0
  		altqsupport = 0;
  #else
  		altqsupport = 1;
---- a/src/sbin/pfctl/pfctl.h
-+++ b/src/sbin/pfctl/pfctl.h
-@@ -86,7 +86,7 @@
+Index: freebsd-utils-jessie/src/sbin/pfctl/pfctl.h
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/pfctl/pfctl.h
++++ freebsd-utils-jessie/src/sbin/pfctl/pfctl.h
+@@ -86,7 +86,7 @@ void	 warn_namespace_collision(const cha
  int	 pfctl_show_ifaces(const char *, int);
  FILE	*pfctl_fopen(const char *, const char *);
  
@@ -312,9 +332,11 @@ exit 0
  extern int altqsupport;
  extern int dummynetsupport;
  #define	HTONL(x)		(x) = htonl((__uint32_t)(x))
---- a/src/sbin/pfctl/pfctl_altq.c
-+++ b/src/sbin/pfctl/pfctl_altq.c
-@@ -77,7 +77,7 @@
+Index: freebsd-utils-jessie/src/sbin/pfctl/pfctl_altq.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/pfctl/pfctl_altq.c
++++ freebsd-utils-jessie/src/sbin/pfctl/pfctl_altq.c
+@@ -77,7 +77,7 @@ static int		 gsc_add_seg(struct gen_sc *
  			     double);
  static double		 sc_x2y(struct service_curve *, double);
  
@@ -323,7 +345,7 @@ exit 0
  u_int32_t	getifspeed(int, char *);
  #else
  u_int32_t	 getifspeed(char *);
-@@ -153,7 +153,7 @@
+@@ -153,7 +153,7 @@ print_altq(const struct pf_altq *a, unsi
  		return;
  	}
  
@@ -332,7 +354,7 @@ exit 0
  	if (a->local_flags & PFALTQ_FLAG_IF_REMOVED)
  		printf("INACTIVE ");
  #endif
-@@ -193,7 +193,7 @@
+@@ -193,7 +193,7 @@ print_queue(const struct pf_altq *a, uns
  {
  	unsigned int	i;
  
@@ -341,7 +363,7 @@ exit 0
  	if (a->local_flags & PFALTQ_FLAG_IF_REMOVED)
  		printf("INACTIVE ");
  #endif
-@@ -239,7 +239,7 @@
+@@ -239,7 +239,7 @@ eval_pfaltq(struct pfctl *pf, struct pf_
  	if (bw->bw_absolute > 0)
  		pa->ifbandwidth = bw->bw_absolute;
  	else
@@ -350,7 +372,7 @@ exit 0
  		if ((rate = getifspeed(pf->dev, pa->ifname)) == 0) {
  #else
  		if ((rate = getifspeed(pa->ifname)) == 0) {
-@@ -1095,7 +1095,7 @@
+@@ -1095,7 +1095,7 @@ rate2str(double rate)
  	return (buf);
  }
  
@@ -359,7 +381,7 @@ exit 0
  /*
   * XXX
   * FreeBSD does not have SIOCGIFDATA.
-@@ -1150,7 +1150,7 @@
+@@ -1150,7 +1150,7 @@ getifmtu(char *ifname)
  	    sizeof(ifr.ifr_name))
  		errx(1, "getifmtu: strlcpy");
  	if (ioctl(s, SIOCGIFMTU, (caddr_t)&ifr) == -1)
@@ -368,9 +390,11 @@ exit 0
  		ifr.ifr_mtu = 1500;
  #else
  		err(1, "SIOCGIFMTU");
---- a/src/sbin/pfctl/pfctl_optimize.c
-+++ b/src/sbin/pfctl/pfctl_optimize.c
-@@ -862,7 +862,7 @@
+Index: freebsd-utils-jessie/src/sbin/pfctl/pfctl_optimize.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/pfctl/pfctl_optimize.c
++++ freebsd-utils-jessie/src/sbin/pfctl/pfctl_optimize.c
+@@ -862,7 +862,7 @@ block_feedback(struct pfctl *pf, struct
  				break;
  			}
  		}
@@ -379,9 +403,11 @@ exit 0
  		if (por2 == NULL)
  #else
  		if (por2 == TAILQ_END(&block->sb_rules))
---- a/src/sbin/pfctl/pfctl_parser.c
-+++ b/src/sbin/pfctl/pfctl_parser.c
-@@ -580,7 +580,7 @@
+Index: freebsd-utils-jessie/src/sbin/pfctl/pfctl_parser.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/pfctl/pfctl_parser.c
++++ freebsd-utils-jessie/src/sbin/pfctl/pfctl_parser.c
+@@ -580,7 +580,7 @@ print_status(struct pf_status *s, int op
  		    s->src_nodes, "");
  		for (i = 0; i < SCNT_MAX; i++) {
  			printf("  %-25s %14lld ", pf_scounters[i],
@@ -390,7 +416,7 @@ exit 0
  				    (long long)s->scounters[i]);
  #else
  				    s->scounters[i]);
-@@ -606,7 +606,7 @@
+@@ -606,7 +606,7 @@ print_status(struct pf_status *s, int op
  		printf("Limit Counters\n");
  		for (i = 0; i < LCNT_MAX; i++) {
  			printf("  %-25s %14lld ", pf_lcounters[i],
@@ -399,7 +425,7 @@ exit 0
  				    (unsigned long long)s->lcounters[i]);
  #else
  				    s->lcounters[i]);
-@@ -655,7 +655,7 @@
+@@ -655,7 +655,7 @@ print_src_node(struct pf_src_node *sn, i
  			    sn->expire, min, sec);
  		}
  		printf(", %llu pkts, %llu bytes",
@@ -408,7 +434,7 @@ exit 0
  		    (unsigned long long)(sn->packets[0] + sn->packets[1]),
  		    (unsigned long long)(sn->bytes[0] + sn->bytes[1]));
  #else
-@@ -1013,7 +1013,7 @@
+@@ -1013,7 +1013,7 @@ print_rule(struct pf_rule *r, const char
  	if (r->rtableid != -1)
  		printf(" rtable %u", r->rtableid);
  	if (r->divert.port) {
@@ -417,9 +443,11 @@ exit 0
  		printf(" divert-to %u", ntohs(r->divert.port));
  #else
  		if (PF_AZERO(&r->divert.addr, r->af)) {
---- a/src/sbin/pfctl/pfctl_qstats.c
-+++ b/src/sbin/pfctl/pfctl_qstats.c
-@@ -89,7 +89,7 @@
+Index: freebsd-utils-jessie/src/sbin/pfctl/pfctl_qstats.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/pfctl/pfctl_qstats.c
++++ freebsd-utils-jessie/src/sbin/pfctl/pfctl_qstats.c
+@@ -89,7 +89,7 @@ pfctl_show_altq(int dev, const char *ifa
  	struct pf_altq_node	*root = NULL, *node;
  	int			 nodes, dotitle = (opts & PF_OPT_SHOWALL);
  
@@ -428,7 +456,7 @@ exit 0
  	if (!altqsupport)
  		return (-1);
  #endif
-@@ -118,7 +118,7 @@
+@@ -118,7 +118,7 @@ pfctl_show_altq(int dev, const char *ifa
  		for (node = root; node != NULL; node = node->next) {
  			if (iface != NULL && strcmp(node->altq.ifname, iface))
  				continue;
@@ -437,7 +465,7 @@ exit 0
  			if (node->altq.local_flags & PFALTQ_FLAG_IF_REMOVED)
  				continue;
  #endif
-@@ -161,7 +161,7 @@
+@@ -161,7 +161,7 @@ pfctl_update_qstats(int dev, struct pf_a
  			warn("DIOCGETALTQ");
  			return (-1);
  		}
@@ -446,7 +474,7 @@ exit 0
  		if (pa.altq.qid > 0 &&
  		    !(pa.altq.local_flags & PFALTQ_FLAG_IF_REMOVED)) {
  #else
-@@ -184,7 +184,7 @@
+@@ -184,7 +184,7 @@ pfctl_update_qstats(int dev, struct pf_a
  				pfctl_insert_altq_node(root, pa.altq, qstats);
  			}
  		}
@@ -455,7 +483,7 @@ exit 0
  		else if (pa.altq.local_flags & PFALTQ_FLAG_IF_REMOVED) {
  			memset(&qstats.data, 0, sizeof(qstats.data));
  			if ((node = pfctl_find_altq_node(*root, pa.altq.qname,
-@@ -303,7 +303,7 @@
+@@ -303,7 +303,7 @@ pfctl_print_altq_nodestat(int dev, const
  	if (a->altq.qid == 0)
  		return;
  

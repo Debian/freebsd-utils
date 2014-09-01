@@ -1,15 +1,8 @@
---- a/src/etc/devd.conf
-+++ b/src/etc/devd.conf
-@@ -1,8 +1,5 @@
--# $FreeBSD$
--#
- # Refer to devd.conf(5) and devd(8) man pages for the details on how to
- # run and configure devd.
--#
- 
- # NB: All regular expressions have an implicit ^$ around them.
- # NB: device-name is shorthand for 'match device-name'
-@@ -13,7 +10,6 @@
+Index: freebsd-utils-jessie/src/etc/devd.conf
+===================================================================
+--- freebsd-utils-jessie.orig/src/etc/devd.conf
++++ freebsd-utils-jessie/src/etc/devd.conf
+@@ -13,7 +13,6 @@ options {
  	# that they are returned from readdir(3).  The rule-sets are combined
  	# to create a DFA that's used to match events to actions.
  	directory "/etc/devd";
@@ -17,7 +10,7 @@
  	pid-file "/var/run/devd.pid";
  
  	# Setup some shorthand for regex that we use later in the file.
-@@ -27,84 +23,6 @@
+@@ -27,84 +26,6 @@ options {
  # Note that the attach/detach with the highest value wins, so that one can
  # override these general rules.
  
@@ -102,7 +95,7 @@
  # When a USB keyboard arrives, attach it as the console keyboard.
  attach 100 {
  	device-name "ukbd0";
-@@ -115,24 +33,6 @@
+@@ -115,42 +36,6 @@ detach 100 {
  	action "/etc/rc.d/syscons setkeyboard /dev/kbd0";
  };
  
@@ -110,7 +103,25 @@
 -	match "system" "DEVFS";
 -	match "subsystem" "CDEV";
 -	match "type" "CREATE";
+-	match "cdev" "atp[0-9]+";
+-
+-	action "/etc/rc.d/moused quietstart $cdev";
+-};
+-
+-notify 100 {
+-	match "system" "DEVFS";
+-	match "subsystem" "CDEV";
+-	match "type" "CREATE";
 -	match "cdev" "ums[0-9]+";
+-
+-	action "/etc/rc.d/moused quietstart $cdev";
+-};
+-
+-notify 100 {
+-	match "system" "DEVFS";
+-	match "subsystem" "CDEV";
+-	match "type" "CREATE";
+-	match "cdev" "wsp[0-9]+";
 -
 -	action "/etc/rc.d/moused quietstart $cdev";
 -};
@@ -127,7 +138,7 @@
  # Firmware download into the ActiveWire board. After the firmware download is
  # done, the device detaches and reappears as something new and shiny
  # automatically.
-@@ -211,13 +111,6 @@
+@@ -229,13 +114,6 @@ nomatch 10 {
  		vendor $vendor bus $bus";
  };
  
@@ -141,7 +152,7 @@
  # Notify all users before beginning emergency shutdown when we get
  # a _CRT or _HOT thermal event and we're going to power down the system
  # very soon.
-@@ -259,19 +152,6 @@
+@@ -277,19 +155,6 @@ notify 10 {
  	action "logger -p kern.warn 'ZFS: checksum mismatch, zpool=$pool path=$vdev_path offset=$zio_offset size=$zio_size'";
  };
  

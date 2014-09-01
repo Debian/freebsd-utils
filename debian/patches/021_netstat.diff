@@ -1,18 +1,7 @@
---- a/src/usr.bin/netstat/netgraph.c
-+++ b/src/usr.bin/netstat/netgraph.c
-@@ -75,8 +75,8 @@
- 		const char *const modname = "ng_socket.ko";
- /* XXX We should get "mpath" from "sysctl kern.module_path" */
- 		const char *mpath[] = { "/", "/boot/", "/modules/", NULL };
--		struct nlist sym[] = { { .n_name = "_ngsocklist" },
--				       { .n_name = NULL } };
-+		struct nlist sym[] = { {{ .n_name = "_ngsocklist" }},
-+				       {{ .n_name = NULL }} };
- 		const char **pre;
- 		struct kld_file_stat ks;
- 		int fileid;
---- a/src/usr.bin/netstat/netstat.h
-+++ b/src/usr.bin/netstat/netstat.h
+Index: freebsd-utils-jessie/src/usr.bin/netstat/netstat.h
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.bin/netstat/netstat.h
++++ freebsd-utils-jessie/src/usr.bin/netstat/netstat.h
 @@ -32,6 +32,19 @@
  
  #include <sys/cdefs.h>

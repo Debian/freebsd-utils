@@ -1,17 +1,21 @@
---- a/src/usr.sbin/acpi/Makefile
-+++ b/src/usr.sbin/acpi/Makefile
+Index: freebsd-utils-jessie/src/usr.sbin/acpi/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/acpi/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/acpi/Makefile
 @@ -2,6 +2,7 @@
  # $Id: Makefile,v 1.1 2000/07/14 18:16:22 iwasaki Exp $
- # $FreeBSD$
+ # $FreeBSD: stable/10/usr.sbin/acpi/Makefile 118643 2003-08-08 03:20:59Z njl $
  
 -SUBDIR= acpiconf acpidb acpidump iasl
 +SUBDIR= acpiconf
 +# acpidb acpidump iasl
  
  .include <bsd.subdir.mk>
---- a/src/sbin/ifconfig/Makefile
-+++ b/src/sbin/ifconfig/Makefile
-@@ -38,6 +38,8 @@
+Index: freebsd-utils-jessie/src/sbin/ifconfig/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/ifconfig/Makefile
++++ freebsd-utils-jessie/src/sbin/ifconfig/Makefile
+@@ -38,6 +38,8 @@ SRCS+=	ifieee80211.c regdomain.c # SIOC[
  DPADD+=	${LIBBSDXML} ${LIBSBUF}
  LDADD+=	-lbsdxml -lsbuf
  
@@ -19,10 +23,12 @@
 +
  SRCS+=	carp.c			# SIOC[GS]VH support
  SRCS+=	ifgroup.c		# ...
- SRCS+=	ifpfsync.c		# pfsync(4) support
---- a/src/usr.sbin/ppp/Makefile
-+++ b/src/usr.sbin/ppp/Makefile
-@@ -38,10 +38,10 @@
+ .if ${MK_PF} != "no"
+Index: freebsd-utils-jessie/src/usr.sbin/ppp/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/ppp/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/ppp/Makefile
+@@ -38,10 +38,10 @@ BINMODE=550
  BINMODE=4550
  BINOWN=	root
  .endif
@@ -35,8 +41,10 @@
  DPADD=	${LIBCRYPT} ${LIBMD} ${LIBUTIL} ${LIBZ}
  
  .if defined(PPP_CONFDIR) && !empty(PPP_CONFDIR)
---- a/src/usr.sbin/nfsd/Makefile
-+++ b/src/usr.sbin/nfsd/Makefile
+Index: freebsd-utils-jessie/src/usr.sbin/nfsd/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/nfsd/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/nfsd/Makefile
 @@ -3,5 +3,7 @@
  
  PROG=	nfsd
@@ -45,9 +53,11 @@
 +LDADD=   -ltirpc
  
  .include <bsd.prog.mk>
---- a/src/usr.sbin/rpc.lockd/Makefile
-+++ b/src/usr.sbin/rpc.lockd/Makefile
-@@ -5,23 +5,27 @@
+Index: freebsd-utils-jessie/src/usr.sbin/rpc.lockd/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/rpc.lockd/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/rpc.lockd/Makefile
+@@ -5,23 +5,27 @@ PROG=	rpc.lockd
  MAN=	rpc.lockd.8
  MLINKS=	rpc.lockd.8 lockd.8
  SRCS=	kern.c nlm_prot_svc.c lockd.c lock_proc.c lockd_lock.c
@@ -80,9 +90,11 @@
  
  test: ${.CURDIR}/test.c
  	cc -o test ${.CURDIR}/test.c -lrpcsvc
---- a/src/sbin/swapon/Makefile
-+++ b/src/sbin/swapon/Makefile
-@@ -9,6 +9,6 @@
+Index: freebsd-utils-jessie/src/sbin/swapon/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/swapon/Makefile
++++ freebsd-utils-jessie/src/sbin/swapon/Makefile
+@@ -9,6 +9,6 @@ MLINKS=	swapon.8 swapoff.8
  MLINKS+=swapon.8 swapctl.8
  
  DPADD=	${LIBUTIL}
@@ -90,19 +102,23 @@
 +LDADD=	-lutil-freebsd -lfreebsd-glue
  
  .include <bsd.prog.mk>
---- a/src/sbin/pfctl/Makefile
-+++ b/src/sbin/pfctl/Makefile
-@@ -18,7 +18,7 @@
+Index: freebsd-utils-jessie/src/sbin/pfctl/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/pfctl/Makefile
++++ freebsd-utils-jessie/src/sbin/pfctl/Makefile
+@@ -28,7 +28,7 @@ CFLAGS+= -DWITH_INET
  
  YFLAGS=
  
 -LDADD+=	-lm -lmd
-+LDADD+=	-lm -lbsd
++LDADD+=	-lm -lbsd -lfreebsd-glue
  DPADD+=	${LIBM} ${LIBMD}
  
  .include <bsd.prog.mk>
---- a/src/usr.sbin/authpf/Makefile
-+++ b/src/usr.sbin/authpf/Makefile
+Index: freebsd-utils-jessie/src/usr.sbin/authpf/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/authpf/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/authpf/Makefile
 @@ -5,7 +5,7 @@
  PROG=	authpf
  MAN=	authpf.8
@@ -112,7 +128,7 @@
  BINMODE= 6555
  
  SRCS=   authpf.c
-@@ -13,7 +13,7 @@
+@@ -13,7 +13,7 @@ SRCS=   authpf.c
  # XXX ALTQ:
  CFLAGS+= -DENABLE_ALTQ
  
@@ -121,8 +137,10 @@
  DPADD+= ${LIBM} ${LIBMD} ${LIBUTIL}
  
  WARNS?=	3
---- a/src/sbin/savecore/Makefile
-+++ b/src/sbin/savecore/Makefile
+Index: freebsd-utils-jessie/src/sbin/savecore/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/savecore/Makefile
++++ freebsd-utils-jessie/src/sbin/savecore/Makefile
 @@ -2,7 +2,7 @@
  
  PROG=	savecore
@@ -132,8 +150,10 @@
  MAN=	savecore.8
  
  .include <bsd.prog.mk>
---- a/src/sbin/geom/class/raid/Makefile
-+++ b/src/sbin/geom/class/raid/Makefile
+Index: freebsd-utils-jessie/src/sbin/geom/class/raid/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/geom/class/raid/Makefile
++++ freebsd-utils-jessie/src/sbin/geom/class/raid/Makefile
 @@ -5,6 +5,6 @@
  GEOM_CLASS=	raid
  
@@ -142,9 +162,11 @@
 +#LDADD=	-lmd
  
  .include <bsd.lib.mk>
---- a/src/sbin/geom/class/eli/Makefile
-+++ b/src/sbin/geom/class/eli/Makefile
-@@ -9,7 +9,7 @@
+Index: freebsd-utils-jessie/src/sbin/geom/class/eli/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/geom/class/eli/Makefile
++++ freebsd-utils-jessie/src/sbin/geom/class/eli/Makefile
+@@ -9,7 +9,7 @@ SRCS+=	pkcs5v2.c
  SRCS+=	sha2.c
  
  DPADD=	${LIBMD} ${LIBCRYPTO}
@@ -153,9 +175,11 @@
  
  WARNS?=	3
  
---- a/src/sbin/geom/class/Makefile
-+++ b/src/sbin/geom/class/Makefile
-@@ -7,18 +7,14 @@
+Index: freebsd-utils-jessie/src/sbin/geom/class/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/geom/class/Makefile
++++ freebsd-utils-jessie/src/sbin/geom/class/Makefile
+@@ -7,18 +7,14 @@ SUBDIR+=concat
  .if ${MK_OPENSSL} != "no"
  SUBDIR+=eli
  .endif
@@ -174,8 +198,10 @@
 -SUBDIR+=virstor
  
  .include <bsd.subdir.mk>
---- a/src/sbin/geom/class/mirror/Makefile
-+++ b/src/sbin/geom/class/mirror/Makefile
+Index: freebsd-utils-jessie/src/sbin/geom/class/mirror/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/geom/class/mirror/Makefile
++++ freebsd-utils-jessie/src/sbin/geom/class/mirror/Makefile
 @@ -5,6 +5,6 @@
  GEOM_CLASS=	mirror
  
@@ -184,8 +210,10 @@
 +#LDADD=	-lmd
  
  .include <bsd.lib.mk>
---- a/src/sbin/geom/class/raid3/Makefile
-+++ b/src/sbin/geom/class/raid3/Makefile
+Index: freebsd-utils-jessie/src/sbin/geom/class/raid3/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/geom/class/raid3/Makefile
++++ freebsd-utils-jessie/src/sbin/geom/class/raid3/Makefile
 @@ -5,6 +5,6 @@
  GEOM_CLASS=	raid3
  
@@ -194,9 +222,11 @@
 +#LDADD=	-lmd
  
  .include <bsd.lib.mk>
---- a/src/sbin/geom/core/Makefile
-+++ b/src/sbin/geom/core/Makefile
-@@ -12,6 +12,6 @@
+Index: freebsd-utils-jessie/src/sbin/geom/core/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/geom/core/Makefile
++++ freebsd-utils-jessie/src/sbin/geom/core/Makefile
+@@ -12,6 +12,6 @@ CFLAGS+= -DGEOM_CLASS_DIR=\"${GEOM_CLASS
  CFLAGS+= -I${.CURDIR}/../../../sys -I${.CURDIR} -I${.CURDIR}/..
  
  DPADD=	${LIBGEOM} ${LIBSBUF} ${LIBBSDXML} ${LIBUTIL}
@@ -204,9 +234,11 @@
 +LDADD=	-lgeom -ldl -lbsd
  
  .include <bsd.prog.mk>
---- a/src/usr.sbin/pppctl/Makefile
-+++ b/src/usr.sbin/pppctl/Makefile
-@@ -6,6 +6,6 @@
+Index: freebsd-utils-jessie/src/usr.sbin/pppctl/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/pppctl/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/pppctl/Makefile
+@@ -6,6 +6,6 @@ MAN=	pppctl.8
  WARNS?=	2
  
  DPADD=	${LIBPTHREAD} ${LIBEDIT} ${LIBTERMCAP}
@@ -214,8 +246,10 @@
 +LDADD=	-lpthread -ledit -lbsd
  
  .include <bsd.prog.mk>
---- a/src/sbin/mount_nfs/Makefile
-+++ b/src/sbin/mount_nfs/Makefile
+Index: freebsd-utils-jessie/src/sbin/mount_nfs/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/mount_nfs/Makefile
++++ freebsd-utils-jessie/src/sbin/mount_nfs/Makefile
 @@ -4,6 +4,7 @@
  
  PROG=	mount_nfs
@@ -224,9 +258,11 @@
  MAN=	mount_nfs.8
  MLINKS=	mount_nfs.8 mount_oldnfs.8
  
---- a/src/usr.sbin/mountd/Makefile
-+++ b/src/usr.sbin/mountd/Makefile
-@@ -6,12 +6,12 @@
+Index: freebsd-utils-jessie/src/usr.sbin/mountd/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/mountd/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/mountd/Makefile
+@@ -6,12 +6,12 @@ SRCS=	mountd.c getmntopts.c
  MAN=	exports.5 netgroup.5 mountd.8
  
  MOUNT=  ${.CURDIR}/../../sbin/mount
@@ -241,8 +277,10 @@
 +LDADD=	-ltirpc -lbsd
  
  .include <bsd.prog.mk>
---- a/src/usr.sbin/arp/Makefile
-+++ b/src/usr.sbin/arp/Makefile
+Index: freebsd-utils-jessie/src/usr.sbin/arp/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/arp/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/arp/Makefile
 @@ -3,6 +3,7 @@
  
  PROG=	arp
@@ -251,9 +289,11 @@
  
  WARNS?=	3
  
---- a/src/usr.bin/netstat/Makefile
-+++ b/src/usr.bin/netstat/Makefile
-@@ -29,7 +29,8 @@
+Index: freebsd-utils-jessie/src/usr.bin/netstat/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.bin/netstat/Makefile
++++ freebsd-utils-jessie/src/usr.bin/netstat/Makefile
+@@ -34,7 +34,8 @@ CFLAGS+=-DPF
  BINGRP=	kmem
  BINMODE=2555
  DPADD=	${LIBKVM} ${LIBMEMSTAT} ${LIBUTIL}
@@ -263,9 +303,11 @@
  
  .if ${MK_NETGRAPH_SUPPORT} != "no"
  SRCS+=	netgraph.c
---- a/src/sbin/umount/Makefile
-+++ b/src/sbin/umount/Makefile
-@@ -6,6 +6,8 @@
+Index: freebsd-utils-jessie/src/sbin/umount/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/umount/Makefile
++++ freebsd-utils-jessie/src/sbin/umount/Makefile
+@@ -6,6 +6,8 @@ PROG=	umount
  SRCS=	umount.c vfslist.c mounttab.c
  MAN=	umount.8
  
@@ -274,9 +316,11 @@
  MOUNT=	${.CURDIR}/../mount
  UMNTALL= ${.CURDIR}/../../usr.sbin/rpc.umntall
  CFLAGS+= -I${MOUNT} -I${UMNTALL}
---- a/src/sbin/route/Makefile
-+++ b/src/sbin/route/Makefile
-@@ -9,6 +9,8 @@
+Index: freebsd-utils-jessie/src/sbin/route/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/route/Makefile
++++ freebsd-utils-jessie/src/sbin/route/Makefile
+@@ -9,6 +9,8 @@ SRCS=	route.c keywords.h
  WARNS?=	3
  CLEANFILES+=keywords.h
  
@@ -285,9 +329,11 @@
  CFLAGS+= -DNS
  .if ${MK_INET_SUPPORT} != "no"
  CFLAGS+= -DINET
---- a/src/sbin/mount/Makefile
-+++ b/src/sbin/mount/Makefile
-@@ -7,6 +7,8 @@
+Index: freebsd-utils-jessie/src/sbin/mount/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/mount/Makefile
++++ freebsd-utils-jessie/src/sbin/mount/Makefile
+@@ -7,6 +7,8 @@ MAN=	mount.8 mount.conf.8
  # We do NOT install the getmntopts.3 man page.
  
  DPADD=	${LIBUTIL}
@@ -297,9 +343,11 @@
 +LDADD+=	-lfreebsd-glue
  
  .include <bsd.prog.mk>
---- a/src/usr.sbin/jail/Makefile
-+++ b/src/usr.sbin/jail/Makefile
-@@ -7,7 +7,9 @@
+Index: freebsd-utils-jessie/src/usr.sbin/jail/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/jail/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/jail/Makefile
+@@ -7,7 +7,9 @@ MAN=	jail.8 jail.conf.5
  SRCS=	jail.c command.c config.c state.c jailp.h jaillex.l jailparse.y y.tab.h
  
  DPADD=	${LIBJAIL} ${LIBKVM} ${LIBUTIL} ${LIBL}
@@ -310,9 +358,11 @@
  
  NO_WMISSING_VARIABLE_DECLARATIONS=
  
---- a/src/sbin/camcontrol/Makefile
-+++ b/src/sbin/camcontrol/Makefile
-@@ -12,7 +12,7 @@
+Index: freebsd-utils-jessie/src/sbin/camcontrol/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/camcontrol/Makefile
++++ freebsd-utils-jessie/src/sbin/camcontrol/Makefile
+@@ -12,7 +12,7 @@ CFLAGS+= -DMINIMALISTIC
  WARNS?= 3
  .endif
  DPADD=	${LIBCAM} ${LIBSBUF} ${LIBUTIL}
@@ -321,19 +371,24 @@
  MAN=	camcontrol.8
  
  .include <bsd.prog.mk>
---- a/src/sbin/mdconfig/Makefile
-+++ b/src/sbin/mdconfig/Makefile
-@@ -4,6 +4,6 @@
+Index: freebsd-utils-jessie/src/sbin/mdconfig/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/mdconfig/Makefile
++++ freebsd-utils-jessie/src/sbin/mdconfig/Makefile
+@@ -6,7 +6,7 @@ PROG=		mdconfig
  MAN=		mdconfig.8
  
  DPADD=	${LIBUTIL} ${LIBGEOM} ${LIBBSDXML} ${LIBSBUF} 
 -LDADD=	-lutil -lgeom -lbsdxml -lsbuf
 +LDADD=	-lgeom
  
- .include <bsd.prog.mk>
---- a/src/sbin/devd/Makefile
-+++ b/src/sbin/devd/Makefile
-@@ -9,7 +9,7 @@
+ .if ${MK_TESTS} != "no"
+ SUBDIR+=    tests
+Index: freebsd-utils-jessie/src/sbin/devd/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/devd/Makefile
++++ freebsd-utils-jessie/src/sbin/devd/Makefile
+@@ -11,7 +11,7 @@ WARNS?=	3
  NO_SHARED?=YES
  
  DPADD=	${LIBL} ${LIBUTIL}
@@ -342,9 +397,11 @@
  
  LIBSTDC++ != \
  	g++ -print-file-name=crt1.o ; \
---- a/src/usr.sbin/powerd/Makefile
-+++ b/src/usr.sbin/powerd/Makefile
-@@ -4,6 +4,6 @@
+Index: freebsd-utils-jessie/src/usr.sbin/powerd/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/powerd/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/powerd/Makefile
+@@ -4,6 +4,6 @@ PROG=	powerd
  MAN=	powerd.8
  
  DPADD=	${LIBUTIL}
@@ -352,16 +409,20 @@
 +#LDADD=	-lutil
  
  .include <bsd.prog.mk>
+Index: freebsd-utils-jessie/src/bin/Makefile
+===================================================================
 --- /dev/null
-+++ b/src/bin/Makefile
++++ freebsd-utils-jessie/src/bin/Makefile
 @@ -0,0 +1,5 @@
 +SUBDIR = \
 +	kenv \
 +	${NULL}
 +
 +.include <bsd.subdir.mk>
+Index: freebsd-utils-jessie/src/sbin/Makefile
+===================================================================
 --- /dev/null
-+++ b/src/sbin/Makefile
++++ freebsd-utils-jessie/src/sbin/Makefile
 @@ -0,0 +1,36 @@
 +SUBDIR = \
 +	devd \
@@ -399,8 +460,10 @@
 +.endif
 +
 +.include <bsd.subdir.mk>
+Index: freebsd-utils-jessie/src/usr.bin/Makefile
+===================================================================
 --- /dev/null
-+++ b/src/usr.bin/Makefile
++++ freebsd-utils-jessie/src/usr.bin/Makefile
 @@ -0,0 +1,9 @@
 +SUBDIR = \
 +	kdump \
@@ -411,8 +474,10 @@
 +	vmstat \
 +
 +.include <bsd.subdir.mk>
+Index: freebsd-utils-jessie/src/usr.sbin/Makefile
+===================================================================
 --- /dev/null
-+++ b/src/usr.sbin/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/Makefile
 @@ -0,0 +1,22 @@
 +SUBDIR = \
 +	kbdcontrol \
@@ -436,8 +501,10 @@
 +.endif
 +
 +.include <bsd.subdir.mk>
+Index: freebsd-utils-jessie/src/Makefile
+===================================================================
 --- /dev/null
-+++ b/src/Makefile
++++ freebsd-utils-jessie/src/Makefile
 @@ -0,0 +1,14 @@
 +SUBDIR = \
 +	bin \

@@ -2,16 +2,21 @@
 When route is invoked with no arguments, fallback to "netstat -r"
 to list existing routes.
 
---- a/src/sbin/route/route.c
-+++ b/src/sbin/route/route.c
-@@ -139,9 +139,19 @@
+Index: freebsd-utils-jessie/src/sbin/route/route.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/route/route.c
++++ freebsd-utils-jessie/src/sbin/route/route.c
+@@ -138,10 +138,19 @@ static void usage(const char *) __dead2;
+ static void
  usage(const char *cp)
  {
- 	if (cp != NULL)
-+	{
+-	if (cp != NULL)
++	if (cp != NULL) {
  		warnx("bad keyword: %s", cp);
- 	errx(EX_USAGE, "usage: route [-dnqtv] command [[modifiers] args]");
- 	/* NOTREACHED */
+-	errx(EX_USAGE, "usage: route [-46dnqtv] command [[modifiers] args]");
+-	/* NOTREACHED */
++		errx(EX_USAGE, "usage: route [-46dnqtv] command [[modifiers] args]");
++		/* NOTREACHED */
 +	} else {
 +		warnx("warning: route invoked with no arguments. fallback to \"netstat -r\"\n");
 +

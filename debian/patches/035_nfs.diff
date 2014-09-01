@@ -1,6 +1,8 @@
---- a/src/sbin/mount_nfs/mount_nfs.c
-+++ b/src/sbin/mount_nfs/mount_nfs.c
-@@ -668,12 +668,18 @@
+Index: freebsd-utils-jessie/src/sbin/mount_nfs/mount_nfs.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/mount_nfs/mount_nfs.c
++++ freebsd-utils-jessie/src/sbin/mount_nfs/mount_nfs.c
+@@ -694,12 +694,18 @@ fallback_mount(struct iovec *iov, int io
  static int
  sec_name_to_num(char *sec)
  {
@@ -19,7 +21,7 @@
  	if (!strcmp(sec, "sys"))
  		return (AUTH_SYS);
  	return (-1);
-@@ -683,12 +689,18 @@
+@@ -709,12 +715,18 @@ static char *
  sec_num_to_name(int flavor)
  {
  	switch (flavor) {
@@ -38,7 +40,7 @@
  	case AUTH_SYS:
  		return ("sys");
  	}
-@@ -833,9 +845,11 @@
+@@ -859,9 +871,11 @@ getnfsargs(char *spec, struct iovec **io
  	freeaddrinfo(ai_nfs);
  
  	build_iovec(iov, iovlen, "hostname", nam, (size_t)-1);
@@ -50,9 +52,11 @@
  	return (1);
  }
  
---- a/src/usr.sbin/mountd/mountd.c
-+++ b/src/usr.sbin/mountd/mountd.c
-@@ -2115,12 +2115,18 @@
+Index: freebsd-utils-jessie/src/usr.sbin/mountd/mountd.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/mountd/mountd.c
++++ freebsd-utils-jessie/src/usr.sbin/mountd/mountd.c
+@@ -2115,12 +2115,18 @@ parsesec(char *seclist, struct exportlis
  
  		if (!strcmp(seclist, "sys"))
  			flavor = AUTH_SYS;
@@ -71,9 +75,11 @@
  		else {
  			if (cp)
  				*cp = savedc;
---- a/src/usr.sbin/rpc.lockd/lockd.c
-+++ b/src/usr.sbin/rpc.lockd/lockd.c
-@@ -997,7 +997,7 @@
+Index: freebsd-utils-jessie/src/usr.sbin/rpc.lockd/lockd.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/rpc.lockd/lockd.c
++++ freebsd-utils-jessie/src/usr.sbin/rpc.lockd/lockd.c
+@@ -997,7 +997,7 @@ init_nsm(void)
  		ret = callrpc("localhost", SM_PROG, SM_VERS, SM_UNMON_ALL,
  		    (xdrproc_t)xdr_my_id, &id, (xdrproc_t)xdr_sm_stat, &stat);
  		if (ret == RPC_PROGUNAVAIL) {
@@ -82,7 +88,7 @@
  			    clnt_sperrno(ret));
  			sleep(2);
  			continue;
-@@ -1006,7 +1006,7 @@
+@@ -1006,7 +1006,7 @@ init_nsm(void)
  	} while (0);
  
  	if (ret != 0) {
@@ -91,9 +97,11 @@
  		exit(1);
  	}
  
---- a/src/usr.sbin/rpc.lockd/kern.c
-+++ b/src/usr.sbin/rpc.lockd/kern.c
-@@ -52,7 +52,8 @@
+Index: freebsd-utils-jessie/src/usr.sbin/rpc.lockd/kern.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/rpc.lockd/kern.c
++++ freebsd-utils-jessie/src/usr.sbin/rpc.lockd/kern.c
+@@ -52,7 +52,8 @@ __FBSDID("$FreeBSD: stable/10/usr.sbin/r
  #include <unistd.h>
  #include <netdb.h>
  
@@ -103,9 +111,11 @@
  #include <nfs/nfsproto.h>
  #include <nfs/nfs_lock.h>
  
---- a/src/usr.sbin/rpc.statd/statd.c
-+++ b/src/usr.sbin/rpc.statd/statd.c
-@@ -58,6 +58,8 @@
+Index: freebsd-utils-jessie/src/usr.sbin/rpc.statd/statd.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/rpc.statd/statd.c
++++ freebsd-utils-jessie/src/usr.sbin/rpc.statd/statd.c
+@@ -58,6 +58,8 @@ __FBSDID("$FreeBSD: stable/10/usr.sbin/r
  
  #define	GETPORT_MAXTRY	20	/* Max tries to get a port # */
  
@@ -114,7 +124,7 @@
  int debug = 0;		/* Controls syslog() calls for debug messages	*/
  
  char **hosts, *svcport_str = NULL;
-@@ -281,7 +283,7 @@
+@@ -281,7 +283,7 @@ main(int argc, char **argv)
    	free(port_list);
    }
  
@@ -123,9 +133,11 @@
  
    /* Note that it is NOT sensible to run this program from inetd - the 	*/
    /* protocol assumes that it will run immediately at boot time.	*/
---- a/src/usr.sbin/rpc.statd/rpc.statd.8
-+++ b/src/usr.sbin/rpc.statd/rpc.statd.8
-@@ -110,7 +110,7 @@
+Index: freebsd-utils-jessie/src/usr.sbin/rpc.statd/rpc.statd.8
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/rpc.statd/rpc.statd.8
++++ freebsd-utils-jessie/src/usr.sbin/rpc.statd/rpc.statd.8
+@@ -110,7 +110,7 @@ Instead, it should be run from
  after the network has been started.
  .Sh FILES
  .Bl -tag -width /usr/include/rpcsvc/sm_inter.x -compact
@@ -134,9 +146,11 @@
  non-volatile record of currently monitored hosts.
  .It Pa /usr/include/rpcsvc/sm_inter.x
  RPC protocol specification used by local applications to register monitoring requests.
---- a/src/usr.sbin/rpc.statd/Makefile
-+++ b/src/usr.sbin/rpc.statd/Makefile
-@@ -8,16 +8,21 @@
+Index: freebsd-utils-jessie/src/usr.sbin/rpc.statd/Makefile
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.sbin/rpc.statd/Makefile
++++ freebsd-utils-jessie/src/usr.sbin/rpc.statd/Makefile
+@@ -8,16 +8,21 @@ CFLAGS+= -I.
  WARNS?= 2
  
  DPADD=	${LIBRPCSVC}

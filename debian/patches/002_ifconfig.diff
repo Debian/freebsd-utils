@@ -1,6 +1,8 @@
---- a/src/sbin/ifconfig/ifconfig.c
-+++ b/src/sbin/ifconfig/ifconfig.c
-@@ -76,6 +76,13 @@
+Index: freebsd-utils-jessie/src/sbin/ifconfig/ifconfig.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/sbin/ifconfig/ifconfig.c
++++ freebsd-utils-jessie/src/sbin/ifconfig/ifconfig.c
+@@ -76,6 +76,13 @@ static const char rcsid[] =
  
  #include "ifconfig.h"
  
@@ -13,8 +15,8 @@
 +
  /*
   * Since "struct ifreq" is composed of various union members, callers
-  * should pay special attention to interprete the value.
-@@ -158,7 +165,7 @@
+  * should pay special attention to interpret the value.
+@@ -158,7 +165,7 @@ main(int argc, char *argv[])
  	all = downonly = uponly = namesonly = noload = verbose = 0;
  
  	/* Parse leading line options */
@@ -23,7 +25,7 @@
  	for (p = opts; p != NULL; p = p->next)
  		strlcat(options, p->opt, sizeof(options));
  	while ((c = getopt(argc, argv, options)) != -1) {
-@@ -954,7 +961,7 @@
+@@ -954,7 +961,7 @@ status(const struct afswtch *afp, const
  	putchar('\n');
  
  	for (;;) {

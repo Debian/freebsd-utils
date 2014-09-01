@@ -5,9 +5,11 @@ Do not hardcode "default". Instead, let netname() handle this. This makes
 Note: it relies on /etc/networks defining "default", which FreeBSD's
 currently doesn't.
 
---- a/src/usr.bin/netstat/route.c
-+++ b/src/usr.bin/netstat/route.c
-@@ -622,12 +622,7 @@
+Index: freebsd-utils-jessie/src/usr.bin/netstat/route.c
+===================================================================
+--- freebsd-utils-jessie.orig/src/usr.bin/netstat/route.c
++++ freebsd-utils-jessie/src/usr.bin/netstat/route.c
+@@ -707,12 +707,7 @@ fmt_sockaddr(struct sockaddr *sa, struct
  	    {
  		struct sockaddr_in *sockin = (struct sockaddr_in *)sa;
  
