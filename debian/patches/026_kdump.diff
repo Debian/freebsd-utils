@@ -72,16 +72,16 @@ Index: freebsd-utils-jessie/src/usr.bin/kdump/Makefile
  ioctl.c: mkioctls
  	env MACHINE=${MACHINE} CPP="${CPP}" \
 -	    sh ${.CURDIR}/mkioctls print ${DESTDIR}/usr/include > ${.TARGET}
-+	    sh ${.CURDIR}/mkioctls print /usr/src/kfreebsd-headers-10.0-1/sys > ${.TARGET}
++	    sh ${.CURDIR}/mkioctls print /usr/src/kfreebsd-headers-10.1-0/sys > ${.TARGET}
  
  kdump_subr.h: mksubr
 -	sh ${.CURDIR}/mksubr ${DESTDIR}/usr/include | \
-+	sh ${.CURDIR}/mksubr /usr/src/kfreebsd-headers-10.0-1/sys | \
++	sh ${.CURDIR}/mksubr /usr/src/kfreebsd-headers-10.1-0/sys | \
  	    sed -n 's/^\([a-z].*)\)$$/void \1;/p' >${.TARGET}
  
  kdump_subr.c: mksubr kdump_subr.h
 -	sh ${.CURDIR}/mksubr ${DESTDIR}/usr/include >${.TARGET}
-+	sh ${.CURDIR}/mksubr /usr/src/kfreebsd-headers-10.0-1/sys >${.TARGET}
++	sh ${.CURDIR}/mksubr /usr/src/kfreebsd-headers-10.1-0/sys >${.TARGET}
  
  linux_syscalls.c:
  	/bin/sh ${.CURDIR}/../../sys/kern/makesyscalls.sh \

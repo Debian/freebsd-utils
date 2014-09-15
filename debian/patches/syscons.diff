@@ -16,8 +16,8 @@ settings, etc.
  name="syscons"
  extra_commands="setkeyboard"
  setkeyboard_cmd="syscons_setkeyboard"
-@@ -258,6 +256,9 @@
- 	[ -n "${_sc_initdone}" ] && echo '.'
+@@ -369,6 +367,9 @@
+ 	fi
  }
  
 -load_rc_config $name

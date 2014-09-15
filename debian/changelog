@@ -5,6 +5,12 @@ freebsd-utils (10.1-1) UNRELEASED; urgency=medium
 
   [ Steven Chamberlain ]
   * Build-Depend on kfreebsd-headers-10.1-0
+    - update hardcoded path in 026_kdump.diff
+  * Refresh patches:
+    - syscons.diff
+    - cli_compat.diff
+    - 007_mount.diff
+    - makefiles.diff
   * Add local definition to sys/mount.h of MNT_AUTOMOUNTED, not in glibc
 
  -- Christoph Egger <christoph@debian.org>  Sun, 31 Aug 2014 12:37:04 -0700
