@@ -1,6 +1,11 @@
-freebsd-utils (10.1-1) experimental; urgency=medium
+freebsd-utils (10.1-1) UNRELEASED; urgency=medium
 
+  [ Christoph Egger ]
   * Upload from 10-STABLE to experimental
+
+  [ Steven Chamberlain ]
+  * Build-Depend on kfreebsd-headers-10.1-0
+  * Add local definition to sys/mount.h of MNT_AUTOMOUNTED, not in glibc
 
  -- Christoph Egger <christoph@debian.org>  Sun, 31 Aug 2014 12:37:04 -0700
 

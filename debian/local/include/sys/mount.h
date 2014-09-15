@@ -11,6 +11,10 @@
 #define     MNT_SUJ         0x0000000100000000ULL /* using journaled soft updates */
 #endif
 
+#ifndef MNT_AUTOMOUNTED
+#define     MNT_AUTOMOUNTED 0x0000000200000000ULL /* mounted by automountd(8) */
+#endif
+
 /*
  * Old export arguments without security flavor list
  */
