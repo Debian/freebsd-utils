@@ -4,6 +4,7 @@ freebsd-utils (10.1-1) UNRELEASED; urgency=medium
   * Upload from 10-STABLE to experimental
 
   [ Steven Chamberlain ]
+  * Build-Depend on kfreebsd-kernel-headers >= 10.1~2
   * Build-Depend on kfreebsd-headers-10.1-0
     - update hardcoded path in 026_kdump.diff
   * Refresh patches:
