@@ -12,6 +12,11 @@ freebsd-utils (10.1-1) UNRELEASED; urgency=medium
     - 007_mount.diff
     - makefiles.diff
   * Add local definition to sys/mount.h of MNT_AUTOMOUNTED, not in glibc
+  * Workarounds:
+    - mk_tests.diff:  disable MK_TESTS until kfreebsd-buildutils updated
+      to version >> 10.1~
+    - netstat_maddrs.diff:  don't print multicast addresses;  requires
+      getifmaddrs and freeifaddrs functions of FreeBSD libc
 
  -- Christoph Egger <christoph@debian.org>  Sun, 31 Aug 2014 12:37:04 -0700
 

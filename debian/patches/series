@@ -36,3 +36,5 @@ rpc.lockd-startup-fix.diff
 
 # Patches that are likely to be Debian-specific
 makefiles.diff
+mk_tests.diff
+netstat_maddrs.diff

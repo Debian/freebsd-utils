@@ -1,0 +1,54 @@
+Temporarily disable showing multicast addresses in netstat -a
+
+The necessary getifmaddrs and freeifaddrs functions are currently only
+available in FreeBSD libc
+
+--- a/src/usr.bin/netstat/if.c
++++ b/src/usr.bin/netstat/if.c
+@@ -202,6 +202,7 @@
+ 	}
+ }
+ 
++#if 0
+ /*
+  * Find next multiaddr for a given interface name.
+  */
+@@ -220,6 +221,7 @@
+ 
+ 	return (ifma);
+ }
++#endif
+ 
+ /*
+  * Print a description of the network interfaces.
+@@ -228,15 +230,19 @@
+ intpr(int interval, void (*pfunc)(char *), int af)
+ {
+ 	struct ifaddrs *ifap, *ifa;
++#if 0
+ 	struct ifmaddrs *ifmap, *ifma;
++#endif
+ 	
+ 	if (interval)
+ 		return sidewaysintpr(interval);
+ 
+ 	if (getifaddrs(&ifap) != 0)
+ 		err(EX_OSERR, "getifaddrs");
++#if 0
+ 	if (aflag && getifmaddrs(&ifmap) != 0)
+ 		err(EX_OSERR, "getifmaddrs");
++#endif
+ 
+ 	if (!pfunc) {
+ 		if (Wflag)
+@@ -452,8 +458,10 @@
+ 	}
+ 
+ 	freeifaddrs(ifap);
++#if 0
+ 	if (aflag)
+ 		freeifmaddrs(ifmap);
++#endif
+ }
+ 
+ struct iftot {
