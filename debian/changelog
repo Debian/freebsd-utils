@@ -5,6 +5,7 @@ freebsd-utils (10.1~svn271687-1) UNRELEASED; urgency=medium
   * Build-Depend on kfreebsd-kernel-headers >= 10.1~2
   * Build-Depend on kfreebsd-headers-10.1-0
     - update hardcoded path in 026_kdump.diff
+  * Build-Depend on libcam-dev >= 10.1
   * Refresh patches:
     - syscons.diff
     - cli_compat.diff

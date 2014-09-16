@@ -31,7 +31,7 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
 # libsbuf-dev: ifconfig, mdconfig, geom
  libsbuf-dev (>= 8.2-2),
 # libcam-dev: camcontrol
- libcam-dev (>= 10.0),
+ libcam-dev (>= 10.1~),
 # libedit-dev: pppctl
  libedit-dev,
 # libexpat1-dev: ifconfig, geom
