@@ -1,4 +1,4 @@
-freebsd-utils (10.1~pre1) UNRELEASED; urgency=medium
+freebsd-utils (10.1~svn271687-1) UNRELEASED; urgency=medium
 
   [ Steven Chamberlain ]
   * New upstream snapshot of 10.1-PRERELEASE
