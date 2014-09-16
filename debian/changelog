@@ -1,9 +1,7 @@
-freebsd-utils (10.1-1) UNRELEASED; urgency=medium
-
-  [ Christoph Egger ]
-  * Upload from 10-STABLE to experimental
+freebsd-utils (10.1~pre1) UNRELEASED; urgency=medium
 
   [ Steven Chamberlain ]
+  * New upstream snapshot of 10.1-PRERELEASE
   * Build-Depend on kfreebsd-kernel-headers >= 10.1~2
   * Build-Depend on kfreebsd-headers-10.1-0
     - update hardcoded path in 026_kdump.diff
@@ -19,7 +17,7 @@ freebsd-utils (10.1-1) UNRELEASED; urgency=medium
     - netstat_maddrs.diff:  don't print multicast addresses;  requires
       getifmaddrs and freeifaddrs functions of FreeBSD libc
 
- -- Christoph Egger <christoph@debian.org>  Sun, 31 Aug 2014 12:37:04 -0700
+ -- GNU/kFreeBSD Maintainers <debian-bsd@lists.debian.org>  Tue, 16 Sep 2014 11:29:52 +0100
 
 freebsd-utils (10.0+ds1-1) unstable; urgency=low
 
