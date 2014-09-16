@@ -1,0 +1,28 @@
+Temporarily remove netstat -d feature showing dropped packet counters.
+
+struct if_data in GNU libc net/if.h doesn't have an ifi_oqdrops member
+yet
+
+--- a/src/usr.bin/netstat/if.c
++++ b/src/usr.bin/netstat/if.c
+@@ -389,8 +389,10 @@
+ 		if (bflag)
+ 			show_stat("lu", 10, IFA_STAT(obytes), link|network);
+ 		show_stat("NRSlu", 5, IFA_STAT(collisions), link);
++#if 0
+ 		if (dflag)
+ 			show_stat("LSlu", 5, IFA_STAT(oqdrops), link);
++#endif
+ 		putchar('\n');
+ 
+ 		if (!aflag)
+@@ -508,7 +510,9 @@
+ 		st->ift_ib += IFA_STAT(ibytes);
+ 		st->ift_op += IFA_STAT(opackets);
+ 		st->ift_oe += IFA_STAT(oerrors);
++#if 0
+ 		st->ift_od += IFA_STAT(oqdrops);
++#endif
+ 		st->ift_ob += IFA_STAT(obytes);
+  		st->ift_co += IFA_STAT(collisions);
+ 	}

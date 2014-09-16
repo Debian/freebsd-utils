@@ -16,6 +16,8 @@ freebsd-utils (10.1~pre1) UNRELEASED; urgency=medium
       to version >> 10.1~
     - netstat_maddrs.diff:  don't print multicast addresses;  requires
       getifmaddrs and freeifaddrs functions of FreeBSD libc
+    - netstat_oqdrops.diff:  don't print dropped packet counters;
+      requires a new struct if_data member not in GNU libc
 
  -- GNU/kFreeBSD Maintainers <debian-bsd@lists.debian.org>  Tue, 16 Sep 2014 11:29:52 +0100
 

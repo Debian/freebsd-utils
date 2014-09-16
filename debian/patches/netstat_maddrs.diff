@@ -41,7 +41,19 @@ available in FreeBSD libc
  
  	if (!pfunc) {
  		if (Wflag)
-@@ -452,8 +458,10 @@
+@@ -390,6 +396,7 @@
+ 		if (!aflag)
+ 			continue;
+ 
++#if 0
+ 		/*
+ 		 * Print family's multicast addresses.
+ 		 */
+@@ -449,11 +456,14 @@
+ 
+ 			ifma = ifma->ifma_next;
+ 		}
++#endif
  	}
  
  	freeifaddrs(ifap);
