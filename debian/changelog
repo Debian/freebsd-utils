@@ -1,4 +1,17 @@
-freebsd-utils (10.1~svn271687-1) UNRELEASED; urgency=medium
+freebsd-utils (10.1~svn271687+really10.1~svn271687-1) experimental; urgency=medium
+
+  * Add a version number for the experimental package that is actually
+    larger than unstable's
+
+ -- Christoph Egger <christoph@debian.org>  Tue, 16 Sep 2014 23:02:09 -0700
+
+freebsd-utils (10.1~svn271687-2) experimental; urgency=medium
+
+  * Actually upload to experimental
+
+ -- Christoph Egger <christoph@debian.org>  Tue, 16 Sep 2014 21:31:53 -0700
+
+freebsd-utils (10.1~svn271687-1) unstable; urgency=medium
 
   [ Steven Chamberlain ]
   * New upstream snapshot of 10.1-PRERELEASE
@@ -20,7 +33,7 @@ freebsd-utils (10.1~svn271687-1) UNRELEASED; urgency=medium
     - netstat_oqdrops.diff:  don't print dropped packet counters;
       requires a new struct if_data member not in GNU libc
 
- -- GNU/kFreeBSD Maintainers <debian-bsd@lists.debian.org>  Tue, 16 Sep 2014 11:29:52 +0100
+ -- Christoph Egger <christoph@debian.org>  Tue, 16 Sep 2014 20:49:41 -0700
 
 freebsd-utils (10.0+ds1-1) unstable; urgency=low
 
