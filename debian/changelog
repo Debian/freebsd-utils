@@ -1,7 +1,7 @@
 freebsd-utils (10.1~svn272167-1) UNRELEASED; urgency=medium
 
   * New upstream snapshot of 10.1-BETA3
-  * Drop Breaks: on old kernel verisons, which can't have the
+  * Drop Breaks: on old kernel versions, which can't have the
     intended effect anyway until reboot (Closes: #756464)
 
  -- Steven Chamberlain <steven@pyro.eu.org>  Fri, 26 Sep 2014 20:42:16 +0100
