@@ -8,7 +8,6 @@ Uploaders: Aurelien Jarno <aurel32@debian.org>,
 Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  flex | flex-old,
  freebsd-buildutils (>= 9.0-8~),
- freebsd-mk (>= 10.0-5),
  freebsd-glue (>= 0.2.17~),
  kfreebsd-kernel-headers (>= 10.1~2),
 # for kdump
