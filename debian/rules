@@ -231,7 +231,8 @@ binary-arch: build install
 #	dh_installinfo
 	dh_installman
 	dh_link
-	dh_strip
+	dh_fixperms -X/usr/bin/netstat
+	dh_strip -X/usr/bin/netstat
 	dh_compress
 	dh_fixperms -X/usr/bin/netstat
 #	dh_perl
