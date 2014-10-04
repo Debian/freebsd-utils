@@ -2,9 +2,11 @@ Source: freebsd-utils
 Section: utils
 Priority: important
 Maintainer: GNU/kFreeBSD Maintainers <debian-bsd@lists.debian.org>
-Uploaders: Aurelien Jarno <aurel32@debian.org>,
+Uploaders:
+ Aurelien Jarno <aurel32@debian.org>,
  Robert Millan <rmh@debian.org>,
- Christoph Egger <christoph@debian.org>
+ Christoph Egger <christoph@debian.org>,
+ Steven Chamberlain <steven@pyro.eu.org>,
 Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  flex | flex-old,
  freebsd-buildutils (>= 9.0-8~),
