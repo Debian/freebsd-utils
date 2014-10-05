@@ -5,6 +5,8 @@ freebsd-utils (10.1~svn272167-1) unstable; urgency=low
   * Drop Breaks: on old kernel versions, which can't have the
     intended effect anyway until reboot (Closes: #756464)
   * Add myself to uploaders
+  * In get-orig-source, svn export with --ignore-keywords so that                                                                                            
+    revision tags do not fuzzy the patches 
 
   [ Christoph Egger ]
   * Upload to unstable
