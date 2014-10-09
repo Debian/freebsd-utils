@@ -1,8 +1,6 @@
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/bundle.c
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/bundle.c
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/bundle.c
-@@ -699,7 +699,7 @@ bundle_Create(const char *prefix, int ty
+--- a/src/usr.sbin/ppp/bundle.c
++++ b/src/usr.sbin/ppp/bundle.c
+@@ -699,7 +699,7 @@
    static struct bundle bundle;		/* there can be only one */
    int enoentcount, err, minunit, maxunit;
    const char *ifname;
@@ -11,7 +9,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/bundle.c
    int kldtried;
  #endif
  #if defined(TUNSIFMODE) || defined(TUNSLMODE) || defined(TUNSIFHEAD)
-@@ -720,7 +720,7 @@ bundle_Create(const char *prefix, int ty
+@@ -720,7 +720,7 @@
    }
    err = ENOENT;
    enoentcount = 0;
@@ -20,7 +18,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/bundle.c
    kldtried = 0;
  #endif
    for (bundle.unit = minunit; bundle.unit != maxunit; bundle.unit++) {
-@@ -730,7 +730,7 @@ bundle_Create(const char *prefix, int ty
+@@ -730,7 +730,7 @@
      if (bundle.dev.fd >= 0)
        break;
      else if (errno == ENXIO || errno == ENOENT) {
@@ -29,10 +27,8 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/bundle.c
        if (bundle.unit == minunit && !kldtried++) {
          /*
           * Attempt to load the tunnel interface KLD if it isn't loaded
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/cbcp.c
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/cbcp.c
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/cbcp.c
+--- a/src/usr.sbin/ppp/cbcp.c
++++ b/src/usr.sbin/ppp/cbcp.c
 @@ -28,7 +28,7 @@
  
  #include <sys/param.h>
@@ -42,12 +38,10 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/cbcp.c
  #include <netinet/in.h>
  #endif
  #include <sys/un.h>
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/chap_ms.c
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/chap_ms.c
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/chap_ms.c
+--- a/src/usr.sbin/ppp/chap_ms.c
++++ b/src/usr.sbin/ppp/chap_ms.c
 @@ -29,8 +29,9 @@
-  * $FreeBSD: stable/10/usr.sbin/ppp/chap_ms.c 134789 2004-09-05 01:46:52Z brian $
+  * $FreeBSD$
   */
  
 +#include <sys/param.h>
@@ -57,7 +51,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/chap_ms.c
  #include <openssl/des.h>
  #include <sha.h>
  #else
-@@ -187,7 +188,7 @@ GenerateNTResponse(char *AuthenticatorCh
+@@ -187,7 +188,7 @@
    ChallengeResponse(Challenge, PasswordHash, Response);
  }
  
@@ -66,10 +60,8 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/chap_ms.c
  #define LENGTH 20
  static char *
  SHA1_End(SHA_CTX *ctx, char *buf)
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/defs.c
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/defs.c
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/defs.c
+--- a/src/usr.sbin/ppp/defs.c
++++ b/src/usr.sbin/ppp/defs.c
 @@ -39,16 +39,16 @@
  #include <stdio.h>
  #include <stdlib.h>
@@ -90,7 +82,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/defs.c
  #include "id.h"
  #include "log.h"
  #endif
-@@ -411,7 +411,7 @@ Concatinate(char *buf, size_t sz, int ar
+@@ -411,7 +411,7 @@
    }
  }
  
@@ -99,12 +91,10 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/defs.c
  int
  loadmodules(int how, const char *module, ...)
  {
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/defs.h
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/defs.h
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/defs.h
+--- a/src/usr.sbin/ppp/defs.h
++++ b/src/usr.sbin/ppp/defs.h
 @@ -28,8 +28,10 @@
-  * $FreeBSD: stable/10/usr.sbin/ppp/defs.h 252826 2013-07-05 19:26:01Z rmh $
+  * $FreeBSD$
   */
  
 +#include <sys/param.h>
@@ -115,10 +105,8 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/defs.h
  # define  MODEM_LIST	"/dev/cuau1\0/dev/cuau0"	/* name of tty device */
  #else
  # ifdef __OpenBSD__
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/id.c
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/id.c
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/id.c
+--- a/src/usr.sbin/ppp/id.c
++++ b/src/usr.sbin/ppp/id.c
 @@ -40,7 +40,7 @@
  #include <stdio.h>
  #include <string.h>
@@ -128,7 +116,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/id.c
  #include <sys/linker.h>
  #endif
  #include <unistd.h>
-@@ -262,7 +262,7 @@ ID0kill(pid_t pid, int sig)
+@@ -262,7 +262,7 @@
    return result;
  }
  
@@ -137,12 +125,10 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/id.c
  int
  ID0kldload(const char *dev)
  {
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/id.h
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/id.h
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/id.h
+--- a/src/usr.sbin/ppp/id.h
++++ b/src/usr.sbin/ppp/id.h
 @@ -26,6 +26,8 @@
-  * $FreeBSD: stable/10/usr.sbin/ppp/id.h 202192 2010-01-13 17:54:32Z ed $
+  * $FreeBSD$
   */
  
 +#include <sys/param.h>
@@ -150,7 +136,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/id.h
  #ifndef NOSUID
  struct utmpx;
  struct sockaddr_un;
-@@ -46,7 +48,7 @@ extern void ID0logout(const struct utmpx
+@@ -46,7 +48,7 @@
  extern int ID0bind_un(int, const struct sockaddr_un *);
  extern int ID0connect_un(int, const struct sockaddr_un *);
  extern int ID0kill(pid_t, int);
@@ -159,7 +145,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/id.h
  extern int ID0kldload(const char *);
  #endif
  #ifndef NONETGRAPH
-@@ -70,7 +72,7 @@ extern int ID0NgMkSockNode(const char *,
+@@ -70,7 +72,7 @@
  #define ID0connect_un(s, n) \
  	connect(s, (const struct sockaddr *)(n), sizeof *(n))
  #define ID0kill kill
@@ -168,10 +154,8 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/id.h
  #include <sys/param.h>
  #include <sys/linker.h>
  #define ID0kldload kldload
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/iface.c
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/iface.c
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/iface.c
+--- a/src/usr.sbin/ppp/iface.c
++++ b/src/usr.sbin/ppp/iface.c
 @@ -31,7 +31,7 @@
  #include <netinet/in.h>
  #include <net/if.h>
@@ -181,7 +165,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/iface.c
  #include <net/if_var.h>
  #endif
  #include <net/route.h>
-@@ -666,7 +666,7 @@ iface_ChangeFlags(const char *ifname, in
+@@ -666,7 +666,7 @@
      close(s);
      return 0;
    }
@@ -190,7 +174,7 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/iface.c
    new_flags = (ifrq.ifr_flags & 0xffff) | (ifrq.ifr_flagshigh << 16);
  #else
    new_flags = ifrq.ifr_flags & 0xffff;
-@@ -677,7 +677,7 @@ iface_ChangeFlags(const char *ifname, in
+@@ -677,7 +677,7 @@
    else
      new_flags &= ~flags;
    ifrq.ifr_flags = new_flags & 0xffff;
@@ -199,10 +183,8 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/iface.c
    ifrq.ifr_flagshigh = new_flags >> 16;
  #endif
  
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/lqr.c
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/lqr.c
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/lqr.c
+--- a/src/usr.sbin/ppp/lqr.c
++++ b/src/usr.sbin/ppp/lqr.c
 @@ -30,7 +30,7 @@
  
  #include <sys/param.h>
@@ -212,10 +194,8 @@ Index: freebsd-utils-jessie/src/usr.sbin/ppp/lqr.c
  #include <netinet/in.h>
  #endif
  #include <sys/un.h>
-Index: freebsd-utils-jessie/src/usr.sbin/ppp/tun.c
-===================================================================
---- freebsd-utils-jessie.orig/src/usr.sbin/ppp/tun.c
-+++ freebsd-utils-jessie/src/usr.sbin/ppp/tun.c
+--- a/src/usr.sbin/ppp/tun.c
++++ b/src/usr.sbin/ppp/tun.c
 @@ -29,7 +29,7 @@
  #include <sys/param.h>
  

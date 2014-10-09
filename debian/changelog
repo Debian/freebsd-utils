@@ -1,10 +1,15 @@
-freebsd-utils (10.1~svn272464-1) unstable; urgency=medium
+freebsd-utils (10.1~svn272464-1) UNRELEASED; urgency=medium
 
   [ Petr Salinger ]
   * Build-Depend on freebsd-mk >= 10.0-5 for MK_HYPERV
 
   [ Steven Chamberlain ]
   * New upstream snapshot of 10.1-RC1
+  * Refresh patches: (with unexpanded revision tags;  a/ b/ paths;  no
+    Index field;  no 'C function' context, not applicable here)
+    - ppp_macros.diff
+    - 035_nfs.diff
+    - makefiles.diff
   * Delete patch mk_tests.diff: freebsd-mk now provides MK_TESTS
   * No longer try to override MK_TESTS in debian/rules (default is "no")
 
