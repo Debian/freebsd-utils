@@ -12,13 +12,6 @@ freebsd-utils (10.1~svn272464-1) UNRELEASED; urgency=medium
     - makefiles.diff
   * Delete patch mk_tests.diff: freebsd-mk now provides MK_TESTS
   * No longer try to override MK_TESTS in debian/rules (default is "no")
-
- -- Steven Chamberlain <steven@pyro.eu.org>  Wed, 08 Oct 2014 22:18:48 +0100
-
-freebsd-utils (10.1~svn272167-1) unstable; urgency=low
-
-  [ Steven Chamberlain ]
-  * New upstream snapshot of 10.1-BETA3
   * Drop Breaks: on old kernel versions, which can't have the
     intended effect anyway until reboot (Closes: #756464)
   * Add myself to uploaders
