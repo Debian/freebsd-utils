@@ -11,7 +11,8 @@ freebsd-utils (10.1~svn272464-1) UNRELEASED; urgency=medium
     - 035_nfs.diff
     - makefiles.diff
   * Delete patch mk_tests.diff: freebsd-mk now provides MK_TESTS
-  * No longer try to override MK_TESTS in debian/rules (default is "no")
+  * No longer try to set MK_TESTS in debian/rules;  use WITHOUT_TESTS
+    instead
 
  -- Steven Chamberlain <steven@pyro.eu.org>  Wed, 08 Oct 2014 22:18:48 +0100
 
