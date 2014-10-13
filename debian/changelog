@@ -13,6 +13,8 @@ freebsd-utils (10.1~svn272464-1) UNRELEASED; urgency=medium
   * Delete patch mk_tests.diff: freebsd-mk now provides MK_TESTS
   * No longer try to set MK_TESTS in debian/rules;  use WITHOUT_TESTS
     instead
+  * Set kern.ipc.shmall=32768 in /etc/sysctl.conf, as the kernel
+    default is too low for some Qt applications (Closes: #763706)
 
  -- Steven Chamberlain <steven@pyro.eu.org>  Wed, 08 Oct 2014 22:18:48 +0100
 

@@ -1,0 +1,13 @@
+Bug-Debian: http://bugs.debian.org/763706
+Forwarded: no
+
+--- a/src/etc/sysctl.conf
++++ b/src/etc/sysctl.conf
+@@ -7,3 +7,7 @@
+ # Uncomment this to prevent users from seeing information about processes that
+ # are being run under another UID.
+ #security.bsd.see_other_uids=0
++
++# Qt applications need much more shared memory than the kernel default
++# (see bug #763706)
++kern.ipc.shmall=32768
