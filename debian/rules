@@ -38,8 +38,8 @@ revision	:= $(shell echo $(full_version) | sed -e 's/^[^+-]*//g')
 
 SVN_BASE	:= https://svn0.us-west.freebsd.org/base
 #SVN		:= $(SVN_BASE)/release/$(version).0
-#SVN		:= $(SVN_BASE)/releng/$(version)
-SVN		:= $(SVN_BASE)/stable/$(major)
+SVN		:= $(SVN_BASE)/releng/$(version)
+#SVN		:= $(SVN_BASE)/stable/$(major)
 #SVN		:= $(SVN_BASE)/base/head
 
 SOURCE = freebsd-utils
