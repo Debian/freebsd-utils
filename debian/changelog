@@ -1,10 +1,10 @@
-freebsd-utils (10.1~svn272464-1) UNRELEASED; urgency=medium
+freebsd-utils (10.1~svn273233-1) UNRELEASED; urgency=medium
 
   [ Petr Salinger ]
   * Build-Depend on freebsd-mk >= 10.0-5 for MK_HYPERV
 
   [ Steven Chamberlain ]
-  * New upstream snapshot of 10.1-RC1
+  * New upstream snapshot of 10.1-RC3
   * Refresh patches: (with unexpanded revision tags;  a/ b/ paths;  no
     Index field;  no 'C function' context, not applicable here)
     - ppp_macros.diff
@@ -15,6 +15,8 @@ freebsd-utils (10.1~svn272464-1) UNRELEASED; urgency=medium
     instead
   * Set kern.ipc.shmall=32768 in /etc/sysctl.conf, as the kernel
     default is too low for some Qt applications (Closes: #763706)
+  * netstat: work around a kfreebsd 9->10 ABI break;  allows tcp sockets
+    to be shown again when running on kfreebsd-9 (Closes: 761418)
 
  -- Steven Chamberlain <steven@pyro.eu.org>  Wed, 08 Oct 2014 22:18:48 +0100
 
@@ -31,7 +33,7 @@ freebsd-utils (10.1~svn272167-1) unstable; urgency=low
   [ Christoph Egger ]
   * Upload to unstable
 
- -- Steven Chamberlain <steven@pyro.eu.org>  Fri, 26 Sep 2014 20:42:16 +0100
+ -- Steven Chamberlain <steven@pyro.eu.org>  Fri, 17 Oct 2014 16:21:26 +0000
 
 freebsd-utils (10.1~svn271687+really10.1~svn271687-1) experimental; urgency=medium
 

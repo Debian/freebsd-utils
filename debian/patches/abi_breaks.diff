@@ -1,0 +1,19 @@
+--- a/src/usr.bin/netstat/inet.c
++++ b/src/usr.bin/netstat/inet.c
+@@ -356,6 +356,16 @@
+ 			tp = &((struct xtcpcb *)xig)->xt_tp;
+ 			inp = &((struct xtcpcb *)xig)->xt_inp;
+ 			so = &((struct xtcpcb *)xig)->xt_socket;
++			/* :XXX: work around a kfreebsd 9->10 ABI break:
++			 * struct tcpcb gained a u_int, so on kfreebsd-9
++			 * the xt_socket member starts earlier */
++			if (((struct xtcpcb *)xig)->xt_len == 900) {
++				/* kfreebsd-i386 9.0 kernel */
++				so = &((struct xtcpcb *)((char *)xig-4))->xt_socket;
++			} else if (((struct xtcpcb *)xig)->xt_len == 1208) {
++				/* kfreebsd-amd64 9.0 kernel */
++				so = &((struct xtcpcb *)((char *)xig-8))->xt_socket;
++			}
+ 		} else {
+ 			inp = &((struct xinpcb *)xig)->xi_inp;
+ 			so = &((struct xinpcb *)xig)->xi_socket;
