@@ -1,10 +1,10 @@
-freebsd-utils (10.1~svn273233-1) UNRELEASED; urgency=medium
+freebsd-utils (10.1~svn273240-1) UNRELEASED; urgency=medium
 
   [ Petr Salinger ]
   * Build-Depend on freebsd-mk >= 10.0-5 for MK_HYPERV
 
   [ Steven Chamberlain ]
-  * New upstream snapshot of 10.1-RC3
+  * New upstream snapshot of 10.1-RC3~
   * Refresh patches: (with unexpanded revision tags;  a/ b/ paths;  no
     Index field;  no 'C function' context, not applicable here)
     - ppp_macros.diff
