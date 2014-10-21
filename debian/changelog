@@ -1,4 +1,4 @@
-freebsd-utils (10.1~svn273304-1) UNRELEASED; urgency=medium
+freebsd-utils (10.1~svn273304-1) unstable; urgency=medium
 
   [ Petr Salinger ]
   * Build-Depend on freebsd-mk >= 10.0-5 for MK_HYPERV
