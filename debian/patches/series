@@ -40,3 +40,4 @@ netstat_maddrs.diff
 netstat_oqdrops.diff
 sysctl.diff
 abi_breaks.diff
+fstype_alias.diff

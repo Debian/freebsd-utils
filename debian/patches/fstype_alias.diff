@@ -1,0 +1,33 @@
+From: Steven Chamberlain <steven@pyro.eu.org>
+Subject: accept some Linux-style filesystem names
+Date: Sun, 26 Oct 2014 18:39:08 +0000
+
+--- a/src/sbin/mount/mount.c
++++ b/src/sbin/mount/mount.c
+@@ -584,6 +584,26 @@
+ 		    "Using \"-t msdosfs\", since \"-t msdos\" is deprecated.");
+ 		vfstype = "msdosfs";
+ 	}
++	if (strcmp(vfstype, "ext2") == 0) {
++		warnx(
++		    "Using \"-t ext2fs\" instead of \"-t ext2\".");
++		vfstype = "ext2fs";
++	}
++	if (strcmp(vfstype, "ext3") == 0) {
++		warnx(
++		    "Using \"-t ext3fs\" instead of \"-t ext3\".");
++		vfstype = "ext3fs";
++	}
++	if (strcmp(vfstype, "ext4") == 0) {
++		warnx(
++		    "Using \"-t ext4fs\" instead of \"-t ext4\".");
++		vfstype = "ext4fs";
++	}
++	if (strcmp(vfstype, "cifs") == 0) {
++		warnx(
++		    "Using \"-t smbfs\" instead of \"-t cifs\".");
++		vfstype = "smbfs";
++	}
+ 
+ 	/* Construct the name of the appropriate mount command */
+ 	(void)snprintf(execname, sizeof(execname), "mount_%s", vfstype);

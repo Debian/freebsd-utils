@@ -1,3 +1,14 @@
+freebsd-utils (10.1~svn273304-2) UNRELEASED; urgency=medium
+
+  * fstype_alias.diff:  accept some Linux-style names for `mount -t`
+    filesystem types:
+    - ext2 for ext2fs
+    - ext3 for ext3fs
+    - ext4 for ext4fs
+    - cifs for smbfs
+
+ -- Steven Chamberlain <steven@pyro.eu.org>  Sun, 26 Oct 2014 18:50:21 +0000
+
 freebsd-utils (10.1~svn273304-1) unstable; urgency=medium
 
   [ Petr Salinger ]
