@@ -1,4 +1,4 @@
-freebsd-utils (10.1~svn273304-2) UNRELEASED; urgency=medium
+freebsd-utils (10.1~svn273304-2) experimental; urgency=medium
 
   * fstype_alias.diff:  accept some Linux-style names for `mount -t`
     filesystem types:
