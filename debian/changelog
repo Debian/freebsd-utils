@@ -1,3 +1,9 @@
+freebsd-utils (10.1~svn273304+ds1-1) UNRELEASED; urgency=medium
+
+  * Support +ds source_version suffix in svn_revision
+
+ -- Steven Chamberlain <steven@pyro.eu.org>  Tue, 08 Dec 2015 18:52:10 +0000
+
 freebsd-utils (10.1~svn273304-2) experimental; urgency=medium
 
   * fstype_alias.diff:  accept some Linux-style names for `mount -t`
