@@ -1,6 +1,7 @@
-freebsd-utils (10.1~svn273304+ds1-1) UNRELEASED; urgency=medium
+freebsd-utils (10.1~svn273304+ds1-1) unstable; urgency=medium
 
   [ Steven Chamberlain ]
+  * Upload to unstable
   * Support +ds source_version suffix in svn_revision
 
   [ Hideki Yamane ]
