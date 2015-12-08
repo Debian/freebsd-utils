@@ -27,3 +27,5 @@ sbin/devfs				/sbin
 
 usr/sbin/acpiconf			/usr/sbin
 usr/sbin/jail				/usr/sbin
+usr/sbin/jls				/usr/sbin
+usr/sbin/jexec				/usr/sbin

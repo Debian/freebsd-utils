@@ -1,6 +1,11 @@
 freebsd-utils (10.1~svn273304+ds1-1) UNRELEASED; urgency=medium
 
+  [ Steven Chamberlain ]
   * Support +ds source_version suffix in svn_revision
+
+  [ Hideki Yamane ]
+  * Add jls(8) and jexec(8) tools for jails administration
+    (Closes: #806562)
 
  -- Steven Chamberlain <steven@pyro.eu.org>  Tue, 08 Dec 2015 18:52:10 +0000
 

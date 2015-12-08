@@ -113,6 +113,7 @@ get-orig-source:
 		sys/i386/linux/syscalls.master \
 		\
 		 usr.sbin/jail bin/chflags \
+		 usr.sbin/jexec usr.sbin/jls \
 		 sbin/devd etc/devd.conf etc/devd sys/dev/usb/usbdevs \
 		 usr.sbin/acpi/acpiconf \
 		usr.sbin/acpi/Makefile \

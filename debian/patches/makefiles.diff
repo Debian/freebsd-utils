@@ -414,7 +414,7 @@
 +.include <bsd.subdir.mk>
 --- /dev/null
 +++ b/src/usr.sbin/Makefile
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,24 @@
 +SUBDIR = \
 +	kbdcontrol \
 +
@@ -424,6 +424,8 @@
 +	arp \
 +	authpf \
 +	jail \
++	jexec \
++	jls \
 +	mountd \
 +	nfsd \
 +	powerd \
@@ -454,3 +456,26 @@
 +.endif
 +
 +.include <bsd.subdir.mk>
+--- a/src/usr.sbin/jexec/Makefile
++++ b/src/usr.sbin/jexec/Makefile
+@@ -3,6 +3,8 @@
+ PROG=	jexec
+ MAN=	jexec.8
+ DPADD=	${LIBJAIL} ${LIBUTIL}
+-LDADD=	-ljail -lutil
++LDADD=	-ljail -lutil-freebsd
++
++LDADD+=	-lfreebsd-glue
+ 
+ .include <bsd.prog.mk>
+--- a/src/usr.sbin/jls/Makefile
++++ b/src/usr.sbin/jls/Makefile
+@@ -7,6 +7,8 @@
+ DPADD=	${LIBJAIL}
+ LDADD=	-ljail
+ 
++LDADD+=	-lfreebsd-glue
++
+ .if ${MK_INET6_SUPPORT} != "no"
+ CFLAGS+= -DINET6
+ .endif
