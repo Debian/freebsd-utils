@@ -36,11 +36,11 @@ version		:= $(shell echo $(full_version) | sed -e 's/[~+-].*//g')
 major           := $(shell echo $(version) | sed -e 's/\..*//g')
 revision	:= $(shell echo $(full_version) | sed -e 's/^[^+-]*//g')
 
-SVN_BASE	:= https://svn0.us-west.freebsd.org/base
+SVN_BASE	:= https://svn.freebsd.org/base
 #SVN		:= $(SVN_BASE)/release/$(version).0
 SVN		:= $(SVN_BASE)/releng/$(version)
 #SVN		:= $(SVN_BASE)/stable/$(major)
-#SVN		:= $(SVN_BASE)/base/head
+#SVN		:= $(SVN_BASE)/head
 
 SOURCE = freebsd-utils
 ORIGDIR = $(SOURCE)-$(tar_version)

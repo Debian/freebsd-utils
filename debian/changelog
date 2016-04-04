@@ -3,6 +3,8 @@ freebsd-utils (10.3~svn296373-1) UNRELEASED; urgency=medium
   * New upstream snapshot of 10.3-RC3
   * Use XZ to compress orig source tarball
   * Make get-orig-source tarball reproducible
+  * Use new preferred hostname for upstream SVN with HTTPS
+    (svn.freebsd.org).
 
  -- Steven Chamberlain <steven@pyro.eu.org>  Mon, 04 Apr 2016 11:16:07 +0100
 
