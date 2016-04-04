@@ -45,6 +45,7 @@ SVN		:= $(SVN_BASE)/releng/$(version)
 SOURCE = freebsd-utils
 ORIGDIR = $(SOURCE)-$(tar_version)
 TARNAME = $(SOURCE)_$(tar_version).orig.tar.xz
+SOURCE_DATE_EPOCH ?= $(shell date -d "$$(dpkg-parsechangelog -SDate)" +%s)
 
 PATH := /usr/lib/freebsd:$(PATH)
 DESTDIR = $(CURDIR)/debian/tmp
@@ -151,7 +152,16 @@ get-orig-source:
 	; do \
 	    svn export --ignore-keywords -r $(svn_revision) $(SVN)/$$i $(ORIGDIR)/src/$$i || exit ; \
 	done
-	tar --numeric-owner --owner 0 --group 0 -cJf ../$(TARNAME) $(ORIGDIR)
+	# Clamp timestamps to be no newer than last changelog entry, see
+	# https://wiki.debian.org/ReproducibleBuilds/TimestampsInTarball
+	find $(ORIGDIR) -newermt "@$(SOURCE_DATE_EPOCH)" -print0 \
+	 | xargs -0r touch --no-dereference --date="@$(SOURCE_DATE_EPOCH)"
+	# Create tarball with files sorted in a stable order, see
+	# https://wiki.debian.org/ReproducibleBuilds/FileOrderInTarballs
+	find $(ORIGDIR) -print0 | LC_ALL=C sort -z \
+	 | tar --null --no-recursion --files-from - \
+	    --numeric-owner --owner 0 --group 0 \
+	    -cJf ../$(TARNAME)
 	rm -rf $(ORIGDIR)
 
 build-arch: build-deb build-udeb
