@@ -5,18 +5,18 @@ yet
 
 --- a/src/usr.bin/netstat/if.c
 +++ b/src/usr.bin/netstat/if.c
-@@ -389,8 +389,10 @@
+@@ -387,8 +387,10 @@
  		if (bflag)
- 			show_stat("lu", 10, IFA_STAT(obytes), link|network);
- 		show_stat("NRSlu", 5, IFA_STAT(collisions), link);
+ 			show_stat("lu", 10, IFA_STAT(obytes), link|network, 0);
+ 		show_stat("NRSlu", 5, IFA_STAT(collisions), link, 1);
 +#if 0
  		if (dflag)
- 			show_stat("LSlu", 5, IFA_STAT(oqdrops), link);
+ 			show_stat("LSlu", 5, IFA_STAT(oqdrops), link, 1);
 +#endif
  		putchar('\n');
  
  		if (!aflag)
-@@ -508,7 +510,9 @@
+@@ -506,7 +508,9 @@
  		st->ift_ib += IFA_STAT(ibytes);
  		st->ift_op += IFA_STAT(opackets);
  		st->ift_oe += IFA_STAT(oerrors);

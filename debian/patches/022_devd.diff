@@ -1,8 +1,6 @@
-Index: freebsd-utils-jessie/src/etc/devd.conf
-===================================================================
---- freebsd-utils-jessie.orig/src/etc/devd.conf
-+++ freebsd-utils-jessie/src/etc/devd.conf
-@@ -13,7 +13,6 @@ options {
+--- a/src/etc/devd.conf
++++ b/src/etc/devd.conf
+@@ -13,7 +13,6 @@
  	# that they are returned from readdir(3).  The rule-sets are combined
  	# to create a DFA that's used to match events to actions.
  	directory "/etc/devd";
@@ -10,7 +8,7 @@ Index: freebsd-utils-jessie/src/etc/devd.conf
  	pid-file "/var/run/devd.pid";
  
  	# Setup some shorthand for regex that we use later in the file.
-@@ -27,84 +26,6 @@ options {
+@@ -27,84 +26,6 @@
  # Note that the attach/detach with the highest value wins, so that one can
  # override these general rules.
  
@@ -95,7 +93,7 @@ Index: freebsd-utils-jessie/src/etc/devd.conf
  # When a USB keyboard arrives, attach it as the console keyboard.
  attach 100 {
  	device-name "ukbd0";
-@@ -115,42 +36,6 @@ detach 100 {
+@@ -115,42 +36,6 @@
  	action "/etc/rc.d/syscons setkeyboard /dev/kbd0";
  };
  
@@ -138,7 +136,7 @@ Index: freebsd-utils-jessie/src/etc/devd.conf
  # Firmware download into the ActiveWire board. After the firmware download is
  # done, the device detaches and reappears as something new and shiny
  # automatically.
-@@ -229,13 +114,6 @@ nomatch 10 {
+@@ -229,13 +114,6 @@
  		vendor $vendor bus $bus";
  };
  
@@ -152,8 +150,8 @@ Index: freebsd-utils-jessie/src/etc/devd.conf
  # Notify all users before beginning emergency shutdown when we get
  # a _CRT or _HOT thermal event and we're going to power down the system
  # very soon.
-@@ -277,19 +155,6 @@ notify 10 {
- 	action "logger -p kern.warn 'ZFS: checksum mismatch, zpool=$pool path=$vdev_path offset=$zio_offset size=$zio_size'";
+@@ -246,19 +124,6 @@
+ 	action "logger -p kern.emerg 'WARNING: system temperature too high, shutting down soon!'";
  };
  
 -# User requested suspend, so perform preparation steps and then execute

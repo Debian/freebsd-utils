@@ -5,7 +5,7 @@ available in FreeBSD libc
 
 --- a/src/usr.bin/netstat/if.c
 +++ b/src/usr.bin/netstat/if.c
-@@ -202,6 +202,7 @@
+@@ -194,6 +194,7 @@
  	}
  }
  
@@ -13,7 +13,7 @@ available in FreeBSD libc
  /*
   * Find next multiaddr for a given interface name.
   */
-@@ -220,6 +221,7 @@
+@@ -212,6 +213,7 @@
  
  	return (ifma);
  }
@@ -21,16 +21,17 @@ available in FreeBSD libc
  
  /*
   * Print a description of the network interfaces.
-@@ -228,15 +230,19 @@
+@@ -220,7 +222,9 @@
  intpr(int interval, void (*pfunc)(char *), int af)
  {
  	struct ifaddrs *ifap, *ifa;
 +#if 0
  	struct ifmaddrs *ifmap, *ifma;
 +#endif
- 	
+ 	u_int ifn_len_max = 5;
+ 
  	if (interval)
- 		return sidewaysintpr(interval);
+@@ -228,8 +232,10 @@
  
  	if (getifaddrs(&ifap) != 0)
  		err(EX_OSERR, "getifaddrs");
@@ -39,9 +40,9 @@ available in FreeBSD libc
  		err(EX_OSERR, "getifmaddrs");
 +#endif
  
- 	if (!pfunc) {
- 		if (Wflag)
-@@ -390,6 +396,7 @@
+ 	if (Wflag) {
+ 		for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
+@@ -388,6 +394,7 @@
  		if (!aflag)
  			continue;
  
@@ -49,7 +50,7 @@ available in FreeBSD libc
  		/*
  		 * Print family's multicast addresses.
  		 */
-@@ -449,11 +456,14 @@
+@@ -447,11 +454,14 @@
  
  			ifma = ifma->ifma_next;
  		}

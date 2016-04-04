@@ -1,6 +1,15 @@
 freebsd-utils (10.3~svn296373-1) UNRELEASED; urgency=medium
 
   * New upstream snapshot of 10.3-RC3
+  * Refresh patches:
+    - 017_sysctl.diff
+    - 022_devd.diff
+    - 026_kdump.diff
+    - 035_nfs.diff
+    - makefiles.diff
+    - netstat_maddrs.diff
+    - netstat_oqdrops.diff
+    - fstype_alias.diff
   * Use XZ to compress orig source tarball
   * Make get-orig-source tarball reproducible
   * Use new preferred hostname for upstream SVN with HTTPS

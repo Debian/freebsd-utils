@@ -1,8 +1,8 @@
 --- a/src/sbin/mount_nfs/mount_nfs.c
 +++ b/src/sbin/mount_nfs/mount_nfs.c
-@@ -694,12 +694,18 @@
+@@ -484,12 +484,18 @@
  static int
- sec_name_to_num(char *sec)
+ sec_name_to_num(const char *sec)
  {
 +#ifdef RPCSEC_GSS_KRB5
  	if (!strcmp(sec, "krb5"))
@@ -19,7 +19,7 @@
  	if (!strcmp(sec, "sys"))
  		return (AUTH_SYS);
  	return (-1);
-@@ -709,12 +715,18 @@
+@@ -499,12 +505,18 @@
  sec_num_to_name(int flavor)
  {
  	switch (flavor) {
@@ -38,7 +38,7 @@
  	case AUTH_SYS:
  		return ("sys");
  	}
-@@ -859,9 +871,11 @@
+@@ -649,9 +661,11 @@
  	freeaddrinfo(ai_nfs);
  
  	build_iovec(iov, iovlen, "hostname", nam, (size_t)-1);
@@ -52,7 +52,7 @@
  
 --- a/src/usr.sbin/mountd/mountd.c
 +++ b/src/usr.sbin/mountd/mountd.c
-@@ -2116,12 +2116,18 @@
+@@ -2198,12 +2198,18 @@
  
  		if (!strcmp(seclist, "sys"))
  			flavor = AUTH_SYS;

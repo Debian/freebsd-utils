@@ -4,7 +4,7 @@ Date: Sun, 26 Oct 2014 18:39:08 +0000
 
 --- a/src/sbin/mount/mount.c
 +++ b/src/sbin/mount/mount.c
-@@ -584,6 +584,26 @@
+@@ -592,6 +592,26 @@
  		    "Using \"-t msdosfs\", since \"-t msdos\" is deprecated.");
  		vfstype = "msdosfs";
  	}
