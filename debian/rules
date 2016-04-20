@@ -89,6 +89,7 @@ get-orig-source:
 	rm -rf $(ORIGDIR)
 	mkdir -p \
 		$(ORIGDIR)/src/sys/kern \
+		$(ORIGDIR)/src/sys/amd64/linux \
 		$(ORIGDIR)/src/sys/amd64/linux32 \
 		$(ORIGDIR)/src/sys/i386/linux \
 		$(ORIGDIR)/src/sys/dev/usb \
@@ -110,6 +111,7 @@ get-orig-source:
 		usr.bin/ktrace \
 		sys/kern/syscalls.c \
 		sys/kern/makesyscalls.sh \
+		sys/amd64/linux/syscalls.master \
 		sys/amd64/linux32/syscalls.master \
 		sys/i386/linux/syscalls.master \
 		\
