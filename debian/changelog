@@ -16,6 +16,8 @@ freebsd-utils (10.3~svn296373-1) UNRELEASED; urgency=medium
   * Use new preferred hostname for upstream SVN with HTTPS
     (svn.freebsd.org).
   * Bump Build-Depends: kfreebsd-kernel-headers to (>= 10.3~2~)
+  * Bump Build-Depends: libutil-freebsd-dev to (>= 10.3~svn296373-4~)
+    for kinfo_getvmobject
 
  -- Steven Chamberlain <steven@pyro.eu.org>  Mon, 04 Apr 2016 11:16:07 +0100
 

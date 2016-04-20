@@ -46,7 +46,7 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
 # libssl-dev: geom
  libssl-dev,
 # jail, ppp
- libutil-freebsd-dev,
+ libutil-freebsd-dev (>= 10.3~svn296373-4~),
 Vcs-Browser: http://anonscm.debian.org/viewvc/glibc-bsd/trunk/freebsd-utils/
 Vcs-Svn: svn://anonscm.debian.org/glibc-bsd/trunk/freebsd-utils/
 Standards-Version: 3.9.2
