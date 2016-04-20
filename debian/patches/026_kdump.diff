@@ -42,6 +42,15 @@
  			case SYS__umtx_op:
  				print_number(ip, narg, c);
  				putchar(',');
+@@ -1708,7 +1713,7 @@
+ }
+ 
+ void
+-ktrstat(struct stat *statp)
++ktrstat(struct stat16 *statp)
+ {
+ 	char mode[12], timestr[PATH_MAX + 4];
+ 	struct passwd *pwd;
 --- a/src/usr.bin/kdump/Makefile
 +++ b/src/usr.bin/kdump/Makefile
 @@ -13,6 +13,9 @@
