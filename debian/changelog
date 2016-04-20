@@ -10,6 +10,7 @@ freebsd-utils (10.3~svn296373-1) UNRELEASED; urgency=medium
     - netstat_maddrs.diff
     - netstat_oqdrops.diff
     - fstype_alias.diff
+    - rpc.lockd-startup-fix.diff
   * Use XZ to compress orig source tarball
   * Make get-orig-source tarball reproducible
   * Use new preferred hostname for upstream SVN with HTTPS

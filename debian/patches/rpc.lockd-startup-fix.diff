@@ -16,3 +16,14 @@
  						res->ai_addr = (struct sockaddr*) sin6;
  						res->ai_addrlen = (socklen_t) sizeof(res->ai_addr);
  						break;
+--- a/src/usr.bin/vmstat/Makefile
++++ b/src/usr.bin/vmstat/Makefile
+@@ -4,7 +4,7 @@
+ PROG=	vmstat
+ MAN=	vmstat.8
+ DPADD=	${LIBDEVSTAT} ${LIBKVM} ${LIBMEMSTAT} ${LIBUTIL}
+-LDADD=	-ldevstat -lkvm -lmemstat -lutil
++LDADD=	-ldevstat -lkvm -lmemstat -lutil-freebsd
+ 
+ WARNS?=	1
+ 
