@@ -15,7 +15,7 @@ Build-Depends: debhelper (>= 7), po-debconf, sharutils,
  kfreebsd-kernel-headers (>= 10.3~2~),
 # for kdump
  kfreebsd-headers-10.3-0,
- libc0.1-dev (>= 2.18-2~),
+ libc0.1-dev (>= 2.22-8~),
  libbsd-dev (>= 0.3.0),
 # zlib1g-dev: savecore
  zlib1g-dev,
