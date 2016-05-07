@@ -32,10 +32,13 @@ DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/buildflags.mk
 
 EXTRA_CFLAGS = \
-	-Wall -pipe -fPIC -D_GNU_SOURCE \
-	-isystem /usr/include/tirpc \
+	-D_GNU_SOURCE -pipe -Wall \
 	-Werror=implicit-function-declaration \
-	-isystem /usr/include/freebsd -I$(CURDIR)/debian/local/include -I$(CURDIR)/src/include -lbsd \
+	-I$(CURDIR)/debian/local/include -I$(CURDIR)/src/include \
+	-isystem /usr/include/freebsd \
+	-isystem /usr/include/tirpc \
+	-fPIC \
+	-lbsd \
 	$(CPPFLAGS) \
 	$(NULL)
 CFLAGS   += $(EXTRA_CFLAGS)
