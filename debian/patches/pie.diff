@@ -1,0 +1,23 @@
+Date: Sat, 07 May 2016 17:07:27 +0100
+From: Steven Chamberlain <steven@pyro.eu.org>
+Subject: link against PIC-enabled C runtime
+
+Link against the PIC version of C runtime, so that PIE can be enabled.
+
+--- a/src/sbin/devd/Makefile
++++ b/src/sbin/devd/Makefile
+@@ -14,11 +14,11 @@
+ LDADD=	-ll
+ 
+ LIBSTDC++ != \
+-	g++ -print-file-name=crt1.o ; \
++	g++ -print-file-name=Scrt1.o ; \
+ 	g++ -print-file-name=crti.o ; \
+ 	g++ -print-file-name=crtn.o ; \
+-	g++ -print-file-name=crtbegin.o ; \
+-	g++ -print-file-name=crtend.o ; \
++	g++ -print-file-name=crtbeginS.o ; \
++	g++ -print-file-name=crtendS.o ; \
+ 	g++ -print-file-name=libstdc++.a
+ 
+ LDADD+= -nostdlib \

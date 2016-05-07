@@ -7,20 +7,39 @@ export SHELL = bash
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-CFLAGS = -Wall -g -pipe -fPIC -D_GNU_SOURCE \
+full_version	:= $(shell dpkg-parsechangelog | grep ^Version: | sed -e 's/^.*: //g')
+tar_version	:= $(shell echo $(full_version) | sed -e 's/-.*//g')
+svn_revision	:= $(shell echo $(full_version) | sed -e 's/.*~svn\([0-9]*\)[+-].*/\1/g')
+version		:= $(shell echo $(full_version) | sed -e 's/[~+-].*//g')
+major		:= $(shell echo $(version) | sed -e 's/\..*//g')
+revision	:= $(shell echo $(full_version) | sed -e 's/^[^+-]*//g')
+
+include /usr/share/dpkg/architecture.mk
+
+# Determine host architecture compiler
+ifeq ($(origin CC),default)
+CC := $(DEB_HOST_GNU_TYPE)-gcc
+endif
+ifeq ($(origin CXX),default)
+CXX := $(DEB_HOST_GNU_TYPE)-g++
+endif
+
+# Use hardening flags
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# Pre-define CFLAGS, for hardening, debug and optimisation level
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
+EXTRA_CFLAGS = \
+	-Wall -pipe -fPIC -D_GNU_SOURCE \
 	-isystem /usr/include/tirpc \
 	-Werror=implicit-function-declaration \
 	-isystem /usr/include/freebsd -I$(CURDIR)/debian/local/include -I$(CURDIR)/src/include -lbsd \
+	$(CPPFLAGS) \
 	$(NULL)
-CXXFLAGS = $(CFLAGS)
-
-ifneq (,$(filter noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-	CXXFLAGS += -O0
-else
-	CFLAGS += -O2
-	CXXFLAGS += -O2
-endif
+CFLAGS   += $(EXTRA_CFLAGS)
+CXXFLAGS += $(EXTRA_CFLAGS)
 
 ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 	NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
@@ -28,13 +47,6 @@ ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 	# Do not mess with MAKEFLAGS until we transfer control to BSD make (see below)
 #	BSD_MAKEFLAGS += -j$(NUMJOBS)
 endif
-
-full_version	:= $(shell dpkg-parsechangelog | grep ^Version: | sed -e 's/^.*: //g')
-tar_version	:= $(shell echo $(full_version) | sed -e 's/-.*//g')
-svn_revision	:= $(shell echo $(full_version) | sed -e 's/.*~svn\([0-9]*\)[+-].*/\1/g')
-version		:= $(shell echo $(full_version) | sed -e 's/[~+-].*//g')
-major           := $(shell echo $(version) | sed -e 's/\..*//g')
-revision	:= $(shell echo $(full_version) | sed -e 's/^[^+-]*//g')
 
 SVN_BASE	:= https://svn.freebsd.org/base
 #SVN		:= $(SVN_BASE)/release/$(version).0
@@ -49,23 +61,30 @@ SOURCE_DATE_EPOCH ?= $(shell date -d "$$(dpkg-parsechangelog -SDate)" +%s)
 
 PATH := /usr/lib/freebsd:$(PATH)
 DESTDIR = $(CURDIR)/debian/tmp
-PMAKE = \
+PMAKE_COMMON = \
 	MAKEFLAGS=$(BSD_MAKEFLAGS) \
-	MAKEOBJDIRPREFIX=$(CURDIR)/obj-deb \
-	CFLAGS="$(CFLAGS)" \
-	NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO WITHOUT_TESTS=yes \
-	DESTDIR="$(DESTDIR)" \
-	make -C src $(PMAKE_FLAGS)
-PMAKE_UDEB = \
-	MAKEFLAGS=$(BSD_MAKEFLAGS) \
-	MAKEOBJDIRPREFIX=$(CURDIR)/obj-udeb \
-	CFLAGS="$(CFLAGS) -Os" \
-	NO_WERROR=1 NOGCCERROR=1 NOSHARED=NO NO_SHARED=NO \
-	DESTDIR="$(DESTDIR)-udeb" \
+	NO_WERROR=1 NOGCCERROR=1 \
+	NOSHARED=NO NO_SHARED=NO \
 	make -C src $(PMAKE_FLAGS) \
+	CC=$(CC) \
+	CXX=$(CXX) \
+	$(NULL)
+PMAKE = \
+	CFLAGS="$(CFLAGS)" \
+	CXXFLAGS="$(CXXFLAGS)" \
+	DESTDIR="$(DESTDIR)" \
+	MAKEOBJDIRPREFIX=$(CURDIR)/obj-deb \
+	WITHOUT_TESTS=yes \
+	$(PMAKE_COMMON)
+PMAKE_UDEB = \
+	CFLAGS="$(CFLAGS) -Os" \
+	CXXFLAGS="$(CXXFLAGS) -Os" \
+	DESTDIR="$(DESTDIR)-udeb" \
+	MAKEOBJDIRPREFIX=$(CURDIR)/obj-udeb \
+	$(PMAKE_COMMON) \
 	-DRESCUE=yes \
-	-DWITHOUT_JAIL \
 	-DWITHOUT_IPX_SUPPORT \
+	-DWITHOUT_JAIL \
 	$(NULL)
 
 # for ppp

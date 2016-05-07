@@ -1,3 +1,18 @@
+freebsd-utils (10.3~svn296373-2) UNRELEASED; urgency=medium
+
+  * Now using debhelper compat v9
+  * Now using Standards-Version 3.9.8 (no changes needed).
+  * Add Build-Depends: dpkg-dev (>= 1.16.1.1) and use buildflags.mk
+    to set CFLAGS, respecting DEB_BUILD_OPTIONS flags such as noopt
+  * Enable hardening=+all, which includes PIE, relro and stack protector
+  * Link against the PIC version of C runtime, so that PIE can be
+    enabled.
+    - pie.diff
+  * Use architecture.mk instead of individual calls to dpkg-architecture
+  * Use the proper host architecture compiler
+
+ -- Steven Chamberlain <steven@pyro.eu.org>  Sat, 07 May 2016 00:30:27 +0100
+
 freebsd-utils (10.3~svn296373-1) experimental; urgency=medium
 
   * New upstream snapshot of 10.3-RC3
