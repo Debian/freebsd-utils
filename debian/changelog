@@ -1,3 +1,9 @@
+freebsd-utils (10.3~svn296373-2.1) UNRELEASED; urgency=medium
+
+  * Update my email address in Uploaders
+
+ -- Steven Chamberlain <stevenc@debian.org>  Tue, 28 Mar 2017 20:53:08 +0100
+
 freebsd-utils (10.3~svn296373-2) unstable; urgency=medium
 
   * Upload to unstable
