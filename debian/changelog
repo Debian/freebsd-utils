@@ -1,6 +1,8 @@
 freebsd-utils (10.3~svn296373-2.1) UNRELEASED; urgency=medium
 
   * Update my email address in Uploaders
+  * Bump Build-Depends: libcam-dev (>= 10.3~) for new scsi_da.h
+    functions
 
  -- Steven Chamberlain <stevenc@debian.org>  Tue, 28 Mar 2017 20:53:08 +0100
 
