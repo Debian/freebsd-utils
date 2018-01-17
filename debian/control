@@ -48,9 +48,9 @@ Build-Depends: debhelper (>= 9), po-debconf, sharutils,
  libssl-dev,
 # jail, ppp
  libutil-freebsd-dev (>= 10.3~svn296373-4~),
-Vcs-Browser: http://anonscm.debian.org/viewvc/glibc-bsd/trunk/freebsd-utils/
-Vcs-Svn: svn://anonscm.debian.org/glibc-bsd/trunk/freebsd-utils/
 Standards-Version: 3.9.8
+Vcs-Browser: https://salsa.debian.org/kfreebsd-team/freebsd-utils
+Vcs-Git: https://salsa.debian.org/kfreebsd-team/freebsd-utils.git
 
 Package: freebsd-utils
 Priority: required
